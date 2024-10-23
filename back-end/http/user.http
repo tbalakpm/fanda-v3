@@ -1,0 +1,43 @@
+@baseUrl=http://localhost:4000
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAxOTJhODM2LWIxYjktNzMzNy1hNmE3LWYzNTYzOGExNjJlNSIsImlhdCI6MTcyOTM5OTAwOSwiZXhwIjoxNzI5NDg1NDA5fQ.DHQ5ECTwwyl53ygaqnhFQFEsOo8vIVWLYCqjP7QoWos
+
+### Get all users
+GET {{baseUrl}}/api/users
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Get user by id
+GET {{baseUrl}}/api/users/01921091-988b-7009-82ea-b1de059461fe
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+### Create user
+POST {{baseUrl}}/api/users
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "username": "vyuvan",
+  "password": "Welcome!23",
+  "email": "vyuvan@gmail.com",
+  "firstName": "Yuvan",
+  "lastName": "Vinayagam"
+}
+
+### Update user
+PUT {{baseUrl}}/api/users/01921098-62ed-7009-82ea-c654ab35431b
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "username": "tbala",
+  "firstName": "Balamurugan",
+  "lastName": "Thanikachalam",
+  "email": "tbala@fandatech.net"
+}
+
+### Delete user
+DELETE {{baseUrl}}/api/users/4d5dc30e-43f1-4ec1-9300-0285a95c768c
+Content-Type: application/json
+Authorization: Bearer {{token}}

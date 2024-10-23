@@ -1,0 +1,50 @@
+@baseUrl=http://localhost:4000
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAxOTJhODM2LWIxYjktNzMzNy1hNmE3LWYzNTYzOGExNjJlNSIsImlhdCI6MTcyOTM5OTAwOSwiZXhwIjoxNzI5NDg1NDA5fQ.DHQ5ECTwwyl53ygaqnhFQFEsOo8vIVWLYCqjP7QoWos
+
+### Get all companies
+GET {{baseUrl}}/api/companies
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Get company by id
+GET {{baseUrl}}/api/companies/0192a838-1ddf-7337-a6a8-0838ddcea2fb
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+### Create company
+POST {{baseUrl}}/api/companies
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "code": "FANDA",
+  "name": "FandaTech",
+  "description": "Fintech company",
+  "test":"Testing",
+  "address": {
+    "line1": "#53/15A, Narayanapalayam string",
+    "line2":"",
+    "city":"Kanchipuram",
+    "state":"TN",
+    "postalCode":"631501",
+    "test":"Testing"
+  }
+}
+
+### Update company
+PUT {{baseUrl}}/api/companies/d768a1ac-b2a3-4500-9b9d-7d5d00030f95
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "username": "tbala",
+  "firstName": "Balamurugan",
+  "lastName": "Thanikachalam",
+  "email": "tbala@fandatech.net"
+}
+
+### Delete company
+DELETE {{baseUrl}}/api/companies/4d5dc30e-43f1-4ec1-9300-0285a95c768c
+Content-Type: application/json
+Authorization: Bearer {{token}}

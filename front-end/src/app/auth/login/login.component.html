@@ -1,0 +1,47 @@
+<!-- <div> -->
+<div class="border px-4 py-2 pb-4 rounded w-[350px] space-y-2">
+  <h1 class="text-xl font-medium">Login</h1>
+  <div>
+    <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Please input your username!">
+          <nz-input-group nzPrefixIcon="user">
+            <input
+              type="text"
+              nz-input
+              formControlName="userName"
+              placeholder="Username"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Please input your Password!">
+          <nz-input-group nzPrefixIcon="lock">
+            <input
+              type="password"
+              nz-input
+              formControlName="password"
+              placeholder="Password"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <div class="flex justify-between items-center mb-2">
+        <label nz-checkbox formControlName="remember">
+          <span>Remember me</span>
+        </label>
+        <a>Forgot password</a>
+      </div>
+      <button
+        nz-button
+        class="login-form-button login-form-margin"
+        [nzType]="'primary'"
+        nzBlock
+      >
+        Log in
+      </button>
+    </form>
+  </div>
+</div>
+<!-- </div> -->

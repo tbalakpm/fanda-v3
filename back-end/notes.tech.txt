@@ -1,0 +1,88 @@
+package:json
+      // "typeorm": "typeorm-ts-node-commonjs",
+      // "migration": "npm run typeorm migration:run -- -d ./src/data-source.ts",
+      
+--------------------------------------------------------
+npx typeorm migration:create ./src/migrations/initial-create
+--------------------------------------------------------
+SELECT setval('user_id_seq', max(id)) FROM user;
+ALTER SEQUENCE seq RESTART WITH 1;
+--------------------------------------------------------
+
+*****************************************************
+Auth:
+  /api/auth/login
+  /api/auth/register
+
+Root:
+  /api/organizations
+  /api/users
+  /api/inventories
+  /api/activate/<moduleName>
+
+Organization:
+  /api/orgs/<orgId>/<resource>
+  /api/orgs/<orgId>/<resource>/<resId>
+
+Financial Year:
+  /api/orgs/<orgId>/years/<yearId>/<resource>
+  /api/orgs/<orgId>/years/<yearId>/<resource>/<resId>
+*****************************************************
+
+declare namespace Express {
+  import { User } from "./app/entity/User";
+  export interface Request {
+    user?: User;
+  }
+}
+
+import * as express from "express"
+declare global {
+    namespace Express {
+        interface Request {
+            user? : Record<string, any>
+        }
+    }
+}
+
+**********************************************************************************************************
+GET /user -> hello user
+GET /user/5 -> hello user 5
+GET /user/5/items -> hello items from user 5
+GET /user/5/items/6 -> hello item 6 from user 5
+----------------------------------------------------------------------------------------------------------
+var express = require('express');
+var app = express();
+
+var userRouter = express.Router();
+// you need to set mergeParams: true on the router,
+// if you want to access params from the parent router
+var itemRouter = express.Router({mergeParams: true});
+
+// you can nest routers by attaching them as middleware:
+userRouter.use('/:userId/items', itemRouter);
+
+userRouter.route('/')
+    .get(function (req, res) {
+        res.status(200)
+            .send('hello users');
+    });
+
+userRouter.route('/:userId')
+    .get(function (req, res) {
+        res.status(200)
+            .send('hello user ' + req.params.userId);
+    });
+
+itemRouter.route('/')
+    .get(function (req, res) {
+        res.status(200)
+            .send('hello items from user ' + req.params.userId);
+    });
+
+itemRouter.route('/:itemId')
+    .get(function (req, res) {
+        res.status(200)
+            .send('hello item ' + req.params.itemId + ' from user ' + req.params.userId);
+    });
+**********************************************************************************************************

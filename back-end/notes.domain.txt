@@ -1,0 +1,17 @@
+Users
+
+Companies
+  Branches
+  Units
+  Product Categories
+  Products
+  Addresses
+  Contacts
+  Customers
+  Suppliers
+  Consumers
+  Accounting Years
+    StartingNumbers
+    Invoices
+      LineItems
+  Inventories

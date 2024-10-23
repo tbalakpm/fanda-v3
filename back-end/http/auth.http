@@ -1,0 +1,30 @@
+@baseUrl=http://localhost:4000
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAxOTJhODM2LWIxYjktNzMzNy1hNmE3LWYzNTYzOGExNjJlNSIsImlhdCI6MTcyOTM5OTAwOSwiZXhwIjoxNzI5NDg1NDA5fQ.DHQ5ECTwwyl53ygaqnhFQFEsOo8vIVWLYCqjP7QoWos
+
+### Login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+    "username": "tbala",
+    "password": "Welcome!23"
+}
+
+### Register
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+    "username": "bseetha",
+    "password": "Welcome!23",
+    "email": "bseetha@fandatech.net",
+    "phone": "+9789813931",
+    "firstName": "Seethalakshmi",
+    "lastName": "Balamurugan",
+    "role": "manager"
+}
+
+### Profile
+GET {{baseUrl}}/api/auth/profile
+Content-Type: application/json
+Authorization: Bearer {{token}}
