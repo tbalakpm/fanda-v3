@@ -30,7 +30,7 @@ export class Year {
   company!: Company;
 
   @Column({ name: "is_active", default: true })
-  isActive: boolean = true;
+  isActive!: boolean;
 
   @Column(() => AuditDates)
   date!: AuditDates;

@@ -29,7 +29,7 @@ export class Company {
   contact?: Contact;
 
   @Column({ name: "is_active", default: true })
-  isActive: boolean = true;
+  isActive!: boolean;
 
   @Column(() => AuditDates)
   date!: AuditDates;

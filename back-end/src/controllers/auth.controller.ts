@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { AuthService, UserService } from "../services";
 import { LoginDto } from "../dto";
 import { ApiError } from "../responses/api-error";
-// import { User } from "../entities";
 
 export class AuthController {
   static async register(req: Request, res: Response, next: NextFunction) {
@@ -11,8 +10,7 @@ export class AuthController {
       if (!username || !password) {
         return next(new ApiError("Username and password are required", 400));
       }
-      // const { username, firstName, lastName, email, phone, password, role } = req.body;
-      // const registerUser = { username, password, role, email, phone, firstName, lastName } as User;
+
       const result = await AuthService.register(req.body);
       if (!result.success) {
         return next(new ApiError(result.message, result.status));
@@ -35,7 +33,6 @@ export class AuthController {
       if (!result.success) {
         return next(new ApiError(result.message, result.status));
       }
-
       res.status(result.status).json(result);
     } catch (error) {
       return next(error);
@@ -47,6 +44,7 @@ export class AuthController {
       if (!req.currentUser) {
         return next(new ApiError("Unauthorized", 401));
       }
+
       const result = await UserService.getUserById(req.currentUser.id);
       res.status(result.status).json(result);
     } catch (error) {

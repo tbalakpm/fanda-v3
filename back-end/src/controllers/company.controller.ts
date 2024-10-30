@@ -19,6 +19,7 @@ export class CompanyController {
       if (!result.success) {
         return next(new ApiError(result.message, result.status));
       }
+
       res.status(result.status).json(result);
     } catch (error) {
       return next(error);
@@ -31,6 +32,7 @@ export class CompanyController {
       if (!result.success) {
         return next(new ApiError(result.message, result.status));
       }
+
       res.status(result.status).json(result);
     } catch (error) {
       return next(error);
@@ -40,12 +42,11 @@ export class CompanyController {
   static async updateCompany(req: Request, res: Response, next: NextFunction) {
     try {
       const { companyId } = req.params;
-      // const { name, description, address, contact } = req.body;
-      // const updateCompany = { name, description, address, contact } as Company;
       const result = await CompanyService.updateCompany(companyId, req.body, req.currentUser.id);
       if (!result.success) {
         return next(new ApiError(result.message, result.status));
       }
+
       res.status(result.status).json(result);
     } catch (error) {
       return next(error);
@@ -59,6 +60,7 @@ export class CompanyController {
       if (!result.success) {
         return next(new ApiError(result.message, result.status));
       }
+
       res.status(result.status).json(result);
     } catch (error) {
       return next(error);

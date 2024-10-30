@@ -14,7 +14,7 @@ export const AppDataSource = new DataSource({
   password: DB_PASSWORD,
   database: DB_DATABASE,
   synchronize: true,
-  // logging: NODE_ENV === "development" ? true : false,
+  logging: process.env.NODE_ENV === "development" ? true : false,
   entities: [User, Company, Year, Unit],
   migrations: [__dirname + "/migrations/*.ts"],
   subscribers: [],

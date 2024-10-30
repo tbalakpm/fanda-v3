@@ -13,17 +13,11 @@ export const loggerMiddleware = (req: Request, res: Response, next: NextFunction
     const responseSizeString = `${res.getHeaders()["content-length"]} bytes`;
 
     if (res.statusCode >= 200 && res.statusCode < 400) {
-      logger.info(
-        `${req.method} ${req.hostname}${requestPath} - ${res.statusCode} - ${timeTakenString} - ${responseSizeString}`
-      );
+      logger.info(`${req.method} ${req.hostname}${requestPath} - ${res.statusCode} - ${timeTakenString} - ${responseSizeString}`);
     } else if (res.statusCode >= 400 && res.statusCode < 500) {
-      logger.warn(
-        `${req.method} ${req.hostname}${requestPath} - ${res.statusCode} - ${timeTakenString} - ${responseSizeString}`
-      );
+      logger.warn(`${req.method} ${req.hostname}${requestPath} - ${res.statusCode} - ${timeTakenString} - ${responseSizeString}`);
     } else if (res.statusCode >= 500) {
-      logger.error(
-        `${req.method} ${req.hostname}${requestPath} - ${res.statusCode} - ${timeTakenString} - ${responseSizeString}`
-      );
+      logger.error(`${req.method} ${req.hostname}${requestPath} - ${res.statusCode} - ${timeTakenString} - ${responseSizeString}`);
     }
   });
 
