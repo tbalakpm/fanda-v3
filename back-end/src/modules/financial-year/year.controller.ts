@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
-import { YearService } from "../../services";
+import { YearService } from "./year.service";
 import { User } from "../../entities";
 import { ApiError } from "../../responses";
 

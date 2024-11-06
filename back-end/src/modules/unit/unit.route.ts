@@ -1,6 +1,6 @@
 import express from "express";
 import { authorization } from "../../middleware";
-import { UnitController } from "../../controllers";
+import { UnitController } from "./unit.controller";
 
 export const unitRoutes = () => {
   const router = express.Router({ mergeParams: true });

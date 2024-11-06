@@ -1,6 +1,6 @@
 import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
-import { Company } from "../company.entity";
-import { AuditDates, AuditUsers } from "../embedded/audit.entity";
+import { Company } from "../../entities/company.entity";
+import { AuditDates, AuditUsers } from "../../entities/embedded/audit.entity";
 import { v7 } from "uuid";
 
 @Entity({ name: "years" })

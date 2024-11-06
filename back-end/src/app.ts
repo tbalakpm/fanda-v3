@@ -3,8 +3,11 @@ import express from "express";
 import cors from "cors";
 
 import { authentication, notFound, errorHandler, loggerMiddleware } from "./middleware";
-import { authRoutes, userRoutes, companyRoutes, unitRoutes, yearRoutes } from "./routes";
-import { productCategoryRoutes } from "./modules/product-category/product-category.routes";
+import { authRoutes, userRoutes, companyRoutes } from "./routes";
+
+import { yearRoutes } from "./modules/financial-year/year.route";
+import { unitRoutes } from "./modules/unit/unit.route";
+import { productCategoryRoutes } from "./modules/product-category/product-category.route";
 
 const app = express();
 

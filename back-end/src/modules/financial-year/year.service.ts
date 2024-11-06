@@ -1,8 +1,9 @@
 import { Not } from "typeorm";
 
 import { AppDataSource } from "../../data-source";
-import { Year, AuditUsers } from "../../entities";
-import { YearSchema } from "../../schema";
+import { Year } from "./year.entity";
+import { YearSchema } from "./year.schema";
+import { AuditUsers } from "../../entities";
 import { cache, parseError } from "../../helpers";
 import { ApiResponse, ApiStatus } from "../../responses";
 

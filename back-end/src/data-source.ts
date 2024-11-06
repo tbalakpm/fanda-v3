@@ -1,8 +1,11 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import "dotenv/config";
-import { User, Company, Year, Unit } from "./entities";
+import { User, Company } from "./entities";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
+
+import { Year } from "./modules/financial-year/year.entity";
+import { Unit } from "./modules/unit/unit.entity";
 import { ProductCategory } from "./modules/product-category/product-category.entity";
 
 const { DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_DATABASE } = process.env;

@@ -1,10 +1,11 @@
 import { Not } from "typeorm";
 
 import { AppDataSource } from "../../data-source";
-import { Unit, AuditUsers } from "../../entities";
-import { UnitSchema } from "../../schema";
-import { cache, parseError } from "../../helpers";
+import { AuditUsers } from "../../entities";
 import { ApiResponse, ApiStatus } from "../../responses";
+import { cache, parseError } from "../../helpers";
+import { Unit } from "./unit.entity";
+import { UnitSchema } from "./unit.schema";
 
 export class UnitService {
   private static unitRepository = AppDataSource.getRepository(Unit);

@@ -1,6 +1,6 @@
 import express from "express";
 import { authorization } from "../../middleware";
-import { YearController } from "../../controllers";
+import { YearController } from "./year.controller";
 
 export const yearRoutes = () => {
   const router = express.Router({ mergeParams: true });

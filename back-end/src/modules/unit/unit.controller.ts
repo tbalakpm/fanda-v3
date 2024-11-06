@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
-import { UnitService } from "../../services";
+import { UnitService } from "./unit.service";
 import { User } from "../../entities";
 import { ApiError } from "../../responses";
 
