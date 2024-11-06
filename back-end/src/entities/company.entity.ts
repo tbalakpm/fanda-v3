@@ -6,14 +6,14 @@ import { v7 } from "uuid";
 @Entity({ name: "companies" })
 export class Company {
   @PrimaryColumn("uuid")
-  id!: string;
+  companyId!: string;
 
   @Column({ length: 10, nullable: false, unique: true })
   code!: string;
 
   @BeforeInsert()
   generateId() {
-    this.id = v7();
+    if (!this.companyId) this.companyId = v7();
   }
 
   @Column({ length: 50, nullable: false, unique: true })

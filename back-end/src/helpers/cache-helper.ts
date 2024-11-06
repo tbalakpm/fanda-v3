@@ -2,7 +2,7 @@
 import { createCache } from "cache-manager";
 
 // Memory store by default
-const cache = createCache({ ttl: 600000, refreshThreshold: 20000 });
+const cache = createCache({ ttl: 10 * 60 * 1000, refreshThreshold: 60 * 1000 }); // 10 minutes, 1 minute
 
 // Single store which is in memory
 // const cache = createCache({

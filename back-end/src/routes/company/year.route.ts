@@ -1,16 +1,18 @@
-import { Router } from "express";
+import express from "express";
 import { authorization } from "../../middleware";
-import { CompanyController } from "../../controllers";
+import { YearController } from "../../controllers";
 
-export const yearRoutes = (prefix: string, router: Router) => {
+export const yearRoutes = () => {
+  const router = express.Router({ mergeParams: true });
+
   router
-    .route(`/${prefix}`)
-    .get(authorization(["admin"]), CompanyController.getCompanies)
-    .post(authorization(["admin"]), CompanyController.createCompany);
+    .route(`/`)
+    .get(authorization(["admin"]), YearController.getYears)
+    .post(authorization(["admin"]), YearController.createYear);
   router
-    .route(`/${prefix}/:companyId`)
-    .get(authorization(["admin"]), CompanyController.getCompanyById)
-    .put(authorization(["admin"]), CompanyController.updateCompany)
-    .delete(authorization(["admin"]), CompanyController.deleteCompany);
+    .route(`/:yearId`)
+    .get(authorization(["admin"]), YearController.getYearById)
+    .put(authorization(["admin"]), YearController.updateYear)
+    .delete(authorization(["admin"]), YearController.deleteYear);
   return router;
 };

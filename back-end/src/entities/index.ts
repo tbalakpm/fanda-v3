@@ -9,3 +9,4 @@ export * from "./contact.entity";
 
 export * from "./company/year.entity";
 export * from "./company/unit.entity";
+export * from "./embedded/audit.entity";

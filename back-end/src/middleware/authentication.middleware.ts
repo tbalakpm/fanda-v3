@@ -19,13 +19,16 @@ export const authentication = async (req: Request, res: Response, next: NextFunc
       return next(new ApiError("Unauthorized: Invalid token", 401));
     }
     //req.jwtPayload = jwtPayload;
-    const result = await UserService.getUserById((jwtPayload as jwt.JwtPayload)?.id || "");
+    const result = await UserService.getUserById((jwtPayload as jwt.JwtPayload)?.userId || "");
     if (!result.success) {
       return next(new ApiError("Unauthorized: User not found", 401));
     }
     req.currentUser = result.data as User;
     next();
   } catch (err) {
+    if (err instanceof jwt.JsonWebTokenError) {
+      return next(new ApiError("Unauthorized: Token expired or invalid token", 401));
+    }
     return next(err);
   }
 };

@@ -10,7 +10,7 @@ export const unitRoutes = () => {
     .get(authorization(["admin"]), UnitController.getUnits)
     .post(authorization(["admin"]), UnitController.createUnit);
   router
-    .route(`/:id`)
+    .route(`/:unitId`)
     .get(authorization(["admin"]), UnitController.getUnitById)
     .put(authorization(["admin"]), UnitController.updateUnit)
     .delete(authorization(["admin"]), UnitController.deleteUnit);

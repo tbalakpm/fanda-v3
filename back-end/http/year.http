@@ -1,0 +1,41 @@
+@baseUrl=http://localhost:4000
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTkyZmM1ZS0wMDkzLTdjY2MtYTIwYS1kYzg0NGE1YmFkMWMiLCJpYXQiOjE3MzA4MTI0MjQsImV4cCI6NDg4NDQxMjQyNH0.kpqWbQXwp9GsKhB-Yd1eGPdq8NHw5mj_9xpRT5Ggmkw
+@companyId=0192fb1b-ce1a-7ff2-955c-2912f7b645f0
+
+### Get all years
+GET {{baseUrl}}/api/companies/{{companyId}}/years
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Get year by id
+GET {{baseUrl}}/api/companies/{{companyId}}/years/0192fd19-776b-7775-9c4d-e24bbca5bc0e
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+### Create year
+POST {{baseUrl}}/api/companies/{{companyId}}/years
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "code": "FY-2024-25",
+  "beginDate": "2024-04-01",
+  "endDate": "2025-03-31"
+}
+
+### Update year
+PUT {{baseUrl}}/api/companies/{{companyId}}/years/d768a1ac-b2a3-4500-9b9d-7d5d00030f95
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "code": "FY-2024-25",
+  "beginDate": "2024-04-01",
+  "endDate": "2025-03-31"
+}
+
+### Delete year
+DELETE {{baseUrl}}/api/companies/{{companyId}}/years/4d5dc30e-43f1-4ec1-9300-0285a95c768c
+Content-Type: application/json
+Authorization: Bearer {{token}}

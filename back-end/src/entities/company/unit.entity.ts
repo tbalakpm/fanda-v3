@@ -1,16 +1,21 @@
-import { BeforeInsert, Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
+import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 import { Company } from "../company.entity";
 import { AuditDates, AuditUsers } from "../embedded/audit.entity";
 import { v7 } from "uuid";
 
 @Entity({ name: "units" })
+@Index(["companyId", "code"], { unique: true })
+@Index(["companyId", "name"], { unique: true })
 export class Unit {
-  @PrimaryColumn("uuid")
-  id!: string;
+  @PrimaryColumn("uuid", { name: "company_id" })
+  companyId!: string;
+
+  @PrimaryColumn("uuid", { name: "unit_id" })
+  unitId!: string;
 
   @BeforeInsert()
   generateId() {
-    this.id = v7();
+    if (!this.unitId) this.unitId = v7();
   }
 
   @Column({ name: "code", length: 15, nullable: false, unique: true })
@@ -22,13 +27,8 @@ export class Unit {
   @Column({ name: "description", length: 255, nullable: true })
   description?: string;
 
-  @ManyToOne(() => Unit, { nullable: true, onUpdate: "CASCADE", onDelete: "RESTRICT" })
-  @JoinColumn({ name: "base_unit_id" })
+  @Column({ name: "base_unit_id", nullable: true })
   baseUnitId?: string;
-
-  @ManyToOne(() => Company, { nullable: false, onUpdate: "CASCADE", onDelete: "RESTRICT" })
-  @JoinColumn({ name: "company_id" })
-  company!: Company;
 
   @Column({ name: "is_active", default: true })
   isActive!: boolean;
@@ -38,4 +38,13 @@ export class Unit {
 
   @Column(() => AuditUsers)
   user!: AuditUsers;
+
+  // Related Entities
+  @ManyToOne(() => Unit, { nullable: true, onUpdate: "CASCADE", onDelete: "RESTRICT" })
+  @JoinColumn({ name: "base_unit_id" })
+  baseUnit?: Unit;
+
+  @ManyToOne(() => Company, { nullable: false, onUpdate: "CASCADE", onDelete: "RESTRICT" })
+  @JoinColumn({ name: "company_id" })
+  company?: Company;
 }

@@ -4,11 +4,11 @@ import { v7 } from "uuid";
 @Entity({ name: "users" })
 export class User {
   @PrimaryColumn("uuid")
-  id!: string;
+  userId!: string;
 
   @BeforeInsert()
   generateId() {
-    this.id = v7();
+    if (!this.userId) this.userId = v7();
   }
 
   @Column({ length: 25, unique: true })

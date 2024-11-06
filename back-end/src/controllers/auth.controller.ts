@@ -45,7 +45,7 @@ export class AuthController {
         return next(new ApiError("Unauthorized", 401));
       }
 
-      const result = await UserService.getUserById(req.currentUser.id);
+      const result = await UserService.getUserById(req.currentUser.userId);
       res.status(result.status).json(result);
     } catch (error) {
       return next(error);

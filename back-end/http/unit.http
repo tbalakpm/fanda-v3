@@ -1,30 +1,33 @@
 @baseUrl=http://localhost:4000
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAxOTJhODM2LWIxYjktNzMzNy1hNmE3LWYzNTYzOGExNjJlNSIsImlhdCI6MTcyOTM5OTAwOSwiZXhwIjoxNzI5NDg1NDA5fQ.DHQ5ECTwwyl53ygaqnhFQFEsOo8vIVWLYCqjP7QoWos
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTkyZmM1ZS0wMDkzLTdjY2MtYTIwYS1kYzg0NGE1YmFkMWMiLCJpYXQiOjE3MzA4MTI0MjQsImV4cCI6NDg4NDQxMjQyNH0.kpqWbQXwp9GsKhB-Yd1eGPdq8NHw5mj_9xpRT5Ggmkw
+@companyId=0192fb1b-ce1a-7ff2-955c-2912f7b645f0
+@unitId=0192fc47-ac9b-7001-a290-788777a046a1
 
 ### Get all units
-GET {{baseUrl}}/api/companies/0192a838-1ddf-7337-a6a8-0838ddcea2fb/units
+GET {{baseUrl}}/api/companies/{{companyId}}/units
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 ### Get unit by id
-GET {{baseUrl}}/api/companies/0192a838-1ddf-7337-a6a8-0838ddcea2fb/units/0192a84e-db7e-7224-afc5-afeb110e1227
+GET {{baseUrl}}/api/companies/{{companyId}}/units/0192a84e-db7e-7224-afc5-afeb110e1227
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 
 ### Create unit
-POST {{baseUrl}}/api/companies/0192a838-1ddf-7337-a6a8-0838ddcea2fb/units
+POST {{baseUrl}}/api/companies/{{companyId}}/units
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "code": "NO.",
-  "name": "Number",
+  "unitId": "{{unitId}}",
+  "code": "NO",
+  "name": "Numbers",
   "description": "Numbers"
 }
 
 ### Update unit
-PUT {{baseUrl}}/api/companies/0192a838-1ddf-7337-a6a8-0838ddcea2fb/units/d768a1ac-b2a3-4500-9b9d-7d5d00030f95
+PUT {{baseUrl}}/api/companies/{{companyId}}/units/d768a1ac-b2a3-4500-9b9d-7d5d00030f95
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -36,6 +39,6 @@ Authorization: Bearer {{token}}
 }
 
 ### Delete unit
-DELETE {{baseUrl}}/api/companies/0192a838-1ddf-7337-a6a8-0838ddcea2fb/units/4d5dc30e-43f1-4ec1-9300-0285a95c768c
+DELETE {{baseUrl}}/api/companies/{{companyId}}/units/01930141-ef9a-7bba-915a-3e4ed9df0c18
 Content-Type: application/json
 Authorization: Bearer {{token}}

@@ -4,7 +4,7 @@ import { ApiError } from "../responses/api-error";
 
 export const authorization = (roles: string[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const user = req.currentUser as User; //await UserService.getUserById(req['currentUser'].id);
+    const user = req.currentUser as User;
     if (!user || !roles.includes(user.role)) {
       return next(new ApiError("Forbidden", 403));
     }

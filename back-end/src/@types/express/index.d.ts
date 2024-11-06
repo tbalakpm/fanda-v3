@@ -3,7 +3,7 @@ import { User } from "../../entity/user.entity";
 
 declare global {
   interface JwtPayload {
-    id?: string;
+    userId?: string;
   }
 
   namespace Express {

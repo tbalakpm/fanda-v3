@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { CompanyService } from "../services";
 import { ApiError } from "../responses/api-error";
+import { User } from "../entities";
 
 export class CompanyController {
   static async getCompanies(req: Request, res: Response, next: NextFunction) {
@@ -28,7 +29,7 @@ export class CompanyController {
 
   static async createCompany(req: Request, res: Response, next: NextFunction) {
     try {
-      const result = await CompanyService.createCompany(req.body, req.currentUser.id);
+      const result = await CompanyService.createCompany(req.body, (req.currentUser as User).userId);
       if (!result.success) {
         return next(new ApiError(result.message, result.status));
       }
@@ -42,7 +43,7 @@ export class CompanyController {
   static async updateCompany(req: Request, res: Response, next: NextFunction) {
     try {
       const { companyId } = req.params;
-      const result = await CompanyService.updateCompany(companyId, req.body, req.currentUser.id);
+      const result = await CompanyService.updateCompany(companyId, req.body, (req.currentUser as User).userId);
       if (!result.success) {
         return next(new ApiError(result.message, result.status));
       }
