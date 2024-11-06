@@ -7,12 +7,12 @@ export const unitRoutes = () => {
 
   router
     .route(`/`)
-    .get(authorization(["admin"]), UnitController.getUnits)
-    .post(authorization(["admin"]), UnitController.createUnit);
+    .get(UnitController.getUnits)
+    .post(authorization(["admin", "manager"]), UnitController.createUnit);
   router
     .route(`/:unitId`)
-    .get(authorization(["admin"]), UnitController.getUnitById)
-    .put(authorization(["admin"]), UnitController.updateUnit)
-    .delete(authorization(["admin"]), UnitController.deleteUnit);
+    .get(UnitController.getUnitById)
+    .put(authorization(["admin", "manager"]), UnitController.updateUnit)
+    .delete(authorization(["admin", "manager"]), UnitController.deleteUnit);
   return router;
 };

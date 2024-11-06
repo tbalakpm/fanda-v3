@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from "express";
+
 import { AuthService, UserService } from "../services";
 import { LoginDto } from "../dto";
-import { ApiError } from "../responses/api-error";
+import { ApiError } from "../responses";
 
 export class AuthController {
   static async register(req: Request, res: Response, next: NextFunction) {

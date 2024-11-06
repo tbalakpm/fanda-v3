@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
+
 import { UserService } from "../services";
-import { ApiError } from "../responses/api-error";
+import { ApiError } from "../responses";
 
 export class UserController {
   static async getUsers(req: Request, res: Response, next: NextFunction) {

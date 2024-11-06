@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
+
 import { YearService } from "../../services";
 import { User } from "../../entities";
-import { ApiError } from "../../responses/api-error";
+import { ApiError } from "../../responses";
 
 export class YearController {
   static async getYears(req: Request, res: Response, next: NextFunction) {
@@ -43,9 +44,6 @@ export class YearController {
   static async updateYear(req: Request, res: Response, next: NextFunction) {
     try {
       const { companyId, yearId } = req.params;
-      // console.log(unitId, req.body);
-      // const { code, name, description } = req.body;
-      // const updatedCompany = { code, name, description } as Unit;
       const result = await YearService.updateYear(companyId, yearId, req.body, (req.currentUser as User).userId);
       if (!result.success) {
         return next(new ApiError(result.message, result.status));

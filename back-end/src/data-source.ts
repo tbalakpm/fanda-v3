@@ -3,6 +3,7 @@ import { DataSource } from "typeorm";
 import "dotenv/config";
 import { User, Company, Year, Unit } from "./entities";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
+import { ProductCategory } from "./modules/product-category/product-category.entity";
 
 const { DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_DATABASE } = process.env;
 
@@ -15,7 +16,7 @@ export const AppDataSource = new DataSource({
   database: DB_DATABASE,
   synchronize: true,
   logging: process.env.NODE_ENV === "development" ? true : false,
-  entities: [User, Company, Year, Unit],
+  entities: [User, Company, Year, Unit, ProductCategory],
   migrations: [__dirname + "/migrations/*.ts"],
   subscribers: [],
   namingStrategy: new SnakeNamingStrategy()

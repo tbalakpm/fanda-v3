@@ -4,6 +4,7 @@ import cors from "cors";
 
 import { authentication, notFound, errorHandler, loggerMiddleware } from "./middleware";
 import { authRoutes, userRoutes, companyRoutes, unitRoutes, yearRoutes } from "./routes";
+import { productCategoryRoutes } from "./modules/product-category/product-category.routes";
 
 const app = express();
 
@@ -23,8 +24,9 @@ app.use(authentication);
 app.use("/api/users", userRoutes());
 app.use("/api/companies", companyRouter);
 // company routes
-companyRouter.use("/:companyId/units", unitRoutes());
 companyRouter.use("/:companyId/years", yearRoutes());
+companyRouter.use("/:companyId/units", unitRoutes());
+companyRouter.use("/:companyId/product-categories", productCategoryRoutes());
 // app.use("/api/companies/:companyId/years", yearRoutes(companyRouter));
 // year routes
 

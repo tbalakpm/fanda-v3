@@ -1,12 +1,10 @@
 import { Not } from "typeorm";
 
-import cache from "../../helpers/cache-helper";
-
 import { AppDataSource } from "../../data-source";
 import { Unit, AuditUsers } from "../../entities";
 import { UnitSchema } from "../../schema";
+import { cache, parseError } from "../../helpers";
 import { ApiResponse, ApiStatus } from "../../responses";
-import { parseError } from "../../helpers";
 
 export class UnitService {
   private static unitRepository = AppDataSource.getRepository(Unit);
@@ -17,7 +15,7 @@ export class UnitService {
       return { success: true, message: "Serving units from cache", data, status: ApiStatus.OK };
     }
     const units = await this.unitRepository.find({
-      select: ["unitId", "code", "name", "description", "isActive"],
+      select: ["unitId", "code", "name", "description", "baseUnitId", "isActive"],
       where: { companyId },
       order: { companyId: "ASC", unitId: "ASC" }
     });
@@ -31,7 +29,7 @@ export class UnitService {
       return { success: true, message: "Serving a unit from cache", data, status: ApiStatus.OK };
     }
     const unit = await this.unitRepository.findOne({
-      select: ["unitId", "code", "name", "description", "isActive"],
+      select: ["unitId", "code", "name", "description", "baseUnitId", "isActive"],
       where: { companyId, unitId }
     });
     if (!unit) {
@@ -55,7 +53,6 @@ export class UnitService {
     }
 
     const parsedUnit = parsedResult.data as Unit;
-    // parsedUnit.unitId = v7();
     parsedUnit.companyId = companyId;
     parsedUnit.user = { created: userId, updated: userId } as AuditUsers;
     const createUnit = this.unitRepository.create(parsedUnit);
@@ -78,7 +75,6 @@ export class UnitService {
 
     const auditUsers: AuditUsers = { ...dbUnit.user, updated: userId };
     const updateUnit = { ...dbUnit, ...unit, user: auditUsers };
-    // console.log(updateUnit);
     const parsedResult = UnitSchema.safeParse(updateUnit);
     if (!parsedResult.success) {
       return { success: false, message: parseError(parsedResult), status: ApiStatus.BAD_REQUEST };

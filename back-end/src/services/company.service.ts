@@ -1,13 +1,10 @@
 import { Not } from "typeorm";
-// import { v7 } from "uuid";
 
-import cache from "../helpers/cache-helper";
 import { AppDataSource } from "../data-source";
-import { Company, Address, Contact } from "../entities";
+import { Company, Address, Contact, AuditUsers } from "../entities";
 import { CompanySchema, AddressSchema, ContactSchema } from "../schema";
 import { ApiResponse, ApiStatus } from "../responses";
-import { AuditUsers } from "../entities/embedded/audit.entity";
-import { parseError } from "../helpers";
+import { cache, parseError } from "../helpers";
 
 export class CompanyService {
   private static companyRepository = AppDataSource.getRepository(Company);

@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
+
 import { UnitService } from "../../services";
 import { User } from "../../entities";
-import { ApiError } from "../../responses/api-error";
+import { ApiError } from "../../responses";
 
 export class UnitController {
   static async getUnits(req: Request, res: Response, next: NextFunction) {
@@ -43,9 +44,6 @@ export class UnitController {
   static async updateUnit(req: Request, res: Response, next: NextFunction) {
     try {
       const { companyId, unitId } = req.params;
-      // console.log(unitId, req.body);
-      // const { code, name, description } = req.body;
-      // const updatedCompany = { code, name, description } as Unit;
       const result = await UnitService.updateUnit(companyId, unitId, req.body, (req.currentUser as User).userId);
       if (!result.success) {
         return next(new ApiError(result.message, result.status));

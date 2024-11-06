@@ -7,12 +7,12 @@ export const yearRoutes = () => {
 
   router
     .route(`/`)
-    .get(authorization(["admin"]), YearController.getYears)
-    .post(authorization(["admin"]), YearController.createYear);
+    .get(YearController.getYears)
+    .post(authorization(["admin", "manager"]), YearController.createYear);
   router
     .route(`/:yearId`)
-    .get(authorization(["admin"]), YearController.getYearById)
-    .put(authorization(["admin"]), YearController.updateYear)
+    .get(YearController.getYearById)
+    .put(authorization(["admin", "manager"]), YearController.updateYear)
     .delete(authorization(["admin"]), YearController.deleteYear);
   return router;
 };
