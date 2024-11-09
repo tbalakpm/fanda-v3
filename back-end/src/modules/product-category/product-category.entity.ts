@@ -3,12 +3,10 @@ import { v7 } from "uuid";
 import { AuditDates, AuditUsers, Company } from "../../entities";
 
 @Entity({ name: "product_categories" })
+@Index(["companyId", "categoryId"], { unique: true })
 @Index(["companyId", "code"], { unique: true })
 @Index(["companyId", "name"], { unique: true })
 export class ProductCategory {
-  @PrimaryColumn("uuid")
-  companyId!: string;
-
   @PrimaryColumn("uuid")
   categoryId!: string;
 
@@ -17,10 +15,10 @@ export class ProductCategory {
     if (!this.categoryId) this.categoryId = v7();
   }
 
-  @Column({ length: 15, nullable: false })
+  @Column({ length: 15 })
   code!: string;
 
-  @Column({ length: 50, nullable: false })
+  @Column({ length: 50 })
   name!: string;
 
   @Column({ length: 255, nullable: true })
@@ -28,6 +26,9 @@ export class ProductCategory {
 
   @Column({ nullable: true })
   parentId?: string;
+
+  @Column("uuid")
+  companyId!: string;
 
   @Column({ default: true })
   isActive!: boolean;
@@ -41,7 +42,7 @@ export class ProductCategory {
   // Related Entities
   @ManyToOne(() => ProductCategory, { nullable: true, onUpdate: "CASCADE", onDelete: "RESTRICT" })
   @JoinColumn({ name: "parent_id" })
-  parentCategory?: ProductCategory;
+  parent?: ProductCategory;
 
   @ManyToOne(() => Company, { nullable: false, onUpdate: "CASCADE", onDelete: "RESTRICT" })
   @JoinColumn({ name: "company_id" })

@@ -2,12 +2,12 @@ import { z } from "zod";
 import { AuditDatesSchema, AuditUsersSchema } from "../../schema";
 
 export const UnitSchema = z.object({
-  companyId: z.string().uuid().optional(),
   unitId: z.string().uuid().optional(),
   code: z.string().min(1).max(15),
   name: z.string().min(1).max(50),
   description: z.string().max(255).optional(),
   baseUnitId: z.string().uuid().optional(),
+  companyId: z.string().uuid().optional(),
   isActive: z.boolean().default(true),
   date: AuditDatesSchema.optional(),
   user: AuditUsersSchema.optional()

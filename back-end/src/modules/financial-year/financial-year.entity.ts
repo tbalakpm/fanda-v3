@@ -3,13 +3,11 @@ import { Company } from "../../entities/company.entity";
 import { AuditDates, AuditUsers } from "../../entities/embedded/audit.entity";
 import { v7 } from "uuid";
 
-@Entity({ name: "years" })
+@Entity({ name: "financial_years" })
+@Index(["companyId", "yearId"], { unique: true })
 @Index(["companyId", "code"], { unique: true })
-export class Year {
-  @PrimaryColumn("uuid", { name: "company_id" })
-  companyId!: string;
-
-  @PrimaryColumn("uuid", { name: "year_id" })
+export class FinancialYear {
+  @PrimaryColumn("uuid")
   yearId!: string;
 
   @BeforeInsert()
@@ -17,19 +15,22 @@ export class Year {
     if (!this.yearId) this.yearId = v7();
   }
 
-  @Column({ length: 10, nullable: false, unique: true })
+  @Column({ length: 15, nullable: false })
   code!: string;
 
   @Column({ length: 255, nullable: true })
   description?: string;
 
-  @Column({ name: "begin_date", type: "date", nullable: false })
+  @Column({ type: "date", nullable: false })
   beginDate!: Date;
 
-  @Column({ name: "end_date", type: "date", nullable: false })
+  @Column({ type: "date", nullable: false })
   endDate!: Date;
 
-  @Column({ name: "is_active", default: true })
+  @Column("uuid")
+  companyId!: string;
+
+  @Column({ default: true })
   isActive!: boolean;
 
   @Column(() => AuditDates)

@@ -5,9 +5,10 @@ import cors from "cors";
 import { authentication, notFound, errorHandler, loggerMiddleware } from "./middleware";
 import { authRoutes, userRoutes, companyRoutes } from "./routes";
 
-import { yearRoutes } from "./modules/financial-year/year.route";
+import { financialYearRoutes } from "./modules/financial-year/financial-year.route";
 import { unitRoutes } from "./modules/unit/unit.route";
 import { productCategoryRoutes } from "./modules/product-category/product-category.route";
+import { productRoutes } from "./modules/product/product.route";
 
 const app = express();
 
@@ -27,10 +28,10 @@ app.use(authentication);
 app.use("/api/users", userRoutes());
 app.use("/api/companies", companyRouter);
 // company routes
-companyRouter.use("/:companyId/years", yearRoutes());
+companyRouter.use("/:companyId/years", financialYearRoutes());
 companyRouter.use("/:companyId/units", unitRoutes());
 companyRouter.use("/:companyId/product-categories", productCategoryRoutes());
-// app.use("/api/companies/:companyId/years", yearRoutes(companyRouter));
+companyRouter.use("/:companyId/products", productRoutes());
 // year routes
 
 // ############### routers - end ###############

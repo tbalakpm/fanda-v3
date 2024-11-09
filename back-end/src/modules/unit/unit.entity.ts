@@ -3,12 +3,10 @@ import { v7 } from "uuid";
 import { Company, AuditDates, AuditUsers } from "../../entities";
 
 @Entity({ name: "units" })
+@Index(["companyId", "unitId"], { unique: true })
 @Index(["companyId", "code"], { unique: true })
 @Index(["companyId", "name"], { unique: true })
 export class Unit {
-  @PrimaryColumn("uuid")
-  companyId!: string;
-
   @PrimaryColumn("uuid")
   unitId!: string;
 
@@ -28,6 +26,9 @@ export class Unit {
 
   @Column({ nullable: true })
   baseUnitId?: string;
+
+  @Column("uuid")
+  companyId!: string;
 
   @Column({ default: true })
   isActive!: boolean;
