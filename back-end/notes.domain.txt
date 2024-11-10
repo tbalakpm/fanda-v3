@@ -7,8 +7,8 @@ Companies             - done
   Products            - done
   Addresses           - done
   Contacts            - done
-  Customers
-  Suppliers
+  Customers           - done
+  Suppliers           - done
   Consumers
   Accounting Years
     StartingNumbers

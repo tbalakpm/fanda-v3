@@ -9,6 +9,8 @@ import { financialYearRoutes } from "./modules/financial-year/financial-year.rou
 import { unitRoutes } from "./modules/unit/unit.route";
 import { productCategoryRoutes } from "./modules/product-category/product-category.route";
 import { productRoutes } from "./modules/product/product.route";
+import { supplierRoutes } from "./modules/supplier/supplier.route";
+import { customerRoutes } from "./modules/customer/customer.route";
 
 const app = express();
 
@@ -32,6 +34,8 @@ companyRouter.use("/:companyId/years", financialYearRoutes());
 companyRouter.use("/:companyId/units", unitRoutes());
 companyRouter.use("/:companyId/product-categories", productCategoryRoutes());
 companyRouter.use("/:companyId/products", productRoutes());
+companyRouter.use("/:companyId/suppliers", supplierRoutes());
+companyRouter.use("/:companyId/customers", customerRoutes());
 // year routes
 
 // ############### routers - end ###############
