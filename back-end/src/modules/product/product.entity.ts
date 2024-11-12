@@ -1,6 +1,8 @@
 import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 import { v7 } from "uuid";
-import { AuditDates, AuditUsers, Company } from "../../entities";
+// import { AuditDates, AuditUsers, Company } from "../../entities";
+import { AuditDates, AuditUsers } from "../../entities/embedded/audit.entity";
+import { Company } from "../../entities/company.entity";
 import { ProductCategory } from "../product-category/product-category.entity";
 import { Unit } from "../unit/unit.entity";
 
@@ -78,15 +80,27 @@ export class Product {
   user!: AuditUsers;
 
   // Related Entities
-  @ManyToOne(() => ProductCategory, { nullable: true, onUpdate: "CASCADE", onDelete: "RESTRICT" })
+  @ManyToOne(() => ProductCategory, {
+    nullable: true,
+    onUpdate: "CASCADE",
+    onDelete: "RESTRICT"
+  })
   @JoinColumn({ name: "category_id" })
   category?: ProductCategory;
 
-  @ManyToOne(() => Unit, { nullable: true, onUpdate: "CASCADE", onDelete: "RESTRICT" })
+  @ManyToOne(() => Unit, {
+    nullable: true,
+    onUpdate: "CASCADE",
+    onDelete: "RESTRICT"
+  })
   @JoinColumn({ name: "base_unit_id" })
   unit?: Unit;
 
-  @ManyToOne(() => Company, { nullable: false, onUpdate: "CASCADE", onDelete: "RESTRICT" })
+  @ManyToOne(() => Company, {
+    nullable: false,
+    onUpdate: "CASCADE",
+    onDelete: "RESTRICT"
+  })
   @JoinColumn({ name: "company_id" })
   company?: Company;
 }

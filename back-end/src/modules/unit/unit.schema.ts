@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { AuditDatesSchema, AuditUsersSchema } from "../../schema";
+import { AuditDatesSchema, AuditUsersSchema } from "../../schema/embedded/audit.schema";
 
 export const UnitSchema = z.object({
   unitId: z.string().uuid().optional(),

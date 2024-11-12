@@ -1,10 +1,13 @@
+import process from "node:process";
 import { NextFunction, Request, Response } from "express";
 import * as jwt from "jsonwebtoken";
-import { UserService } from "../services";
-import { User } from "../entities";
+// import { UserService } from "../services";
+// import { User } from "../entities";
 import { ApiError } from "../responses/api-error";
+import { UserService } from "../services/user.service";
+import { User } from "../entities/user.entity";
 
-export const authentication = async (req: Request, res: Response, next: NextFunction) => {
+export const authentication = async (req: Request, _res: Response, next: NextFunction) => {
   try {
     const header = req.headers.authorization;
     if (!header) {

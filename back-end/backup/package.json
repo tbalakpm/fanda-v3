@@ -14,7 +14,7 @@
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "start": "npm run build && node --env-file=.env.prod dist/index",
-    "build": "rm -rf ./dist/ && tsc",
+    "build": "tsc",
     "migration:generate": "typeorm-ts-node-commonjs -d ./src/data-source.ts migration:generate ./src/migrations/initial",
     "migration:run": "typeorm-ts-node-commonjs -d ./src/data-source.ts migration:run"
   },

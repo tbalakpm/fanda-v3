@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 
-import { UserService } from "../services";
-import { ApiError } from "../responses";
+import { UserService } from "../services/user.service";
+import { ApiError } from "../responses/api-error";
 
 export class UserController {
-  static async getUsers(req: Request, res: Response, next: NextFunction) {
+  static async getUsers(_req: Request, res: Response, next: NextFunction) {
     try {
       const result = await UserService.getAllUsers();
       res.status(result.status).json(result);

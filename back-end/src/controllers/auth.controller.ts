@@ -1,8 +1,10 @@
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 
-import { AuthService, UserService } from "../services";
-import { LoginDto } from "../dto";
-import { ApiError } from "../responses";
+// import { AuthService, UserService } from "../services";
+import { LoginDto } from "../dto/login.dto";
+import { ApiError } from "../responses/api-error";
+import { AuthService } from "../services/auth.service";
+import { UserService } from "../services/user.service";
 
 export class AuthController {
   static async register(req: Request, res: Response, next: NextFunction) {

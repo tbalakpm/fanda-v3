@@ -1,6 +1,9 @@
 import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 import { v7 } from "uuid";
-import { Company, AuditDates, AuditUsers } from "../../entities";
+import { AuditDates, AuditUsers } from "../../entities/embedded/audit.entity";
+import { Company } from "../../entities/company.entity";
+
+// import { Company, AuditDates, AuditUsers } from "../../entities";
 
 @Entity({ name: "units" })
 @Index(["companyId", "unitId"], { unique: true })
@@ -40,11 +43,19 @@ export class Unit {
   user!: AuditUsers;
 
   // Related Entities
-  @ManyToOne(() => Unit, { nullable: true, onUpdate: "CASCADE", onDelete: "RESTRICT" })
+  @ManyToOne(() => Unit, {
+    nullable: true,
+    onUpdate: "CASCADE",
+    onDelete: "RESTRICT"
+  })
   @JoinColumn({ name: "base_unit_id" })
   baseUnit?: Unit;
 
-  @ManyToOne(() => Company, { nullable: false, onUpdate: "CASCADE", onDelete: "RESTRICT" })
+  @ManyToOne(() => Company, {
+    nullable: false,
+    onUpdate: "CASCADE",
+    onDelete: "RESTRICT"
+  })
   @JoinColumn({ name: "company_id" })
   company?: Company;
 }

@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import process from "node:process";
 import logger from "../helpers/logger.helper";
 
 export const loggerMiddleware = (req: Request, res: Response, next: NextFunction) => {

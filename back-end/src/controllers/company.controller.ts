@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 
-import { CompanyService } from "../services";
-import { User } from "../entities";
-import { ApiError } from "../responses";
+import { CompanyService } from "../services/company.service";
+import { User } from "../entities/user.entity";
+import { ApiError } from "../responses/api-error";
 
 export class CompanyController {
-  static async getCompanies(req: Request, res: Response, next: NextFunction) {
+  static async getCompanies(_req: Request, res: Response, next: NextFunction) {
     try {
       const result = await CompanyService.getAllCompanies();
       res.status(result.status).json(result);

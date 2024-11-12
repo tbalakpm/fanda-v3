@@ -1,7 +1,14 @@
 // import * as jwt from "jsonwebtoken";
-import { User } from "../../entity/user.entity";
+// import { User } from "../../entity/user.entity";
+
+import { User } from "../../entities/user.entity";
 
 declare global {
+  interface ImportMeta {
+    url: string;
+    main: boolean;
+  }
+
   interface JwtPayload {
     userId?: string;
   }

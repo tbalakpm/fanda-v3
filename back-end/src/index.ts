@@ -1,11 +1,14 @@
+import { DataSource } from "typeorm";
+import process from "node:process";
+import "dotenv/config";
+
 import { AppDataSource } from "./data-source";
 import app from "./app";
 import logger from "./helpers/logger.helper";
-import { User } from "./entities";
-import { encrypt } from "./helpers";
-import { DataSource } from "typeorm";
+import { User } from "./entities/user.entity";
+import { encrypt } from "./helpers/encrypt.helper";
 
-const { PORT = "3000" } = process.env;
+const { PORT = "4000" } = process.env;
 
 AppDataSource.initialize()
   .then(async (db) => {
@@ -17,7 +20,7 @@ AppDataSource.initialize()
       logger.info(`Server is running on http://localhost:${PORT}`);
     });
   })
-  .catch((error) => console.error(error));
+  .catch((error) => logger.error(error));
 
 const createAdminUser = async (db: DataSource) => {
   const userRepo = db.getRepository<User>(User);

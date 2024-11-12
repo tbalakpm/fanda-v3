@@ -2,15 +2,22 @@ import "reflect-metadata";
 import express from "express";
 import cors from "cors";
 
-import { authentication, notFound, errorHandler, loggerMiddleware } from "./middleware";
-import { authRoutes, userRoutes, companyRoutes } from "./routes";
+// import { authentication, notFound, errorHandler, loggerMiddleware } from "./middleware";
+// import { authRoutes, userRoutes, companyRoutes } from "./routes";
+import { loggerMiddleware } from "./middleware/logger.middleware";
+import { authentication } from "./middleware/authentication.middleware";
+import { notFound } from "./middleware/not-found.middleware";
+import { errorHandler } from "./middleware/error.middleware";
 
+import { userRoutes } from "./routes/user.route";
+import { companyRoutes } from "./routes/company.route";
 import { financialYearRoutes } from "./modules/financial-year/financial-year.route";
 import { unitRoutes } from "./modules/unit/unit.route";
 import { productCategoryRoutes } from "./modules/product-category/product-category.route";
 import { productRoutes } from "./modules/product/product.route";
 import { supplierRoutes } from "./modules/supplier/supplier.route";
 import { customerRoutes } from "./modules/customer/customer.route";
+import { authRoutes } from "./routes/auth.route";
 
 const app = express();
 

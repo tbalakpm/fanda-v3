@@ -1,7 +1,9 @@
 import { BeforeInsert, Column, Entity, PrimaryColumn } from "typeorm";
-import { Address, Contact } from "./";
-import { AuditDates, AuditUsers } from "./embedded/audit.entity";
 import { v7 } from "uuid";
+//import { Address, Contact } from "./";
+import { AuditDates, AuditUsers } from "./embedded/audit.entity";
+import { Address } from "./address.entity";
+import { Contact } from "./contact.entity";
 
 @Entity({ name: "companies" })
 export class Company {

@@ -1,5 +1,8 @@
 import { z } from "zod";
-import { AddressSchema, ContactSchema, AuditDatesSchema, AuditUsersSchema } from "../../schema";
+import { AddressSchema } from "../../schema/address.schema";
+import { ContactSchema } from "../../schema/contact.schema";
+import { AuditDatesSchema, AuditUsersSchema } from "../../schema/embedded/audit.schema";
+// import { AddressSchema, ContactSchema, AuditDatesSchema, AuditUsersSchema } from "../../schema";
 
 export const CustomerSchema = z.object({
   supplierId: z.string().uuid().optional(),

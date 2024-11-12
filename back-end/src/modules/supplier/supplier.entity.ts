@@ -1,6 +1,10 @@
 import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 import { v7 } from "uuid";
-import { Address, Contact, AuditDates, AuditUsers, Company } from "../../entities";
+// import { Address, Contact, AuditDates, AuditUsers, Company } from "../../entities";
+import { AuditDates, AuditUsers } from "../../entities/embedded/audit.entity";
+import { Company } from "../../entities/company.entity";
+import { Address } from "../../entities/address.entity";
+import { Contact } from "../../entities/contact.entity";
 
 @Entity({ name: "suppliers" })
 @Index(["companyId", "supplierId"], { unique: true })
@@ -43,7 +47,11 @@ export class Supplier {
   user!: AuditUsers;
 
   // Related Entities
-  @ManyToOne(() => Company, { nullable: false, onUpdate: "CASCADE", onDelete: "RESTRICT" })
+  @ManyToOne(() => Company, {
+    nullable: false,
+    onUpdate: "CASCADE",
+    onDelete: "RESTRICT"
+  })
   @JoinColumn({ name: "company_id" })
   company?: Company;
 }

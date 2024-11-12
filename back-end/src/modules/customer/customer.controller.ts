@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 
 import { CustomerService } from "./customer.service";
-import { User } from "../../entities";
-import { ApiError } from "../../responses";
+import { User } from "../../entities/user.entity";
+import { ApiError } from "../../responses/api-error";
 
 export class CustomerController {
   static async getCustomers(req: Request, res: Response, next: NextFunction) {

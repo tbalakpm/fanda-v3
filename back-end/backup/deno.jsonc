@@ -1,0 +1,49 @@
+{
+  "nodeModulesDir": "auto",
+  "entryFile": "src/main.ts",
+  // "scripts": {
+  //   "start": "deno run src/main.ts",
+  //   "dev": "denon run --allow-net --allow-read --allow-env --allow-write src/main.ts",
+  //   "test": "deno test --allow-net --allow-read --allow-env --allow-write"
+  // },
+  "tasks": {
+    "dev": "deno --allow-env --allow-read --allow-net --allow-ffi --allow-write --watch src/main.ts",
+    "test": "deno --allow-env --allow-read --allow-net --allow-ffi --allow-write test",
+    "start": "deno --allow-env --allow-read --allow-net --allow-ffi --allow-write src/main.ts",
+    // "build": "deno bundle src/main.ts dist/main.js",
+    "compile": "deno compile --unstable --allow-env --allow-read --allow-net --allow-ffi --allow-write --output ./fanda-api src/main.ts",
+    "lint": "deno lint --unstable --ignore=dist",
+    "format": "deno fmt --ignore=dist",
+    "cache": "deno cache --unstable --reload --lock=lock.json --lock-write src/main.ts",
+    "doc": "deno doc --unstable --reload src/main.ts"
+    // "upgrade": "deno upgrade --version 1.17.2",
+    // "install": "deno install --unstable --allow-env --allow-read --allow-write --allow-net --allow-run --name=denon https://deno.land/x/denon/denon.ts",
+    // "uninstall": "deno uninstall denon",
+    // "run": "deno run src/main.ts"
+  },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@1",
+    "bcrypt": "npm:bcrypt@^5.1.1",
+    "cache-manager": "npm:cache-manager@^6.1.2",
+    "cors": "npm:cors@^2.8.5",
+    "dotenv": "npm:dotenv@^16.4.5",
+    "express": "npm:express@^5.0.1",
+    "jsonwebtoken": "npm:jsonwebtoken@^9.0.2",
+    "pg": "npm:pg@^8.13.1",
+    "reflect-metadata": "npm:reflect-metadata@^0.2.2",
+    "typeorm": "npm:typeorm@^0.3.20",
+    "typeorm-naming-strategies": "npm:typeorm-naming-strategies@^4.1.0",
+    "uuid": "npm:uuid@^11.0.2",
+    "winston": "npm:winston@^3.17.0",
+    "zod": "npm:zod@^3.23.8"
+  },
+  "compilerOptions": {
+    "lib": ["ES5", "ES6", "ES2018"],
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
+  }
+}

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { AuditDatesSchema, AuditUsersSchema } from "../../schema";
+import { AuditDatesSchema, AuditUsersSchema } from "../../schema/embedded/audit.schema";
 
 export const ProductCategorySchema = z.object({
   categoryId: z.string().uuid().optional(),

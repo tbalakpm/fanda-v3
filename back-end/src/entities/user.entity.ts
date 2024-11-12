@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn, BeforeInsert } from "typeorm";
+import { BeforeInsert, Column, Entity, PrimaryColumn } from "typeorm";
 import { v7 } from "uuid";
 
 @Entity({ name: "users" })
