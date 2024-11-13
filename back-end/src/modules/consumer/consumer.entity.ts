@@ -17,7 +17,7 @@ export class Consumer {
     if (!this.consumerId) this.consumerId = v7();
   }
 
-  @Column({ length: 50, unique: true })
+  @Column({ length: 50 })
   name!: string;
 
   @Column({ type: "jsonb", default: {} })

@@ -14,7 +14,7 @@ export class Supplier {
   @PrimaryColumn("uuid")
   supplierId!: string;
 
-  @Column({ length: 10, unique: true })
+  @Column({ length: 10 })
   code!: string;
 
   @BeforeInsert()
@@ -22,7 +22,7 @@ export class Supplier {
     if (!this.supplierId) this.supplierId = v7();
   }
 
-  @Column({ length: 50, unique: true })
+  @Column({ length: 50 })
   name!: string;
 
   @Column({ length: 255, nullable: true })

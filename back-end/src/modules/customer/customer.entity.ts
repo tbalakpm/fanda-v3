@@ -14,7 +14,7 @@ export class Customer {
   @PrimaryColumn("uuid")
   customerId!: string;
 
-  @Column({ length: 10, unique: true })
+  @Column({ length: 10 })
   code!: string;
 
   @BeforeInsert()
@@ -22,7 +22,7 @@ export class Customer {
     if (!this.customerId) this.customerId = v7();
   }
 
-  @Column({ length: 50, unique: true })
+  @Column({ length: 50 })
   name!: string;
 
   @Column({ length: 255, nullable: true })

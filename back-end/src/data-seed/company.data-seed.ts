@@ -1,5 +1,3 @@
-import { v7 } from "uuid";
-
 import { Customer } from "../modules/customer/customer.entity";
 import { FinancialYear } from "../modules/financial-year/financial-year.entity";
 import { ProductCategory } from "../modules/product-category/product-category.entity";
@@ -121,7 +119,6 @@ export class CompanyDataSeeder {
   static getDefaultSequences(yearId: string, adminUserId: string): SequenceGenerator[] {
     const sequences = this.defaultSequences.map((sequence) => {
       const newSequence = new SequenceGenerator();
-      newSequence.sequenceId = v7();
       newSequence.key = sequence.key;
       newSequence.prefix = sequence.prefix;
       newSequence.current = sequence.current;
