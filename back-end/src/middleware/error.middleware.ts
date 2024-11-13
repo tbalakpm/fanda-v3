@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ApiError } from "../responses/api-error";
-import logger from "../helpers/logger.helper";
+import logger from "../logger";
 
 export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
   const message = `${req.method} ${req.hostname}${req.path} - ${err.message}`;

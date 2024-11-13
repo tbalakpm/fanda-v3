@@ -14,7 +14,7 @@ export class Customer {
   @PrimaryColumn("uuid")
   customerId!: string;
 
-  @Column({ length: 10, nullable: false, unique: true })
+  @Column({ length: 10, unique: true })
   code!: string;
 
   @BeforeInsert()
@@ -22,16 +22,16 @@ export class Customer {
     if (!this.customerId) this.customerId = v7();
   }
 
-  @Column({ length: 50, nullable: false, unique: true })
+  @Column({ length: 50, unique: true })
   name!: string;
 
   @Column({ length: 255, nullable: true })
   description?: string;
 
-  @Column({ type: "jsonb", nullable: false, default: {} })
+  @Column({ type: "jsonb", default: {} })
   address?: Address;
 
-  @Column({ type: "jsonb", nullable: false, default: {} })
+  @Column({ type: "jsonb", default: {} })
   contact?: Contact;
 
   @Column("uuid")
@@ -47,11 +47,7 @@ export class Customer {
   user!: AuditUsers;
 
   // Related Entities
-  @ManyToOne(() => Company, {
-    nullable: false,
-    onUpdate: "CASCADE",
-    onDelete: "RESTRICT"
-  })
+  @ManyToOne(() => Company, { onUpdate: "CASCADE", onDelete: "RESTRICT" })
   @JoinColumn({ name: "company_id" })
   company?: Company;
 }

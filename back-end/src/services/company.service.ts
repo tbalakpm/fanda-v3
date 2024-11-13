@@ -2,20 +2,17 @@ import { Not } from "typeorm";
 
 import { AppDataSource } from "../data-source";
 import { Company } from "../entities/company.entity";
-import { ApiResponse } from "../responses/api-response";
-import { cache } from "../helpers/cache.helper";
-import { ApiStatus } from "../responses/api-status";
-import { CompanySchema } from "../schema/company.schema";
-import { parseError } from "../helpers/error.helper";
 import { Address } from "../entities/address.entity";
-import { AddressSchema } from "../schema/address.schema";
 import { Contact } from "../entities/contact.entity";
-import { ContactSchema } from "../schema/contact.schema";
 import { AuditUsers } from "../entities/embedded/audit.entity";
-// import { Company, Address, Contact, AuditUsers } from "../entities";
-// import { CompanySchema, AddressSchema, ContactSchema } from "../schema";
-// import { ApiResponse, ApiStatus } from "../responses";
-// import { cache, parseError } from "../helpers";
+import { CompanySchema } from "../schema/company.schema";
+import { AddressSchema } from "../schema/address.schema";
+import { ContactSchema } from "../schema/contact.schema";
+import { ApiResponse } from "../responses/api-response";
+import { ApiStatus } from "../responses/api-status";
+import { cache } from "../helpers/cache.helper";
+import { parseError } from "../helpers/error.helper";
+import { CompanyDataSeeder } from "../data-seed/company.data-seed";
 
 export class CompanyService {
   private static companyRepository = AppDataSource.getRepository(Company);
@@ -23,80 +20,44 @@ export class CompanyService {
   static async getAllCompanies(): Promise<ApiResponse<Company[]>> {
     const data = await cache.get<Company[]>("companies");
     if (data) {
-      return {
-        success: true,
-        message: "Serving companies from cache",
-        data,
-        status: ApiStatus.OK
-      };
+      return { success: true, message: "Serving companies from cache", data, status: ApiStatus.OK };
     }
     const companies = await this.companyRepository.find({
       select: ["companyId", "code", "name", "description", "address", "contact", "isActive"],
       order: { companyId: "ASC" }
     });
     await cache.set("companies", companies);
-    return {
-      success: true,
-      message: "Serving companies from database",
-      data: companies,
-      status: ApiStatus.OK
-    };
+    return { success: true, message: "Serving companies from database", data: companies, status: ApiStatus.OK };
   }
 
   static async getCompanyById(companyId: string): Promise<ApiResponse<Company>> {
     const data = await cache.get<Company>(`companies:${companyId}`);
     if (data) {
-      return {
-        success: true,
-        message: "Serving a company from cache",
-        data,
-        status: ApiStatus.OK
-      };
+      return { success: true, message: "Serving a company from cache", data, status: ApiStatus.OK };
     }
     const company = await this.companyRepository.findOne({
       select: ["companyId", "code", "name", "description", "address", "contact", "isActive"],
       where: { companyId }
     });
     if (!company) {
-      return {
-        success: false,
-        message: `Company with id '${companyId}' not found`,
-        status: ApiStatus.NOT_FOUND
-      };
+      return { success: false, message: `Company with id '${companyId}' not found`, status: ApiStatus.NOT_FOUND };
     }
     await cache.set(`companies:${companyId}`, company);
-    return {
-      success: true,
-      message: "Serving company from database",
-      data: company,
-      status: ApiStatus.OK
-    };
+    return { success: true, message: "Serving company from database", data: company, status: ApiStatus.OK };
   }
 
   static async createCompany(company: Company, userId: string): Promise<ApiResponse<Company>> {
     const parsedResult = CompanySchema.safeParse(company);
     if (!parsedResult.success) {
-      return {
-        success: false,
-        message: parseError(parsedResult),
-        status: ApiStatus.BAD_REQUEST
-      };
+      return { success: false, message: parseError(parsedResult), status: ApiStatus.BAD_REQUEST };
     }
 
     const parsedCompany = parsedResult.data as Company; //as any as Company;
     if (await this.isCompanyCodeExists(parsedCompany.code)) {
-      return {
-        success: false,
-        message: `Company with code '${parsedCompany.code}' already exists`,
-        status: ApiStatus.BAD_REQUEST
-      };
+      return { success: false, message: `Company with code '${parsedCompany.code}' already exists`, status: ApiStatus.BAD_REQUEST };
     }
     if (await this.isCompanyNameExists(parsedCompany.name)) {
-      return {
-        success: false,
-        message: `Company with name '${parsedCompany.name}' already exists`,
-        status: ApiStatus.BAD_REQUEST
-      };
+      return { success: false, message: `Company with name '${parsedCompany.name}' already exists`, status: ApiStatus.BAD_REQUEST };
     }
 
     // parsedCompany.companyId = v7();
@@ -104,37 +65,27 @@ export class CompanyService {
 
     const createCompany = this.companyRepository.create(parsedCompany);
     const newCompany = await this.companyRepository.save<Company>(createCompany);
+    // Seed company data
+    await CompanyDataSeeder.createYear(newCompany.companyId, userId, new Date());
+    await CompanyDataSeeder.createCashCustomer(newCompany.companyId, userId);
+    await CompanyDataSeeder.createCashSupplier(newCompany.companyId, userId);
+    await CompanyDataSeeder.createDefaultProductCategory(newCompany.companyId, userId);
+    await CompanyDataSeeder.createDefaultUnit(newCompany.companyId, userId);
+
     this.invalidateCache();
-    return {
-      success: true,
-      message: "Company created successfully",
-      data: newCompany,
-      status: ApiStatus.CREATED
-    };
+    return { success: true, message: "Company created successfully", data: newCompany, status: ApiStatus.CREATED };
   }
 
   static async updateCompany(companyId: string, company: Partial<Company>, userId: string): Promise<ApiResponse<Company>> {
     if (company.code && (await this.isCompanyCodeExists(company.code, companyId))) {
-      return {
-        success: false,
-        message: `Company with code '${company.code}' already exists`,
-        status: ApiStatus.BAD_REQUEST
-      };
+      return { success: false, message: `Company with code '${company.code}' already exists`, status: ApiStatus.BAD_REQUEST };
     }
     if (company.name && (await this.isCompanyNameExists(company.name, companyId))) {
-      return {
-        success: false,
-        message: `Company with name '${company.name}' already exists`,
-        status: ApiStatus.BAD_REQUEST
-      };
+      return { success: false, message: `Company with name '${company.name}' already exists`, status: ApiStatus.BAD_REQUEST };
     }
     const dbCompany = await this.companyRepository.findOneBy({ companyId });
     if (!dbCompany) {
-      return {
-        success: false,
-        message: `Company with id '${companyId}' not found`,
-        status: ApiStatus.NOT_FOUND
-      };
+      return { success: false, message: `Company with id '${companyId}' not found`, status: ApiStatus.NOT_FOUND };
     }
 
     let address: Address | undefined;
@@ -162,40 +113,22 @@ export class CompanyService {
     };
     const parsedResult = CompanySchema.safeParse(updateCompany);
     if (!parsedResult.success) {
-      return {
-        success: false,
-        message: parseError(parsedResult),
-        status: ApiStatus.BAD_REQUEST
-      };
+      return { success: false, message: parseError(parsedResult), status: ApiStatus.BAD_REQUEST };
     }
     const parsedCompany = parsedResult.data as Company;
     const updatedCompany = await this.companyRepository.save(parsedCompany);
     this.invalidateCache(companyId);
-    return {
-      success: true,
-      message: "Company updated successfully",
-      data: updatedCompany,
-      status: ApiStatus.OK
-    };
+    return { success: true, message: "Company updated successfully", data: updatedCompany, status: ApiStatus.OK };
   }
 
   static async deleteCompany(companyId: string): Promise<ApiResponse<Company>> {
     const company = await this.companyRepository.findOneBy({ companyId });
     if (!company) {
-      return {
-        success: false,
-        message: `Company with id '${companyId}' not found`,
-        status: ApiStatus.NOT_FOUND
-      };
+      return { success: false, message: `Company with id '${companyId}' not found`, status: ApiStatus.NOT_FOUND };
     }
     await this.companyRepository.remove(company);
     this.invalidateCache(companyId);
-    return {
-      success: true,
-      message: "Company deleted successfully",
-      data: company,
-      status: ApiStatus.OK
-    };
+    return { success: true, message: "Company deleted successfully", data: company, status: ApiStatus.OK };
   }
 
   static async isCompanyCodeExists(companyCode: string, companyId?: string): Promise<boolean> {

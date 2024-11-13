@@ -4,11 +4,9 @@ import { ContactSchema } from "../../schema/contact.schema";
 import { AuditDatesSchema, AuditUsersSchema } from "../../schema/embedded/audit.schema";
 // import { AddressSchema, ContactSchema, AuditDatesSchema, AuditUsersSchema } from "../../schema";
 
-export const CustomerSchema = z.object({
-  customerId: z.string().uuid().optional(),
-  code: z.string().min(1).max(10),
+export const ConsumerSchema = z.object({
+  consumerId: z.string().uuid().optional(),
   name: z.string().min(1).max(50),
-  description: z.string().max(255).optional(),
   address: AddressSchema.optional(),
   contact: ContactSchema.optional(),
   isActive: z.boolean().default(true),
@@ -17,4 +15,4 @@ export const CustomerSchema = z.object({
 });
 
 // extract the inferred type
-export type CustomerType = z.infer<typeof CustomerSchema>;
+export type ConsumerType = z.infer<typeof ConsumerSchema>;

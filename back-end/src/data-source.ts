@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import process from "node:process";
+// import process from "node:process";
 // import { dirname } from "node:path";
 // import { fileURLToPath } from "node:url";
 import { DataSource } from "typeorm";
@@ -14,6 +14,8 @@ import { ProductCategory } from "./modules/product-category/product-category.ent
 import { Product } from "./modules/product/product.entity";
 import { Supplier } from "./modules/supplier/supplier.entity";
 import { Customer } from "./modules/customer/customer.entity";
+import { Consumer } from "./modules/consumer/consumer.entity";
+import { SequenceGenerator } from "./modules/sequence-generator/sequence-generator.entity";
 
 // const __dirname = dirname(fileURLToPath(import.meta.url));
 const { DB_HOST = "localhost", DB_PORT = "5432", DB_USERNAME, DB_PASSWORD, DB_DATABASE, NODE_ENV = "development" } = process.env;
@@ -27,7 +29,7 @@ export const AppDataSource = new DataSource({
   database: DB_DATABASE,
   synchronize: true,
   logging: NODE_ENV === "development" ? true : false,
-  entities: [User, Company, FinancialYear, Unit, ProductCategory, Product, Supplier, Customer],
+  entities: [User, Company, FinancialYear, Unit, ProductCategory, Product, Supplier, Customer, Consumer, SequenceGenerator],
   migrations: [__dirname + "/migrations/*.ts"],
   subscribers: [],
   namingStrategy: new SnakeNamingStrategy()

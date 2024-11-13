@@ -43,19 +43,11 @@ export class Unit {
   user!: AuditUsers;
 
   // Related Entities
-  @ManyToOne(() => Unit, {
-    nullable: true,
-    onUpdate: "CASCADE",
-    onDelete: "RESTRICT"
-  })
+  @ManyToOne(() => Unit, { nullable: true, onUpdate: "CASCADE", onDelete: "RESTRICT" })
   @JoinColumn({ name: "base_unit_id" })
   baseUnit?: Unit;
 
-  @ManyToOne(() => Company, {
-    nullable: false,
-    onUpdate: "CASCADE",
-    onDelete: "RESTRICT"
-  })
+  @ManyToOne(() => Company, { onUpdate: "CASCADE", onDelete: "RESTRICT" })
   @JoinColumn({ name: "company_id" })
   company?: Company;
 }

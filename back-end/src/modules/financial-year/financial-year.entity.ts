@@ -24,16 +24,16 @@ export class FinancialYear {
     if (!this.yearId) this.yearId = v7();
   }
 
-  @Column({ length: 15, nullable: false })
+  @Column({ length: 15 })
   code!: string;
 
   @Column({ length: 255, nullable: true })
   description?: string;
 
-  @Column({ type: "date", nullable: false })
+  @Column({ type: "date" })
   beginDate!: Date;
 
-  @Column({ type: "date", nullable: false })
+  @Column({ type: "date" })
   endDate!: Date;
 
   @Column("uuid")
@@ -49,11 +49,7 @@ export class FinancialYear {
   user!: AuditUsers;
 
   // Related Entities
-  @ManyToOne(() => Company, {
-    nullable: false,
-    onUpdate: "CASCADE",
-    onDelete: "RESTRICT"
-  })
+  @ManyToOne(() => Company, { onUpdate: "CASCADE", onDelete: "RESTRICT" })
   @JoinColumn({ name: "company_id" })
   company?: Company;
 }

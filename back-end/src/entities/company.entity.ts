@@ -10,7 +10,7 @@ export class Company {
   @PrimaryColumn("uuid")
   companyId!: string;
 
-  @Column({ length: 10, nullable: false, unique: true })
+  @Column({ length: 10, unique: true })
   code!: string;
 
   @BeforeInsert()
@@ -18,16 +18,16 @@ export class Company {
     if (!this.companyId) this.companyId = v7();
   }
 
-  @Column({ length: 50, nullable: false, unique: true })
+  @Column({ length: 50, unique: true })
   name!: string;
 
   @Column({ length: 255, nullable: true })
   description?: string;
 
-  @Column({ type: "jsonb", nullable: false, default: {} })
+  @Column({ type: "jsonb", default: {} })
   address?: Address;
 
-  @Column({ type: "jsonb", nullable: false, default: {} })
+  @Column({ type: "jsonb", default: {} })
   contact?: Contact;
 
   @Column({ name: "is_active", default: true })

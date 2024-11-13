@@ -1,32 +1,24 @@
 import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 import { v7 } from "uuid";
-// import { Address, Contact, AuditDates, AuditUsers, Company } from "../../entities";
+
 import { AuditDates, AuditUsers } from "../../entities/embedded/audit.entity";
 import { Company } from "../../entities/company.entity";
 import { Address } from "../../entities/address.entity";
 import { Contact } from "../../entities/contact.entity";
 
-@Entity({ name: "suppliers" })
-@Index(["companyId", "supplierId"], { unique: true })
-@Index(["companyId", "code"], { unique: true })
-@Index(["companyId", "name"], { unique: true })
-export class Supplier {
+@Entity({ name: "consumers" })
+@Index(["companyId", "consumerId"], { unique: true })
+export class Consumer {
   @PrimaryColumn("uuid")
-  supplierId!: string;
-
-  @Column({ length: 10, unique: true })
-  code!: string;
+  consumerId!: string;
 
   @BeforeInsert()
   generateId() {
-    if (!this.supplierId) this.supplierId = v7();
+    if (!this.consumerId) this.consumerId = v7();
   }
 
   @Column({ length: 50, unique: true })
   name!: string;
-
-  @Column({ length: 255, nullable: true })
-  description?: string;
 
   @Column({ type: "jsonb", default: {} })
   address?: Address;

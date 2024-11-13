@@ -10,6 +10,7 @@ import { notFound } from "./middleware/not-found.middleware";
 import { errorHandler } from "./middleware/error.middleware";
 
 import { userRoutes } from "./routes/user.route";
+import { authRoutes } from "./routes/auth.route";
 import { companyRoutes } from "./routes/company.route";
 import { financialYearRoutes } from "./modules/financial-year/financial-year.route";
 import { unitRoutes } from "./modules/unit/unit.route";
@@ -17,7 +18,7 @@ import { productCategoryRoutes } from "./modules/product-category/product-catego
 import { productRoutes } from "./modules/product/product.route";
 import { supplierRoutes } from "./modules/supplier/supplier.route";
 import { customerRoutes } from "./modules/customer/customer.route";
-import { authRoutes } from "./routes/auth.route";
+import { consumerRoutes } from "./modules/consumer/consumer.route";
 
 const app = express();
 
@@ -43,6 +44,7 @@ companyRouter.use("/:companyId/product-categories", productCategoryRoutes());
 companyRouter.use("/:companyId/products", productRoutes());
 companyRouter.use("/:companyId/suppliers", supplierRoutes());
 companyRouter.use("/:companyId/customers", customerRoutes());
+companyRouter.use("/:companyId/consumers", consumerRoutes());
 // year routes
 
 // ############### routers - end ###############

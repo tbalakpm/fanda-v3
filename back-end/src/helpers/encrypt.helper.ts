@@ -1,7 +1,7 @@
 import * as jwt from "jsonwebtoken";
 import * as bcrypt from "bcrypt";
 import "dotenv/config";
-import process from "node:process";
+// import process from "node:process";
 
 export class encrypt {
   static async encryptPassword(password: string) {
