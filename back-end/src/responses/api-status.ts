@@ -6,4 +6,5 @@ export enum ApiStatus {
   FORBIDDEN = 403,
   NOT_FOUND = 404,
   ERROR = 500
+  //INTERNAL_SERVER_ERROR = 500
 }

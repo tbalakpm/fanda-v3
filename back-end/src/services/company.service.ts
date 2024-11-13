@@ -1,4 +1,4 @@
-import { Not } from "typeorm";
+import { EntityManager, Not } from "typeorm";
 
 import { AppDataSource } from "../data-source";
 import { Company } from "../entities/company.entity";
@@ -13,6 +13,12 @@ import { ApiStatus } from "../responses/api-status";
 import { cache } from "../helpers/cache.helper";
 import { parseError } from "../helpers/error.helper";
 import { CompanyDataSeeder } from "../data-seed/company.data-seed";
+import { FinancialYear } from "../modules/financial-year/financial-year.entity";
+import { Customer } from "../modules/customer/customer.entity";
+import { Supplier } from "../modules/supplier/supplier.entity";
+import { ProductCategory } from "../modules/product-category/product-category.entity";
+import { Unit } from "../modules/unit/unit.entity";
+import { SequenceGenerator } from "../modules/sequence-generator/sequence-generator.entity";
 
 export class CompanyService {
   private static companyRepository = AppDataSource.getRepository(Company);
@@ -64,16 +70,22 @@ export class CompanyService {
     parsedCompany.user = { created: userId, updated: userId };
 
     const createCompany = this.companyRepository.create(parsedCompany);
-    const newCompany = await this.companyRepository.save<Company>(createCompany);
-    // Seed company data
-    await CompanyDataSeeder.createYear(newCompany.companyId, userId, new Date());
-    await CompanyDataSeeder.createCashCustomer(newCompany.companyId, userId);
-    await CompanyDataSeeder.createCashSupplier(newCompany.companyId, userId);
-    await CompanyDataSeeder.createDefaultProductCategory(newCompany.companyId, userId);
-    await CompanyDataSeeder.createDefaultUnit(newCompany.companyId, userId);
-
-    this.invalidateCache();
-    return { success: true, message: "Company created successfully", data: newCompany, status: ApiStatus.CREATED };
+    // Transaction starts here
+    const result = AppDataSource.transaction(async (transactionalEntityManager: EntityManager) => {
+      const newCompany = await transactionalEntityManager.save<Company>(createCompany);
+      // Seed company data
+      const year = await transactionalEntityManager.save<FinancialYear>(CompanyDataSeeder.getNewYear(newCompany.companyId, userId, new Date()));
+      await transactionalEntityManager.save<SequenceGenerator>(CompanyDataSeeder.getDefaultSequences(year.yearId, userId));
+      await transactionalEntityManager.save<Customer>(CompanyDataSeeder.getDefaultCashCustomer(newCompany.companyId, userId));
+      await transactionalEntityManager.save<Supplier>(CompanyDataSeeder.getDefaultCashSupplier(newCompany.companyId, userId));
+      await transactionalEntityManager.save<ProductCategory>(CompanyDataSeeder.getDefaultProductCategory(newCompany.companyId, userId));
+      await transactionalEntityManager.save<Unit>(CompanyDataSeeder.getDefaultUnit(newCompany.companyId, userId));
+      this.invalidateCache();
+      return { success: true, message: "Company created successfully", data: newCompany, status: ApiStatus.CREATED };
+    }).catch((error) => {
+      return { success: false, message: error.message, status: ApiStatus.ERROR };
+    });
+    return result;
   }
 
   static async updateCompany(companyId: string, company: Partial<Company>, userId: string): Promise<ApiResponse<Company>> {

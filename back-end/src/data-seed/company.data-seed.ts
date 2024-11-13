@@ -1,19 +1,14 @@
 import { v7 } from "uuid";
-import { AppDataSource } from "../data-source";
+
 import { Customer } from "../modules/customer/customer.entity";
-import { CustomerService } from "../modules/customer/customer.service";
 import { FinancialYear } from "../modules/financial-year/financial-year.entity";
-import { FinancialYearService } from "../modules/financial-year/financial-year.service";
 import { ProductCategory } from "../modules/product-category/product-category.entity";
-import { ProductCategoryService } from "../modules/product-category/product-category.service";
 import { Supplier } from "../modules/supplier/supplier.entity";
-import { SupplierService } from "../modules/supplier/supplier.service";
 import { Unit } from "../modules/unit/unit.entity";
-import { UnitService } from "../modules/unit/unit.service";
 import { SequenceGenerator } from "../modules/sequence-generator/sequence-generator.entity";
 
 export class CompanyDataSeeder {
-  static async createYear(companyId: string, adminUserId: string, date: Date = new Date()): Promise<void> {
+  static getNewYear(companyId: string, adminUserId: string, date: Date = new Date()): FinancialYear {
     const newYear = new FinancialYear();
 
     // Apr-Dec
@@ -31,52 +26,99 @@ export class CompanyDataSeeder {
       created: new Date(),
       updated: new Date()
     };
+    newYear.user = {
+      created: adminUserId,
+      updated: adminUserId
+    };
     newYear.companyId = companyId;
     newYear.isActive = true;
-
-    const savedYear = await FinancialYearService.createYear(companyId, newYear, adminUserId);
-    if (!savedYear.success) return;
-
-    await this.createSequences(savedYear.data!.yearId, adminUserId);
+    return newYear;
+    // const savedYear = await FinancialYearService.createYear(companyId, newYear, adminUserId);
+    // if (!savedYear.success) return;
+    // await this.createSequences(savedYear.data!.yearId, adminUserId);
   }
 
-  static async createCashCustomer(companyId: string, adminUserId: string): Promise<void> {
-    const cashCustomer = {
-      code: "CASH",
-      name: "Cash",
-      description: "Cash customer"
-    } as Customer;
-    await CustomerService.createCustomer(companyId, cashCustomer, adminUserId);
+  static getDefaultCashCustomer(companyId: string, adminUserId: string): Customer {
+    const cashCustomer = new Customer();
+    cashCustomer.code = "CASH";
+    cashCustomer.name = "Cash";
+    cashCustomer.description = "Cash customer";
+    cashCustomer.date = {
+      created: new Date(),
+      updated: new Date()
+    };
+    cashCustomer.user = {
+      created: adminUserId,
+      updated: adminUserId
+    };
+    cashCustomer.companyId = companyId;
+    cashCustomer.isActive = true;
+    return cashCustomer;
+
+    // await CustomerService.createCustomer(companyId, cashCustomer, adminUserId);
   }
 
-  static async createCashSupplier(companyId: string, adminUserId: string): Promise<void> {
-    const cashSupplier = {
-      code: "CASH",
-      name: "Cash",
-      description: "Cash supplier"
-    } as Supplier;
-    await SupplierService.createSupplier(companyId, cashSupplier, adminUserId);
+  static getDefaultCashSupplier(companyId: string, adminUserId: string): Supplier {
+    const cashSupplier = new Supplier();
+    cashSupplier.code = "CASH";
+    cashSupplier.name = "Cash";
+    cashSupplier.description = "Cash supplier";
+    cashSupplier.date = {
+      created: new Date(),
+      updated: new Date()
+    };
+    cashSupplier.user = {
+      created: adminUserId,
+      updated: adminUserId
+    };
+    cashSupplier.companyId = companyId;
+    cashSupplier.isActive = true;
+
+    return cashSupplier;
+    // await SupplierService.createSupplier(companyId, cashSupplier, adminUserId);
   }
 
-  static async createDefaultProductCategory(companyId: string, amdinUserId: string): Promise<void> {
-    const defaultCategory = {
-      code: "DEFAULT",
-      name: "Default",
-      description: "Default product category"
-    } as ProductCategory;
-    await ProductCategoryService.createCategory(companyId, defaultCategory, amdinUserId);
+  static getDefaultProductCategory(companyId: string, amdinUserId: string): ProductCategory {
+    const defaultCategory = new ProductCategory();
+    defaultCategory.code = "DEFAULT";
+    defaultCategory.name = "Default";
+    defaultCategory.description = "Default product category";
+    defaultCategory.companyId = companyId;
+    defaultCategory.isActive = true;
+    defaultCategory.date = {
+      created: new Date(),
+      updated: new Date()
+    };
+    defaultCategory.user = {
+      created: amdinUserId,
+      updated: amdinUserId
+    };
+    return defaultCategory;
+
+    // await ProductCategoryService.createCategory(companyId, defaultCategory, amdinUserId);
   }
 
-  static async createDefaultUnit(companyId: string, adminUserId: string): Promise<void> {
-    const numberUnit = {
-      code: "NO",
-      name: "Number",
-      description: "Default unit"
-    } as Unit;
-    await UnitService.createUnit(companyId, numberUnit, adminUserId);
+  static getDefaultUnit(companyId: string, adminUserId: string): Unit {
+    const numberUnit = new Unit();
+    numberUnit.code = "NO";
+    numberUnit.name = "Number";
+    numberUnit.description = "Default unit";
+    numberUnit.companyId = companyId;
+    numberUnit.isActive = true;
+    numberUnit.date = {
+      created: new Date(),
+      updated: new Date()
+    };
+    numberUnit.user = {
+      created: adminUserId,
+      updated: adminUserId
+    };
+    return numberUnit;
+
+    // await UnitService.createUnit(companyId, numberUnit, adminUserId);
   }
 
-  static async createSequences(yearId: string, adminUserId: string): Promise<void> {
+  static getDefaultSequences(yearId: string, adminUserId: string): SequenceGenerator[] {
     const sequences = this.defaultSequences.map((sequence) => {
       const newSequence = new SequenceGenerator();
       newSequence.sequenceId = v7();
@@ -97,9 +139,8 @@ export class CompanyDataSeeder {
 
       return newSequence;
     });
-
-    //  await this.sequenceRepository.insert(sequences);
-    await AppDataSource.getRepository("SequenceGenerator").insert(sequences);
+    return sequences;
+    // await AppDataSource.getRepository("SequenceGenerator").insert(sequences);
   }
 
   static defaultSequences = [
