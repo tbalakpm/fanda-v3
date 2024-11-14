@@ -3,7 +3,7 @@ import { FinancialYear } from "../modules/financial-year/financial-year.entity";
 import { ProductCategory } from "../modules/product-category/product-category.entity";
 import { Supplier } from "../modules/supplier/supplier.entity";
 import { Unit } from "../modules/unit/unit.entity";
-import { SequenceGenerator } from "../modules/sequence-generator/sequence-generator.entity";
+import { SerialNumber } from "../modules/serial-number/serial-number.entity";
 
 export class CompanyDataSeeder {
   static getNewYear(companyId: string, adminUserId: string, date: Date = new Date()): FinancialYear {
@@ -116,31 +116,31 @@ export class CompanyDataSeeder {
     // await UnitService.createUnit(companyId, numberUnit, adminUserId);
   }
 
-  static getDefaultSequences(yearId: string, adminUserId: string): SequenceGenerator[] {
-    const sequences = this.defaultSequences.map((sequence) => {
-      const newSequence = new SequenceGenerator();
-      newSequence.key = sequence.key;
-      newSequence.prefix = sequence.prefix;
-      newSequence.current = sequence.current;
-      newSequence.length = sequence.length;
-      newSequence.yearId = yearId;
-      newSequence.isActive = true;
-      newSequence.date = {
+  static getDefaultSequences(yearId: string, adminUserId: string): SerialNumber[] {
+    const serials = this.defaultSerials.map((serial) => {
+      const newSerial = new SerialNumber();
+      newSerial.key = serial.key;
+      newSerial.prefix = serial.prefix;
+      newSerial.current = serial.current;
+      newSerial.length = serial.length;
+      newSerial.yearId = yearId;
+      newSerial.isActive = true;
+      newSerial.date = {
         created: new Date(),
         updated: new Date()
       };
-      newSequence.user = {
+      newSerial.user = {
         created: adminUserId,
         updated: adminUserId
       };
 
-      return newSequence;
+      return newSerial;
     });
-    return sequences;
+    return serials;
     // await AppDataSource.getRepository("SequenceGenerator").insert(sequences);
   }
 
-  static defaultSequences = [
+  static defaultSerials = [
     {
       key: "purchase",
       prefix: "I",

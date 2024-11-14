@@ -18,7 +18,7 @@ import { Customer } from "../modules/customer/customer.entity";
 import { Supplier } from "../modules/supplier/supplier.entity";
 import { ProductCategory } from "../modules/product-category/product-category.entity";
 import { Unit } from "../modules/unit/unit.entity";
-import { SequenceGenerator } from "../modules/sequence-generator/sequence-generator.entity";
+import { SerialNumber } from "../modules/serial-number/serial-number.entity";
 
 export class CompanyService {
   private static companyRepository = AppDataSource.getRepository(Company);
@@ -75,7 +75,7 @@ export class CompanyService {
       const newCompany = await transactionalEntityManager.save<Company>(createCompany);
       // Seed company data
       const year = await transactionalEntityManager.save<FinancialYear>(CompanyDataSeeder.getNewYear(newCompany.companyId, userId, new Date()));
-      await transactionalEntityManager.save<SequenceGenerator>(CompanyDataSeeder.getDefaultSequences(year.yearId, userId));
+      await transactionalEntityManager.save<SerialNumber>(CompanyDataSeeder.getDefaultSequences(year.yearId, userId));
       await transactionalEntityManager.save<Customer>(CompanyDataSeeder.getDefaultCashCustomer(newCompany.companyId, userId));
       await transactionalEntityManager.save<Supplier>(CompanyDataSeeder.getDefaultCashSupplier(newCompany.companyId, userId));
       await transactionalEntityManager.save<ProductCategory>(CompanyDataSeeder.getDefaultProductCategory(newCompany.companyId, userId));

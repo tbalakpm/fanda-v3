@@ -15,7 +15,7 @@ import { Product } from "./modules/product/product.entity";
 import { Supplier } from "./modules/supplier/supplier.entity";
 import { Customer } from "./modules/customer/customer.entity";
 import { Consumer } from "./modules/consumer/consumer.entity";
-import { SequenceGenerator } from "./modules/sequence-generator/sequence-generator.entity";
+import { SerialNumber } from "./modules/serial-number/serial-number.entity";
 
 // const __dirname = dirname(fileURLToPath(import.meta.url));
 const { DB_HOST = "localhost", DB_PORT = "5432", DB_USERNAME, DB_PASSWORD, DB_DATABASE, NODE_ENV = "development" } = process.env;
@@ -29,7 +29,7 @@ export const AppDataSource = new DataSource({
   database: DB_DATABASE,
   synchronize: true,
   logging: NODE_ENV === "development" ? true : false,
-  entities: [User, Company, FinancialYear, Unit, ProductCategory, Product, Supplier, Customer, Consumer, SequenceGenerator],
+  entities: [User, Company, FinancialYear, Unit, ProductCategory, Product, Supplier, Customer, Consumer, SerialNumber],
   migrations: [__dirname + "/migrations/*.ts"],
   subscribers: [],
   namingStrategy: new SnakeNamingStrategy()

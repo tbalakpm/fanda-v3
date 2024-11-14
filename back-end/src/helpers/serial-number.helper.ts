@@ -1,32 +1,26 @@
 import { AppDataSource } from "../data-source";
-import { SequenceGenerator } from "../modules/sequence-generator/sequence-generator.entity";
+import { SerialNumber } from "../modules/serial-number/serial-number.entity";
 
-export class SequenceGeneratorHelper {
-  private static readonly SEQUENCE_LENGTH = 7;
-  private static readonly SEQUENCE_PREFIX = "";
-  private static readonly SEQUENCE_CURRENT = 0;
-  private static readonly sequenceRepository = AppDataSource.getRepository(SequenceGenerator);
+export class SerialNumberHelper {
+  private static readonly serialRepository = AppDataSource.getRepository(SerialNumber);
 
-  static async getNextSerial(key: string, yearId: string) {
-    // const sequence = await this.sequenceRepository.save({ where: { key, yearId }, data: { current: { increment: 1 } } });
-    // const sequence = await AppDataSource.createQueryBuilder(GeneratedSequence, "sequence")
-    //   .update(GeneratedSequence)
-    //   .set({ current: () => "current + 1" })
-    //   .where("sequence.key = :key", { key })
-    //   .andWhere("sequence.yearId = :yearId", { yearId })
-    //   .returning(["current", "length", "prefix"])
-    //   .execute();
+  static async getNextSerial(key: string, yearId: string): Promise<string> {
+    // const result = await this.serialRepository.update({ yearId, key }, { current: () => "current + 1" });
+    const result = await this.serialRepository
+      .createQueryBuilder()
+      .update(SerialNumber)
+      .set({ current: () => "current + 1" })
+      .where("yearId = :yearId", { yearId })
+      .andWhere("key = :key", { key })
+      .returning("*")
+      .execute();
+    const serial = result.raw[0];
 
-    const result = await this.sequenceRepository.update({ key, yearId }, { current: () => "current + 1" });
-    const sequence = result.raw[0];
-
-    console.log("result", result);
-
-    if (!sequence) {
+    if (!serial) {
       return "";
     }
 
-    const nextSerial = this.formatSerial(sequence.length, sequence.generatedMaps.current, sequence.prefix);
+    const nextSerial = this.formatSerial(serial.length, serial.current - 1, serial.prefix);
     return nextSerial;
   }
 
@@ -65,7 +59,8 @@ export class SequenceGeneratorHelper {
     };
   }
   */
-  static formatSerial(length: number, value: number, prefix: string | null | undefined) {
+
+  static formatSerial(length: number, value: number, prefix?: string): string {
     return `${prefix ? prefix : ""}${String(value).padStart(length, "0")}`;
   }
 }

@@ -4,16 +4,16 @@ import { v7 } from "uuid";
 import { AuditDates, AuditUsers } from "../../entities/embedded/audit.entity";
 import { FinancialYear } from "../financial-year/financial-year.entity";
 
-@Entity({ name: "sequence_generators" })
-@Index(["yearId", "sequenceId"], { unique: true })
+@Entity({ name: "serial_numbers" })
+@Index(["yearId", "serialId"], { unique: true })
 @Index(["yearId", "key"], { unique: true })
-export class SequenceGenerator {
+export class SerialNumber {
   @PrimaryColumn("uuid")
-  sequenceId!: string;
+  serialId!: string;
 
   @BeforeInsert()
   generateId() {
-    if (!this.sequenceId) this.sequenceId = v7();
+    if (!this.serialId) this.serialId = v7();
   }
 
   @Column({ length: 15 })
