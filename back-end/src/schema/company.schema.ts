@@ -1,8 +1,8 @@
 // import { Company } from "../entity/company.entity";
-import { z } from "zod";
-import { AddressSchema } from "./address.schema";
-import { ContactSchema } from "./contact.schema";
-import { AuditDatesSchema, AuditUsersSchema } from "./embedded/audit.schema";
+import { z } from 'zod';
+import { AddressSchema } from './address.schema';
+import { ContactSchema } from './contact.schema';
+import { AuditDatesSchema, AuditUsersSchema } from './embedded/audit.schema';
 
 export const CompanySchema = z.object({
   companyId: z.string().uuid().optional(),

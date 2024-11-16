@@ -1,8 +1,8 @@
-import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
+import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 // import * as TypeORM from "typeorm";
-import { Company } from "../../entities/company.entity";
-import { AuditDates, AuditUsers } from "../../entities/embedded/audit.entity";
-import { v7 } from "uuid";
+import { Company } from '../../entities/company.entity';
+import { AuditDates, AuditUsers } from '../../entities/embedded/audit.entity';
+import { v7 } from 'uuid';
 
 // const Entity = TypeORM.Entity;
 // const Index = TypeORM.Index;
@@ -12,11 +12,11 @@ import { v7 } from "uuid";
 
 // const { Entity, Index, PrimaryColumn, BeforeInsert, Column, ManyToOne, JoinColumn } = TypeORM;
 
-@Entity({ name: "financial_years" })
-@Index(["companyId", "yearId"], { unique: true })
-@Index(["companyId", "code"], { unique: true })
+@Entity({ name: 'financial_years' })
+@Index(['companyId', 'yearId'], { unique: true })
+@Index(['companyId', 'code'], { unique: true })
 export class FinancialYear {
-  @PrimaryColumn("uuid")
+  @PrimaryColumn('uuid')
   yearId!: string;
 
   @BeforeInsert()
@@ -30,13 +30,13 @@ export class FinancialYear {
   @Column({ length: 255, nullable: true })
   description?: string;
 
-  @Column({ type: "date" })
+  @Column({ type: 'date' })
   beginDate!: Date;
 
-  @Column({ type: "date" })
+  @Column({ type: 'date' })
   endDate!: Date;
 
-  @Column("uuid")
+  @Column('uuid')
   companyId!: string;
 
   @Column({ default: true })
@@ -49,7 +49,7 @@ export class FinancialYear {
   user!: AuditUsers;
 
   // Related Entities
-  @ManyToOne(() => Company, { onUpdate: "CASCADE", onDelete: "RESTRICT" })
-  @JoinColumn({ name: "company_id" })
+  @ManyToOne(() => Company, { onUpdate: 'CASCADE', onDelete: 'RESTRICT' })
+  @JoinColumn({ name: 'company_id' })
   company?: Company;
 }

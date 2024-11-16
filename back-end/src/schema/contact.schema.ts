@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const ContactSchema = z.object({
   salutation: z.string().max(10).optional(),

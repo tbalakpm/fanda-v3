@@ -1,9 +1,9 @@
-import { BeforeInsert, Column, Entity, PrimaryColumn } from "typeorm";
-import { v7 } from "uuid";
+import { BeforeInsert, Column, Entity, PrimaryColumn } from 'typeorm';
+import { v7 } from 'uuid';
 
-@Entity({ name: "users" })
+@Entity({ name: 'users' })
 export class User {
-  @PrimaryColumn("uuid")
+  @PrimaryColumn('uuid')
   userId!: string;
 
   @BeforeInsert()
@@ -23,15 +23,15 @@ export class User {
   @Column({ length: 25, nullable: true })
   phone?: string;
 
-  @Column({ name: "first_name", length: 25, nullable: true })
+  @Column({ name: 'first_name', length: 25, nullable: true })
   firstName?: string;
 
-  @Column({ name: "last_name", length: 25, nullable: true })
+  @Column({ name: 'last_name', length: 25, nullable: true })
   lastName?: string;
 
-  @Column({ length: 15, default: "user" })
-  role: string = "user";
+  @Column({ length: 15, default: 'user' })
+  role: string = 'user';
 
-  @Column({ name: "is_active", default: true })
+  @Column({ name: 'is_active', default: true })
   isActive!: boolean;
 }

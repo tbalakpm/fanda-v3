@@ -1,13 +1,13 @@
-import { SafeParseError } from "zod";
+import { SafeParseError } from 'zod';
 
 export function parseError<T>(parseResult: SafeParseError<T>): string {
   const issues = { ...parseResult.error.issues };
   const errors: string[] = [];
   issues.map((issue) => {
-    errors.push(`${issue.path.join(".")}: ${issue.message}`);
+    errors.push(`${issue.path.join('.')}: ${issue.message}`);
   });
 
-  return errors.join(";\n\t");
+  return errors.join(';\n\t');
 }
 
 /*

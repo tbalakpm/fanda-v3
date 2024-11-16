@@ -1,18 +1,18 @@
-import express from "express";
-import { authorization } from "../../middleware/authorization.middleware";
-import { SupplierController } from "./supplier.controller";
+import express from 'express';
+import { authorization } from '../../middleware/authorization.middleware';
+import { SupplierController } from './supplier.controller';
 
 export const supplierRoutes = () => {
   const router = express.Router({ mergeParams: true });
 
   router
-    .route("/")
+    .route('/')
     .get(SupplierController.getSuppliers)
-    .post(authorization(["admin", "manager"]), SupplierController.createSupplier);
+    .post(authorization(['admin', 'manager']), SupplierController.createSupplier);
   router
-    .route("/:supplierId")
+    .route('/:supplierId')
     .get(SupplierController.getSupplierById)
-    .put(authorization(["admin", "manager"]), SupplierController.updateSupplier)
-    .delete(authorization(["admin", "manager"]), SupplierController.deleteSupplier);
+    .put(authorization(['admin', 'manager']), SupplierController.updateSupplier)
+    .delete(authorization(['admin', 'manager']), SupplierController.deleteSupplier);
   return router;
 };

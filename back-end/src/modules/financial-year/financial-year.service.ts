@@ -1,13 +1,13 @@
-import { Not } from "typeorm";
+import { Not } from 'typeorm';
 
-import { AppDataSource } from "../../data-source";
-import { FinancialYear } from "./financial-year.entity";
-import { FinancialYearSchema } from "./financial-year.schema";
-import { AuditUsers } from "../../entities/embedded/audit.entity";
-import { ApiResponse } from "../../responses/api-response";
-import { cache } from "../../helpers/cache.helper";
-import { ApiStatus } from "../../responses/api-status";
-import { parseError } from "../../helpers/error.helper";
+import { AppDataSource } from '../../data-source';
+import { FinancialYear } from './financial-year.entity';
+import { FinancialYearSchema } from './financial-year.schema';
+import { AuditUsers } from '../../entities/embedded/audit.entity';
+import { ApiResponse } from '../../responses/api-response';
+import { cache } from '../../helpers/cache.helper';
+import { ApiStatus } from '../../responses/api-status';
+import { parseError } from '../../helpers/error.helper';
 // import { cache, parseError } from "../../helpers";
 // import { ApiResponse, ApiStatus } from "../../responses";
 
@@ -19,37 +19,37 @@ export class FinancialYearService {
     if (data) {
       return {
         success: true,
-        message: "Serving years from cache",
+        message: 'Serving years from cache',
         data,
         status: ApiStatus.OK
       };
     }
     const years = await this.yearRepository.find({
-      select: ["yearId", "code", "description", "beginDate", "endDate", "isActive"],
+      select: ['yearId', 'code', 'description', 'beginDate', 'endDate', 'isActive'],
       where: { companyId },
-      order: { companyId: "ASC", yearId: "ASC" }
+      order: { companyId: 'ASC', yearId: 'ASC' }
     });
     await cache.set(`years_${companyId}`, years);
     return {
       success: true,
-      message: "Serving years from database",
+      message: 'Serving years from database',
       data: years,
       status: ApiStatus.OK
     };
   }
 
   static async getYearById(companyId: string, yearId: string): Promise<ApiResponse<FinancialYear>> {
-    const data = await cache.get<FinancialYear>("years:" + yearId);
+    const data = await cache.get<FinancialYear>('years:' + yearId);
     if (data) {
       return {
         success: true,
-        message: "Serving a year from cache",
+        message: 'Serving a year from cache',
         data,
         status: ApiStatus.OK
       };
     }
     const year = await this.yearRepository.findOne({
-      select: ["yearId", "code", "description", "beginDate", "endDate", "isActive"],
+      select: ['yearId', 'code', 'description', 'beginDate', 'endDate', 'isActive'],
       where: { companyId, yearId }
     });
     if (!year) {
@@ -59,10 +59,10 @@ export class FinancialYearService {
         status: ApiStatus.NOT_FOUND
       };
     }
-    await cache.set("years:" + yearId, year);
+    await cache.set('years:' + yearId, year);
     return {
       success: true,
-      message: "Serving year from database",
+      message: 'Serving year from database',
       data: year,
       status: ApiStatus.OK
     };
@@ -94,7 +94,7 @@ export class FinancialYearService {
     this.invalidateCache(companyId);
     return {
       success: true,
-      message: "year created successfully",
+      message: 'year created successfully',
       data: newyear,
       status: ApiStatus.CREATED
     };
@@ -132,7 +132,7 @@ export class FinancialYearService {
     this.invalidateCache(dbyear.companyId, yearId);
     return {
       success: true,
-      message: "year updated successfully",
+      message: 'year updated successfully',
       data: updatedyear,
       status: ApiStatus.OK
     };
@@ -151,7 +151,7 @@ export class FinancialYearService {
     this.invalidateCache(year.companyId, yearId);
     return {
       success: true,
-      message: "year deleted successfully",
+      message: 'year deleted successfully',
       data: year,
       status: ApiStatus.OK
     };
@@ -174,6 +174,6 @@ export class FinancialYearService {
 
   static async invalidateCache(companyId: string, yearId?: string): Promise<void> {
     await cache.del(`years_${companyId}`);
-    if (yearId) await cache.del("years:" + yearId);
+    if (yearId) await cache.del('years:' + yearId);
   }
 }

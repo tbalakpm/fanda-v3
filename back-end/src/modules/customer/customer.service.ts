@@ -1,15 +1,15 @@
-import { Not } from "typeorm";
+import { Not } from 'typeorm';
 
-import { cache } from "../../helpers/cache.helper";
+import { cache } from '../../helpers/cache.helper';
 
-import { AppDataSource } from "../../data-source";
-import { AuditUsers } from "../../entities/embedded/audit.entity";
+import { AppDataSource } from '../../data-source';
+import { AuditUsers } from '../../entities/embedded/audit.entity';
 // import { ApiResponse, ApiStatus } from "../../responses";
-import { parseError } from "../../helpers/error.helper";
-import { Customer } from "./customer.entity";
-import { CustomerSchema } from "./customer.schema";
-import { ApiResponse } from "../../responses/api-response";
-import { ApiStatus } from "../../responses/api-status";
+import { parseError } from '../../helpers/error.helper';
+import { Customer } from './customer.entity';
+import { CustomerSchema } from './customer.schema';
+import { ApiResponse } from '../../responses/api-response';
+import { ApiStatus } from '../../responses/api-status';
 
 export class CustomerService {
   private static customerRepository = AppDataSource.getRepository(Customer);
@@ -19,37 +19,37 @@ export class CustomerService {
     if (data) {
       return {
         success: true,
-        message: "Serving customers from cache",
+        message: 'Serving customers from cache',
         data,
         status: ApiStatus.OK
       };
     }
     const customers = await this.customerRepository.find({
-      select: ["customerId", "code", "name", "description", "address", "contact", "isActive"],
+      select: ['customerId', 'code', 'name', 'description', 'address', 'contact', 'isActive'],
       where: { companyId },
-      order: { companyId: "ASC", customerId: "ASC" }
+      order: { companyId: 'ASC', customerId: 'ASC' }
     });
     await cache.set(`customers_${companyId}`, customers);
     return {
       success: true,
-      message: "Serving customers from database",
+      message: 'Serving customers from database',
       data: customers,
       status: ApiStatus.OK
     };
   }
 
   static async getCustomerById(companyId: string, customerId: string): Promise<ApiResponse<Customer>> {
-    const data = await cache.get<Customer>("customers:" + customerId);
+    const data = await cache.get<Customer>('customers:' + customerId);
     if (data) {
       return {
         success: true,
-        message: "Serving a customer from cache",
+        message: 'Serving a customer from cache',
         data,
         status: ApiStatus.OK
       };
     }
     const customer = await this.customerRepository.findOne({
-      select: ["customerId", "code", "name", "description", "address", "contact", "isActive"],
+      select: ['customerId', 'code', 'name', 'description', 'address', 'contact', 'isActive'],
       where: { companyId, customerId }
     });
     if (!customer) {
@@ -59,10 +59,10 @@ export class CustomerService {
         status: ApiStatus.NOT_FOUND
       };
     }
-    await cache.set("customers:" + customerId, customer);
+    await cache.set('customers:' + customerId, customer);
     return {
       success: true,
-      message: "Serving customer from database",
+      message: 'Serving customer from database',
       data: customer,
       status: ApiStatus.OK
     };
@@ -101,7 +101,7 @@ export class CustomerService {
     this.invalidateCache(companyId);
     return {
       success: true,
-      message: "Customer created successfully",
+      message: 'Customer created successfully',
       data: newCustomer,
       status: ApiStatus.CREATED
     };
@@ -149,7 +149,7 @@ export class CustomerService {
     this.invalidateCache(dbCustomer.companyId, customerId);
     return {
       success: true,
-      message: "Customer updated successfully",
+      message: 'Customer updated successfully',
       data: updatedCustomer,
       status: ApiStatus.OK
     };
@@ -171,7 +171,7 @@ export class CustomerService {
     this.invalidateCache(customer.companyId, customerId);
     return {
       success: true,
-      message: "Customer deleted successfully",
+      message: 'Customer deleted successfully',
       data: customer,
       status: ApiStatus.OK
     };
@@ -217,6 +217,6 @@ export class CustomerService {
 
   static async invalidateCache(companyId: string, customerId?: string): Promise<void> {
     await cache.del(`customers_${companyId}`);
-    if (customerId) await cache.del("customers:" + customerId);
+    if (customerId) await cache.del('customers:' + customerId);
   }
 }

@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from "express";
-import { ApiError } from "../responses/api-error";
-import logger from "../logger";
+import { NextFunction, Request, Response } from 'express';
+import { ApiError } from '../responses/api-error';
+import logger from '../logger';
 
 export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
   const message = `${req.method} ${req.hostname}${req.path} - ${err.message}`;
@@ -13,7 +13,7 @@ export const errorHandler = (err: Error, req: Request, res: Response, next: Next
     res.status(err.statusCode).json({ message: err.message });
   } else {
     logger.error(message, { stack: err.stack });
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: 'Internal server error' });
   }
 
   next();

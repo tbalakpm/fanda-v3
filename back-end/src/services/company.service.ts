@@ -1,55 +1,55 @@
-import { EntityManager, Not } from "typeorm";
+import { EntityManager, Not } from 'typeorm';
 
-import { AppDataSource } from "../data-source";
-import { Company } from "../entities/company.entity";
-import { Address } from "../entities/address.entity";
-import { Contact } from "../entities/contact.entity";
-import { AuditUsers } from "../entities/embedded/audit.entity";
-import { CompanySchema } from "../schema/company.schema";
-import { AddressSchema } from "../schema/address.schema";
-import { ContactSchema } from "../schema/contact.schema";
-import { ApiResponse } from "../responses/api-response";
-import { ApiStatus } from "../responses/api-status";
-import { cache } from "../helpers/cache.helper";
-import { parseError } from "../helpers/error.helper";
-import { CompanyDataSeeder } from "../data-seed/company.data-seed";
-import { FinancialYear } from "../modules/financial-year/financial-year.entity";
-import { Customer } from "../modules/customer/customer.entity";
-import { Supplier } from "../modules/supplier/supplier.entity";
-import { ProductCategory } from "../modules/product-category/product-category.entity";
-import { Unit } from "../modules/unit/unit.entity";
-import { SerialNumber } from "../modules/serial-number/serial-number.entity";
+import { AppDataSource } from '../data-source';
+import { Company } from '../entities/company.entity';
+import { Address } from '../entities/address.entity';
+import { Contact } from '../entities/contact.entity';
+import { AuditUsers } from '../entities/embedded/audit.entity';
+import { CompanySchema } from '../schema/company.schema';
+import { AddressSchema } from '../schema/address.schema';
+import { ContactSchema } from '../schema/contact.schema';
+import { ApiResponse } from '../responses/api-response';
+import { ApiStatus } from '../responses/api-status';
+import { cache } from '../helpers/cache.helper';
+import { parseError } from '../helpers/error.helper';
+import { CompanyDataSeeder } from '../data-seed/company.data-seed';
+import { FinancialYear } from '../modules/financial-year/financial-year.entity';
+import { Customer } from '../modules/customer/customer.entity';
+import { Supplier } from '../modules/supplier/supplier.entity';
+import { ProductCategory } from '../modules/product-category/product-category.entity';
+import { Unit } from '../modules/unit/unit.entity';
+import { SerialNumber } from '../modules/serial-number/serial-number.entity';
 
 export class CompanyService {
   private static companyRepository = AppDataSource.getRepository(Company);
 
   static async getAllCompanies(): Promise<ApiResponse<Company[]>> {
-    const data = await cache.get<Company[]>("companies");
+    const data = await cache.get<Company[]>('companies');
     if (data) {
-      return { success: true, message: "Serving companies from cache", data, status: ApiStatus.OK };
+      return { success: true, message: 'Serving companies from cache', data, status: ApiStatus.OK };
     }
     const companies = await this.companyRepository.find({
-      select: ["companyId", "code", "name", "description", "address", "contact", "isActive"],
-      order: { companyId: "ASC" }
+      select: ['companyId', 'code', 'name', 'description', 'address', 'contact', 'isActive'],
+      order: { companyId: 'ASC' }
     });
-    await cache.set("companies", companies);
-    return { success: true, message: "Serving companies from database", data: companies, status: ApiStatus.OK };
+    await cache.set('companies', companies);
+    return { success: true, message: 'Serving companies from database', data: companies, status: ApiStatus.OK };
   }
 
   static async getCompanyById(companyId: string): Promise<ApiResponse<Company>> {
     const data = await cache.get<Company>(`companies:${companyId}`);
     if (data) {
-      return { success: true, message: "Serving a company from cache", data, status: ApiStatus.OK };
+      return { success: true, message: 'Serving a company from cache', data, status: ApiStatus.OK };
     }
     const company = await this.companyRepository.findOne({
-      select: ["companyId", "code", "name", "description", "address", "contact", "isActive"],
+      select: ['companyId', 'code', 'name', 'description', 'address', 'contact', 'isActive'],
       where: { companyId }
     });
     if (!company) {
       return { success: false, message: `Company with id '${companyId}' not found`, status: ApiStatus.NOT_FOUND };
     }
     await cache.set(`companies:${companyId}`, company);
-    return { success: true, message: "Serving company from database", data: company, status: ApiStatus.OK };
+    return { success: true, message: 'Serving company from database', data: company, status: ApiStatus.OK };
   }
 
   static async createCompany(company: Company, userId: string): Promise<ApiResponse<Company>> {
@@ -81,7 +81,7 @@ export class CompanyService {
       await transactionalEntityManager.save<ProductCategory>(CompanyDataSeeder.getDefaultProductCategory(newCompany.companyId, userId));
       await transactionalEntityManager.save<Unit>(CompanyDataSeeder.getDefaultUnit(newCompany.companyId, userId));
       this.invalidateCache();
-      return { success: true, message: "Company created successfully", data: newCompany, status: ApiStatus.CREATED };
+      return { success: true, message: 'Company created successfully', data: newCompany, status: ApiStatus.CREATED };
     }).catch((error) => {
       return { success: false, message: error.message, status: ApiStatus.ERROR };
     });
@@ -130,7 +130,7 @@ export class CompanyService {
     const parsedCompany = parsedResult.data as Company;
     const updatedCompany = await this.companyRepository.save(parsedCompany);
     this.invalidateCache(companyId);
-    return { success: true, message: "Company updated successfully", data: updatedCompany, status: ApiStatus.OK };
+    return { success: true, message: 'Company updated successfully', data: updatedCompany, status: ApiStatus.OK };
   }
 
   static async deleteCompany(companyId: string): Promise<ApiResponse<Company>> {
@@ -140,7 +140,7 @@ export class CompanyService {
     }
     await this.companyRepository.remove(company);
     this.invalidateCache(companyId);
-    return { success: true, message: "Company deleted successfully", data: company, status: ApiStatus.OK };
+    return { success: true, message: 'Company deleted successfully', data: company, status: ApiStatus.OK };
   }
 
   static async isCompanyCodeExists(companyCode: string, companyId?: string): Promise<boolean> {
@@ -168,7 +168,7 @@ export class CompanyService {
   }
 
   static async invalidateCache(companyId?: string): Promise<void> {
-    await cache.del("companies");
+    await cache.del('companies');
     if (companyId) await cache.del(`companies:${companyId}`);
   }
 }

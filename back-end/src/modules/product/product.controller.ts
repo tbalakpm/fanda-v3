@@ -1,8 +1,8 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from 'express';
 
-import { ProductService } from "./product.service";
-import { User } from "../../entities/user.entity";
-import { ApiError } from "../../responses/api-error";
+import { ProductService } from './product.service';
+import { User } from '../../entities/user.entity';
+import { ApiError } from '../../responses/api-error';
 
 export class ProductController {
   static async getProducts(req: Request, res: Response, next: NextFunction) {

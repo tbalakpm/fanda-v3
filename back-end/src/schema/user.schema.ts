@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { AuditDatesSchema } from "./embedded/audit.schema";
+import { z } from 'zod';
+import { AuditDatesSchema } from './embedded/audit.schema';
 
 export const UserSchema = z.object({
   userId: z.string().uuid().optional(),
@@ -9,7 +9,7 @@ export const UserSchema = z.object({
   phone: z.string().max(25).optional(),
   firstName: z.string().max(25).optional(),
   lastName: z.string().max(25).optional(),
-  role: z.string().max(15).default("user"),
+  role: z.string().max(15).default('user'),
   isActive: z.boolean().default(true),
   date: AuditDatesSchema.optional()
 });

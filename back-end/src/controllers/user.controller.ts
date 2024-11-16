@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from 'express';
 
-import { UserService } from "../services/user.service";
-import { ApiError } from "../responses/api-error";
+import { UserService } from '../services/user.service';
+import { ApiError } from '../responses/api-error';
 
 export class UserController {
   static async getUsers(_req: Request, res: Response, next: NextFunction) {

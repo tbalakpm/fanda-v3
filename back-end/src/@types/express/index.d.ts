@@ -1,7 +1,7 @@
 // import * as jwt from "jsonwebtoken";
 // import { User } from "../../entity/user.entity";
 
-import { User } from "../../entities/user.entity";
+import { User } from '../../entities/user.entity';
 
 declare global {
   interface ImportMeta {

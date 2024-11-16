@@ -1,8 +1,8 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from 'express';
 
-import { CompanyService } from "../services/company.service";
-import { User } from "../entities/user.entity";
-import { ApiError } from "../responses/api-error";
+import { CompanyService } from '../services/company.service';
+import { User } from '../entities/user.entity';
+import { ApiError } from '../responses/api-error';
 
 export class CompanyController {
   static async getCompanies(_req: Request, res: Response, next: NextFunction) {

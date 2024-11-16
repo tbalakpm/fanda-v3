@@ -1,8 +1,8 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from 'express';
 
-import { ConsumerService } from "./consumer.service";
-import { User } from "../../entities/user.entity";
-import { ApiError } from "../../responses/api-error";
+import { ConsumerService } from './consumer.service';
+import { User } from '../../entities/user.entity';
+import { ApiError } from '../../responses/api-error';
 
 export class ConsumerController {
   static async getAllConsumers(req: Request, res: Response, next: NextFunction) {

@@ -1,16 +1,16 @@
-import "dotenv/config";
+import 'dotenv/config';
 
-import { AppDataSource } from "./data-source";
-import app from "./app";
-import logger from "./logger";
-import { createAdminUser } from "./data-seed/admin-user.data-seed";
+import { AppDataSource } from './data-source';
+import app from './app';
+import logger from './logger';
+import { createAdminUser } from './data-seed/admin-user.data-seed';
 // import { SerialNumberHelper } from "./helpers/serial-number.helper";
 
-const { PORT = "4000" } = process.env;
+const { PORT = '4000' } = process.env;
 
 AppDataSource.initialize()
   .then(async (db) => {
-    logger.info("Data Source has been initialized");
+    logger.info('Data Source has been initialized');
 
     await createAdminUser(db);
 

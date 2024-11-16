@@ -1,17 +1,17 @@
-import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
-import { v7 } from "uuid";
+import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { v7 } from 'uuid';
 // import { Address, Contact, AuditDates, AuditUsers, Company } from "../../entities";
-import { AuditDates, AuditUsers } from "../../entities/embedded/audit.entity";
-import { Company } from "../../entities/company.entity";
-import { Address } from "../../entities/address.entity";
-import { Contact } from "../../entities/contact.entity";
+import { AuditDates, AuditUsers } from '../../entities/embedded/audit.entity';
+import { Company } from '../../entities/company.entity';
+import { Address } from '../../entities/address.entity';
+import { Contact } from '../../entities/contact.entity';
 
-@Entity({ name: "suppliers" })
-@Index(["companyId", "supplierId"], { unique: true })
-@Index(["companyId", "code"], { unique: true })
-@Index(["companyId", "name"], { unique: true })
+@Entity({ name: 'suppliers' })
+@Index(['companyId', 'supplierId'], { unique: true })
+@Index(['companyId', 'code'], { unique: true })
+@Index(['companyId', 'name'], { unique: true })
 export class Supplier {
-  @PrimaryColumn("uuid")
+  @PrimaryColumn('uuid')
   supplierId!: string;
 
   @Column({ length: 10 })
@@ -28,16 +28,16 @@ export class Supplier {
   @Column({ length: 255, nullable: true })
   description?: string;
 
-  @Column({ type: "jsonb", default: {} })
+  @Column({ type: 'jsonb', default: {} })
   address?: Address;
 
-  @Column({ type: "jsonb", default: {} })
+  @Column({ type: 'jsonb', default: {} })
   contact?: Contact;
 
-  @Column("uuid")
+  @Column('uuid')
   companyId!: string;
 
-  @Column({ name: "is_active", default: true })
+  @Column({ name: 'is_active', default: true })
   isActive!: boolean;
 
   @Column(() => AuditDates)
@@ -47,7 +47,7 @@ export class Supplier {
   user!: AuditUsers;
 
   // Related Entities
-  @ManyToOne(() => Company, { onUpdate: "CASCADE", onDelete: "RESTRICT" })
-  @JoinColumn({ name: "company_id" })
+  @ManyToOne(() => Company, { onUpdate: 'CASCADE', onDelete: 'RESTRICT' })
+  @JoinColumn({ name: 'company_id' })
   company?: Company;
 }

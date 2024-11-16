@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { AuditDatesSchema, AuditUsersSchema } from "../../schema/embedded/audit.schema";
+import { z } from 'zod';
+import { AuditDatesSchema, AuditUsersSchema } from '../../schema/embedded/audit.schema';
 
 export const ProductSchema = z.object({
   productId: z.string().uuid().optional(),

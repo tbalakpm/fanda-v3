@@ -1,15 +1,15 @@
-import { Not } from "typeorm";
+import { Not } from 'typeorm';
 
-import { cache } from "../../helpers/cache.helper";
+import { cache } from '../../helpers/cache.helper';
 
-import { AppDataSource } from "../../data-source";
-import { AuditUsers } from "../../entities/embedded/audit.entity";
+import { AppDataSource } from '../../data-source';
+import { AuditUsers } from '../../entities/embedded/audit.entity';
 // import { ApiResponse, ApiStatus } from "../../responses";
-import { parseError } from "../../helpers/error.helper";
-import { ProductCategory } from "./product-category.entity";
-import { ProductCategorySchema } from "./product-category.schema";
-import { ApiResponse } from "../../responses/api-response";
-import { ApiStatus } from "../../responses/api-status";
+import { parseError } from '../../helpers/error.helper';
+import { ProductCategory } from './product-category.entity';
+import { ProductCategorySchema } from './product-category.schema';
+import { ApiResponse } from '../../responses/api-response';
+import { ApiStatus } from '../../responses/api-status';
 
 export class ProductCategoryService {
   private static categoryRepository = AppDataSource.getRepository(ProductCategory);
@@ -19,37 +19,37 @@ export class ProductCategoryService {
     if (data) {
       return {
         success: true,
-        message: "Serving categories from cache",
+        message: 'Serving categories from cache',
         data,
         status: ApiStatus.OK
       };
     }
     const categories = await this.categoryRepository.find({
-      select: ["categoryId", "code", "name", "description", "parentId", "isActive"],
+      select: ['categoryId', 'code', 'name', 'description', 'parentId', 'isActive'],
       where: { companyId },
-      order: { companyId: "ASC", categoryId: "ASC" }
+      order: { companyId: 'ASC', categoryId: 'ASC' }
     });
     await cache.set(`product_categories_${companyId}`, categories);
     return {
       success: true,
-      message: "Serving categories from database",
+      message: 'Serving categories from database',
       data: categories,
       status: ApiStatus.OK
     };
   }
 
   static async getCategoryById(companyId: string, categoryId: string): Promise<ApiResponse<ProductCategory>> {
-    const data = await cache.get<ProductCategory>("product_categories:" + categoryId);
+    const data = await cache.get<ProductCategory>('product_categories:' + categoryId);
     if (data) {
       return {
         success: true,
-        message: "Serving a category from cache",
+        message: 'Serving a category from cache',
         data,
         status: ApiStatus.OK
       };
     }
     const category = await this.categoryRepository.findOne({
-      select: ["categoryId", "code", "name", "description", "parentId", "isActive"],
+      select: ['categoryId', 'code', 'name', 'description', 'parentId', 'isActive'],
       where: { companyId, categoryId }
     });
     if (!category) {
@@ -59,10 +59,10 @@ export class ProductCategoryService {
         status: ApiStatus.NOT_FOUND
       };
     }
-    await cache.set("product_categories:" + categoryId, category);
+    await cache.set('product_categories:' + categoryId, category);
     return {
       success: true,
-      message: "Serving category from database",
+      message: 'Serving category from database',
       data: category,
       status: ApiStatus.OK
     };
@@ -101,7 +101,7 @@ export class ProductCategoryService {
     this.invalidateCache(companyId);
     return {
       success: true,
-      message: "Category created successfully",
+      message: 'Category created successfully',
       data: newCategory,
       status: ApiStatus.CREATED
     };
@@ -154,7 +154,7 @@ export class ProductCategoryService {
     this.invalidateCache(dbCategory.companyId, categoryId);
     return {
       success: true,
-      message: "Category updated successfully",
+      message: 'Category updated successfully',
       data: updatedCategory,
       status: ApiStatus.OK
     };
@@ -176,7 +176,7 @@ export class ProductCategoryService {
     this.invalidateCache(category.companyId, categoryId);
     return {
       success: true,
-      message: "Category deleted successfully",
+      message: 'Category deleted successfully',
       data: category,
       status: ApiStatus.OK
     };
@@ -222,6 +222,6 @@ export class ProductCategoryService {
 
   static async invalidateCache(companyId: string, categoryId?: string): Promise<void> {
     await cache.del(`product_categories_${companyId}`);
-    if (categoryId) await cache.del("product_categories:" + categoryId);
+    if (categoryId) await cache.del('product_categories:' + categoryId);
   }
 }

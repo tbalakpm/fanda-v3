@@ -1,13 +1,13 @@
-import { BeforeInsert, Column, Entity, PrimaryColumn } from "typeorm";
-import { v7 } from "uuid";
+import { BeforeInsert, Column, Entity, PrimaryColumn } from 'typeorm';
+import { v7 } from 'uuid';
 //import { Address, Contact } from "./";
-import { AuditDates, AuditUsers } from "./embedded/audit.entity";
-import { Address } from "./address.entity";
-import { Contact } from "./contact.entity";
+import { AuditDates, AuditUsers } from './embedded/audit.entity';
+import { Address } from './address.entity';
+import { Contact } from './contact.entity';
 
-@Entity({ name: "companies" })
+@Entity({ name: 'companies' })
 export class Company {
-  @PrimaryColumn("uuid")
+  @PrimaryColumn('uuid')
   companyId!: string;
 
   @Column({ length: 10, unique: true })
@@ -24,13 +24,13 @@ export class Company {
   @Column({ length: 255, nullable: true })
   description?: string;
 
-  @Column({ type: "jsonb", default: {} })
+  @Column({ type: 'jsonb', default: {} })
   address?: Address;
 
-  @Column({ type: "jsonb", default: {} })
+  @Column({ type: 'jsonb', default: {} })
   contact?: Contact;
 
-  @Column({ name: "is_active", default: true })
+  @Column({ name: 'is_active', default: true })
   isActive!: boolean;
 
   @Column(() => AuditDates)

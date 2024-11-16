@@ -1,10 +1,10 @@
-import { User } from "../entities/user.entity";
-import { LoginDto } from "../dto/login.dto";
+import { User } from '../entities/user.entity';
+import { LoginDto } from '../dto/login.dto';
 // import { ApiStatus, AuthResponse } from "../responses";
-import { encrypt } from "../helpers/encrypt.helper";
-import { UserService } from "./user.service";
-import { AuthResponse } from "../responses/auth-response";
-import { ApiStatus } from "../responses/api-status";
+import { encrypt } from '../helpers/encrypt.helper';
+import { UserService } from './user.service';
+import { AuthResponse } from '../responses/auth-response';
+import { ApiStatus } from '../responses/api-status';
 
 export class AuthService {
   static async register(register: User): Promise<AuthResponse> {
@@ -23,7 +23,7 @@ export class AuthService {
     if (!result.success || !result.data) {
       return {
         success: false,
-        message: "Login failed, invalid credentials",
+        message: 'Login failed, invalid credentials',
         status: ApiStatus.UNAUTHORIZED
       };
     }
@@ -32,7 +32,7 @@ export class AuthService {
     if (!isPasswordValid) {
       return {
         success: false,
-        message: "Login failed, invalid credentials",
+        message: 'Login failed, invalid credentials',
         status: ApiStatus.UNAUTHORIZED
       };
     }
@@ -42,7 +42,7 @@ export class AuthService {
     const { password: _, ...userWithoutPassword } = result.data;
     return {
       success: true,
-      message: "Login successful",
+      message: 'Login successful',
       token,
       data: userWithoutPassword as User,
       status: ApiStatus.OK

@@ -1,15 +1,15 @@
-import { Not } from "typeorm";
+import { Not } from 'typeorm';
 
-import { cache } from "../../helpers/cache.helper";
+import { cache } from '../../helpers/cache.helper';
 
-import { AppDataSource } from "../../data-source";
-import { AuditUsers } from "../../entities/embedded/audit.entity";
+import { AppDataSource } from '../../data-source';
+import { AuditUsers } from '../../entities/embedded/audit.entity';
 // import { ApiResponse, ApiStatus } from "../../responses";
-import { parseError } from "../../helpers/error.helper";
-import { Product } from "./product.entity";
-import { ProductSchema } from "./product.schema";
-import { ApiResponse } from "../../responses/api-response";
-import { ApiStatus } from "../../responses/api-status";
+import { parseError } from '../../helpers/error.helper';
+import { Product } from './product.entity';
+import { ProductSchema } from './product.schema';
+import { ApiResponse } from '../../responses/api-response';
+import { ApiStatus } from '../../responses/api-status';
 
 export class ProductService {
   private static productRepository = AppDataSource.getRepository(Product);
@@ -19,68 +19,68 @@ export class ProductService {
     if (data) {
       return {
         success: true,
-        message: "Serving products from cache",
+        message: 'Serving products from cache',
         data,
         status: ApiStatus.OK
       };
     }
     const products = await this.productRepository.find({
       select: [
-        "productId",
-        "code",
-        "name",
-        "description",
-        "categoryId",
-        "baseUnitId",
-        "buyingPrice",
-        "marginPct",
-        "marginAmt",
-        "sellingPrice",
-        "taxCode",
-        "taxPct",
-        "taxPreference",
-        "isPriceInclusiveTax",
-        "isActive"
+        'productId',
+        'code',
+        'name',
+        'description',
+        'categoryId',
+        'baseUnitId',
+        'buyingPrice',
+        'marginPct',
+        'marginAmt',
+        'sellingPrice',
+        'taxCode',
+        'taxPct',
+        'taxPreference',
+        'isPriceInclusiveTax',
+        'isActive'
       ],
       where: { companyId },
-      order: { companyId: "ASC", productId: "ASC" }
+      order: { companyId: 'ASC', productId: 'ASC' }
     });
     await cache.set(`products_${companyId}`, products);
     return {
       success: true,
-      message: "Serving products from database",
+      message: 'Serving products from database',
       data: products,
       status: ApiStatus.OK
     };
   }
 
   static async getProductById(companyId: string, productId: string): Promise<ApiResponse<Product>> {
-    const data = await cache.get<Product>("products:" + productId);
+    const data = await cache.get<Product>('products:' + productId);
     if (data) {
       return {
         success: true,
-        message: "Serving a product from cache",
+        message: 'Serving a product from cache',
         data,
         status: ApiStatus.OK
       };
     }
     const product = await this.productRepository.findOne({
       select: [
-        "productId",
-        "code",
-        "name",
-        "description",
-        "categoryId",
-        "baseUnitId",
-        "buyingPrice",
-        "marginPct",
-        "marginAmt",
-        "sellingPrice",
-        "taxCode",
-        "taxPct",
-        "taxPreference",
-        "isPriceInclusiveTax",
-        "isActive"
+        'productId',
+        'code',
+        'name',
+        'description',
+        'categoryId',
+        'baseUnitId',
+        'buyingPrice',
+        'marginPct',
+        'marginAmt',
+        'sellingPrice',
+        'taxCode',
+        'taxPct',
+        'taxPreference',
+        'isPriceInclusiveTax',
+        'isActive'
       ],
       where: { companyId, productId }
     });
@@ -91,10 +91,10 @@ export class ProductService {
         status: ApiStatus.NOT_FOUND
       };
     }
-    await cache.set("products:" + productId, product);
+    await cache.set('products:' + productId, product);
     return {
       success: true,
-      message: "Serving product from database",
+      message: 'Serving product from database',
       data: product,
       status: ApiStatus.OK
     };
@@ -133,7 +133,7 @@ export class ProductService {
     this.invalidateCache(companyId);
     return {
       success: true,
-      message: "Product created successfully",
+      message: 'Product created successfully',
       data: newProduct,
       status: ApiStatus.CREATED
     };
@@ -181,7 +181,7 @@ export class ProductService {
     this.invalidateCache(dbProduct.companyId, productId);
     return {
       success: true,
-      message: "Product updated successfully",
+      message: 'Product updated successfully',
       data: updatedProduct,
       status: ApiStatus.OK
     };
@@ -203,7 +203,7 @@ export class ProductService {
     this.invalidateCache(product.companyId, productId);
     return {
       success: true,
-      message: "Product deleted successfully",
+      message: 'Product deleted successfully',
       data: product,
       status: ApiStatus.OK
     };
@@ -249,6 +249,6 @@ export class ProductService {
 
   static async invalidateCache(companyId: string, productId?: string): Promise<void> {
     await cache.del(`products_${companyId}`);
-    if (productId) await cache.del("products:" + productId);
+    if (productId) await cache.del('products:' + productId);
   }
 }

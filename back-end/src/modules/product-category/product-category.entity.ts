@@ -1,15 +1,15 @@
-import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
-import { v7 } from "uuid";
+import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { v7 } from 'uuid';
 // import { AuditDates, AuditUsers, Company } from "../../entities";
-import { AuditDates, AuditUsers } from "../../entities/embedded/audit.entity";
-import { Company } from "../../entities/company.entity";
+import { AuditDates, AuditUsers } from '../../entities/embedded/audit.entity';
+import { Company } from '../../entities/company.entity';
 
-@Entity({ name: "product_categories" })
-@Index(["companyId", "categoryId"], { unique: true })
-@Index(["companyId", "code"], { unique: true })
-@Index(["companyId", "name"], { unique: true })
+@Entity({ name: 'product_categories' })
+@Index(['companyId', 'categoryId'], { unique: true })
+@Index(['companyId', 'code'], { unique: true })
+@Index(['companyId', 'name'], { unique: true })
 export class ProductCategory {
-  @PrimaryColumn("uuid")
+  @PrimaryColumn('uuid')
   categoryId!: string;
 
   @BeforeInsert()
@@ -29,7 +29,7 @@ export class ProductCategory {
   @Column({ nullable: true })
   parentId?: string;
 
-  @Column("uuid")
+  @Column('uuid')
   companyId!: string;
 
   @Column({ default: true })
@@ -42,11 +42,11 @@ export class ProductCategory {
   user!: AuditUsers;
 
   // Related Entities
-  @ManyToOne(() => ProductCategory, { nullable: true, onUpdate: "CASCADE", onDelete: "RESTRICT" })
-  @JoinColumn({ name: "parent_id" })
+  @ManyToOne(() => ProductCategory, { nullable: true, onUpdate: 'CASCADE', onDelete: 'RESTRICT' })
+  @JoinColumn({ name: 'parent_id' })
   parent?: ProductCategory;
 
-  @ManyToOne(() => Company, { onUpdate: "CASCADE", onDelete: "RESTRICT" })
-  @JoinColumn({ name: "company_id" })
+  @ManyToOne(() => Company, { onUpdate: 'CASCADE', onDelete: 'RESTRICT' })
+  @JoinColumn({ name: 'company_id' })
   company?: Company;
 }

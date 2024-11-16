@@ -1,5 +1,5 @@
 // import { Keyv } from 'keyv';
-import { createCache } from "cache-manager";
+import { createCache } from 'cache-manager';
 
 // Memory store by default
 export const cache = createCache({

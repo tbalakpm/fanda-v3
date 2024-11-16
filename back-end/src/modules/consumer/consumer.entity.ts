@@ -1,15 +1,15 @@
-import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
-import { v7 } from "uuid";
+import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { v7 } from 'uuid';
 
-import { AuditDates, AuditUsers } from "../../entities/embedded/audit.entity";
-import { Company } from "../../entities/company.entity";
-import { Address } from "../../entities/address.entity";
-import { Contact } from "../../entities/contact.entity";
+import { AuditDates, AuditUsers } from '../../entities/embedded/audit.entity';
+import { Company } from '../../entities/company.entity';
+import { Address } from '../../entities/address.entity';
+import { Contact } from '../../entities/contact.entity';
 
-@Entity({ name: "consumers" })
-@Index(["companyId", "consumerId"], { unique: true })
+@Entity({ name: 'consumers' })
+@Index(['companyId', 'consumerId'], { unique: true })
 export class Consumer {
-  @PrimaryColumn("uuid")
+  @PrimaryColumn('uuid')
   consumerId!: string;
 
   @BeforeInsert()
@@ -20,16 +20,16 @@ export class Consumer {
   @Column({ length: 50 })
   name!: string;
 
-  @Column({ type: "jsonb", default: {} })
+  @Column({ type: 'jsonb', default: {} })
   address?: Address;
 
-  @Column({ type: "jsonb", default: {} })
+  @Column({ type: 'jsonb', default: {} })
   contact?: Contact;
 
-  @Column("uuid")
+  @Column('uuid')
   companyId!: string;
 
-  @Column({ name: "is_active", default: true })
+  @Column({ name: 'is_active', default: true })
   isActive!: boolean;
 
   @Column(() => AuditDates)
@@ -39,7 +39,7 @@ export class Consumer {
   user!: AuditUsers;
 
   // Related Entities
-  @ManyToOne(() => Company, { onUpdate: "CASCADE", onDelete: "RESTRICT" })
-  @JoinColumn({ name: "company_id" })
+  @ManyToOne(() => Company, { onUpdate: 'CASCADE', onDelete: 'RESTRICT' })
+  @JoinColumn({ name: 'company_id' })
   company?: Company;
 }

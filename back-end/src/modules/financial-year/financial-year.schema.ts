@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { AuditDatesSchema, AuditUsersSchema } from "../../schema/embedded/audit.schema";
+import { z } from 'zod';
+import { AuditDatesSchema, AuditUsersSchema } from '../../schema/embedded/audit.schema';
 
 export const FinancialYearSchema = z.object({
   yearId: z.string().uuid().optional(),

@@ -1,8 +1,8 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from 'express';
 
-import { UnitService } from "./unit.service";
-import { User } from "../../entities/user.entity";
-import { ApiError } from "../../responses/api-error";
+import { UnitService } from './unit.service';
+import { User } from '../../entities/user.entity';
+import { ApiError } from '../../responses/api-error';
 
 export class UnitController {
   static async getUnits(req: Request, res: Response, next: NextFunction) {

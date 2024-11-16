@@ -1,15 +1,15 @@
-import { Not } from "typeorm";
+import { Not } from 'typeorm';
 
-import { AppDataSource } from "../../data-source";
-import { AuditUsers } from "../../entities/embedded/audit.entity";
+import { AppDataSource } from '../../data-source';
+import { AuditUsers } from '../../entities/embedded/audit.entity';
 // import { ApiResponse, ApiStatus } from "../../responses";
 // import { cache, parseError } from "../../helpers";
-import { Unit } from "./unit.entity";
-import { UnitSchema } from "./unit.schema";
-import { ApiResponse } from "../../responses/api-response";
-import { ApiStatus } from "../../responses/api-status";
-import { cache } from "../../helpers/cache.helper";
-import { parseError } from "../../helpers/error.helper";
+import { Unit } from './unit.entity';
+import { UnitSchema } from './unit.schema';
+import { ApiResponse } from '../../responses/api-response';
+import { ApiStatus } from '../../responses/api-status';
+import { cache } from '../../helpers/cache.helper';
+import { parseError } from '../../helpers/error.helper';
 
 export class UnitService {
   private static unitRepository = AppDataSource.getRepository(Unit);
@@ -19,37 +19,37 @@ export class UnitService {
     if (data) {
       return {
         success: true,
-        message: "Serving units from cache",
+        message: 'Serving units from cache',
         data,
         status: ApiStatus.OK
       };
     }
     const units = await this.unitRepository.find({
-      select: ["unitId", "code", "name", "description", "baseUnitId", "isActive"],
+      select: ['unitId', 'code', 'name', 'description', 'baseUnitId', 'isActive'],
       where: { companyId },
-      order: { companyId: "ASC", unitId: "ASC" }
+      order: { companyId: 'ASC', unitId: 'ASC' }
     });
     await cache.set(`units_${companyId}`, units);
     return {
       success: true,
-      message: "Serving units from database",
+      message: 'Serving units from database',
       data: units,
       status: ApiStatus.OK
     };
   }
 
   static async getUnitById(companyId: string, unitId: string): Promise<ApiResponse<Unit>> {
-    const data = await cache.get<Unit>("units:" + unitId);
+    const data = await cache.get<Unit>('units:' + unitId);
     if (data) {
       return {
         success: true,
-        message: "Serving a unit from cache",
+        message: 'Serving a unit from cache',
         data,
         status: ApiStatus.OK
       };
     }
     const unit = await this.unitRepository.findOne({
-      select: ["unitId", "code", "name", "description", "baseUnitId", "isActive"],
+      select: ['unitId', 'code', 'name', 'description', 'baseUnitId', 'isActive'],
       where: { companyId, unitId }
     });
     if (!unit) {
@@ -59,10 +59,10 @@ export class UnitService {
         status: ApiStatus.NOT_FOUND
       };
     }
-    await cache.set("units:" + unitId, unit);
+    await cache.set('units:' + unitId, unit);
     return {
       success: true,
-      message: "Serving unit from database",
+      message: 'Serving unit from database',
       data: unit,
       status: ApiStatus.OK
     };
@@ -101,7 +101,7 @@ export class UnitService {
     this.invalidateCache(companyId);
     return {
       success: true,
-      message: "Unit created successfully",
+      message: 'Unit created successfully',
       data: newUnit,
       status: ApiStatus.CREATED
     };
@@ -146,7 +146,7 @@ export class UnitService {
     this.invalidateCache(dbUnit.companyId, unitId);
     return {
       success: true,
-      message: "Unit updated successfully",
+      message: 'Unit updated successfully',
       data: updatedUnit,
       status: ApiStatus.OK
     };
@@ -165,7 +165,7 @@ export class UnitService {
     this.invalidateCache(unit.companyId, unitId);
     return {
       success: true,
-      message: "Unit deleted successfully",
+      message: 'Unit deleted successfully',
       data: unit,
       status: ApiStatus.OK
     };
@@ -203,6 +203,6 @@ export class UnitService {
 
   static async invalidateCache(companyId: string, unitId?: string): Promise<void> {
     await cache.del(`units_${companyId}`);
-    if (unitId) await cache.del("units:" + unitId);
+    if (unitId) await cache.del('units:' + unitId);
   }
 }

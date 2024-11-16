@@ -1,17 +1,17 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from 'express';
 
 // import { AuthService, UserService } from "../services";
-import { LoginDto } from "../dto/login.dto";
-import { ApiError } from "../responses/api-error";
-import { AuthService } from "../services/auth.service";
-import { UserService } from "../services/user.service";
+import { LoginDto } from '../dto/login.dto';
+import { ApiError } from '../responses/api-error';
+import { AuthService } from '../services/auth.service';
+import { UserService } from '../services/user.service';
 
 export class AuthController {
   static async register(req: Request, res: Response, next: NextFunction) {
     try {
       const { username, password } = req.body;
       if (!username || !password) {
-        return next(new ApiError("Username and password are required", 400));
+        return next(new ApiError('Username and password are required', 400));
       }
 
       const result = await AuthService.register(req.body);
@@ -28,7 +28,7 @@ export class AuthController {
     try {
       const { username, password } = req.body;
       if (!username || !password) {
-        return next(new ApiError("Username and password are required", 400));
+        return next(new ApiError('Username and password are required', 400));
       }
 
       const login = new LoginDto(username, password);
@@ -45,7 +45,7 @@ export class AuthController {
   static async getProfile(req: Request, res: Response, next: NextFunction) {
     try {
       if (!req.currentUser) {
-        return next(new ApiError("Unauthorized", 401));
+        return next(new ApiError('Unauthorized', 401));
       }
 
       const result = await UserService.getUserById(req.currentUser.userId);

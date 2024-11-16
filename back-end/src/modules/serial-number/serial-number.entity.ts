@@ -1,14 +1,14 @@
-import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
-import { v7 } from "uuid";
+import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { v7 } from 'uuid';
 
-import { AuditDates, AuditUsers } from "../../entities/embedded/audit.entity";
-import { FinancialYear } from "../financial-year/financial-year.entity";
+import { AuditDates, AuditUsers } from '../../entities/embedded/audit.entity';
+import { FinancialYear } from '../financial-year/financial-year.entity';
 
-@Entity({ name: "serial_numbers" })
-@Index(["yearId", "serialId"], { unique: true })
-@Index(["yearId", "key"], { unique: true })
+@Entity({ name: 'serial_numbers' })
+@Index(['yearId', 'serialId'], { unique: true })
+@Index(['yearId', 'key'], { unique: true })
 export class SerialNumber {
-  @PrimaryColumn("uuid")
+  @PrimaryColumn('uuid')
   serialId!: string;
 
   @BeforeInsert()
@@ -28,10 +28,10 @@ export class SerialNumber {
   @Column({ default: 7 })
   length!: number;
 
-  @Column("uuid")
+  @Column('uuid')
   yearId!: string;
 
-  @Column({ name: "is_active", default: true })
+  @Column({ name: 'is_active', default: true })
   isActive!: boolean;
 
   @Column(() => AuditDates)
@@ -41,7 +41,7 @@ export class SerialNumber {
   user!: AuditUsers;
 
   // Related Entities
-  @ManyToOne(() => FinancialYear, { onUpdate: "CASCADE", onDelete: "RESTRICT" })
-  @JoinColumn({ name: "year_id" })
+  @ManyToOne(() => FinancialYear, { onUpdate: 'CASCADE', onDelete: 'RESTRICT' })
+  @JoinColumn({ name: 'year_id' })
   year?: FinancialYear;
 }

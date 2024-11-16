@@ -1,16 +1,16 @@
-import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
-import { v7 } from "uuid";
-import { AuditDates, AuditUsers } from "../../entities/embedded/audit.entity";
-import { Company } from "../../entities/company.entity";
+import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { v7 } from 'uuid';
+import { AuditDates, AuditUsers } from '../../entities/embedded/audit.entity';
+import { Company } from '../../entities/company.entity';
 
 // import { Company, AuditDates, AuditUsers } from "../../entities";
 
-@Entity({ name: "units" })
-@Index(["companyId", "unitId"], { unique: true })
-@Index(["companyId", "code"], { unique: true })
-@Index(["companyId", "name"], { unique: true })
+@Entity({ name: 'units' })
+@Index(['companyId', 'unitId'], { unique: true })
+@Index(['companyId', 'code'], { unique: true })
+@Index(['companyId', 'name'], { unique: true })
 export class Unit {
-  @PrimaryColumn("uuid")
+  @PrimaryColumn('uuid')
   unitId!: string;
 
   @BeforeInsert()
@@ -30,7 +30,7 @@ export class Unit {
   @Column({ nullable: true })
   baseUnitId?: string;
 
-  @Column("uuid")
+  @Column('uuid')
   companyId!: string;
 
   @Column({ default: true })
@@ -43,11 +43,11 @@ export class Unit {
   user!: AuditUsers;
 
   // Related Entities
-  @ManyToOne(() => Unit, { nullable: true, onUpdate: "CASCADE", onDelete: "RESTRICT" })
-  @JoinColumn({ name: "base_unit_id" })
+  @ManyToOne(() => Unit, { nullable: true, onUpdate: 'CASCADE', onDelete: 'RESTRICT' })
+  @JoinColumn({ name: 'base_unit_id' })
   baseUnit?: Unit;
 
-  @ManyToOne(() => Company, { onUpdate: "CASCADE", onDelete: "RESTRICT" })
-  @JoinColumn({ name: "company_id" })
+  @ManyToOne(() => Company, { onUpdate: 'CASCADE', onDelete: 'RESTRICT' })
+  @JoinColumn({ name: 'company_id' })
   company?: Company;
 }

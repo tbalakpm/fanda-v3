@@ -1,17 +1,17 @@
-import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
-import { v7 } from "uuid";
+import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { v7 } from 'uuid';
 // import { AuditDates, AuditUsers, Company } from "../../entities";
-import { AuditDates, AuditUsers } from "../../entities/embedded/audit.entity";
-import { Company } from "../../entities/company.entity";
-import { ProductCategory } from "../product-category/product-category.entity";
-import { Unit } from "../unit/unit.entity";
+import { AuditDates, AuditUsers } from '../../entities/embedded/audit.entity';
+import { Company } from '../../entities/company.entity';
+import { ProductCategory } from '../product-category/product-category.entity';
+import { Unit } from '../unit/unit.entity';
 
-@Entity({ name: "products" })
-@Index(["companyId", "productId"], { unique: true })
-@Index(["companyId", "code"], { unique: true })
-@Index(["companyId", "name"], { unique: true })
+@Entity({ name: 'products' })
+@Index(['companyId', 'productId'], { unique: true })
+@Index(['companyId', 'code'], { unique: true })
+@Index(['companyId', 'name'], { unique: true })
 export class Product {
-  @PrimaryColumn("uuid")
+  @PrimaryColumn('uuid')
   productId!: string;
 
   @BeforeInsert()
@@ -28,13 +28,13 @@ export class Product {
   @Column({ length: 255, nullable: true })
   description?: string;
 
-  @Column({ length: 10, default: "Good" }) // enum: Good or Service
+  @Column({ length: 10, default: 'Good' }) // enum: Good or Service
   type!: string;
 
-  @Column("uuid")
+  @Column('uuid')
   categoryId!: string;
 
-  @Column("uuid")
+  @Column('uuid')
   baseUnitId!: string;
 
   @Column({ nullable: true })
@@ -61,13 +61,13 @@ export class Product {
   @Column({ nullable: true })
   taxPct?: number;
 
-  @Column({ length: 15, default: "NO_TAX" }) // enum: No Tax, Taxable, Non-Taxable, Zero-Rated, Exempt, Out-of-Scope, Reverse Charge, Withholding
+  @Column({ length: 15, default: 'NO_TAX' }) // enum: No Tax, Taxable, Non-Taxable, Zero-Rated, Exempt, Out-of-Scope, Reverse Charge, Withholding
   taxPreference!: string;
 
   @Column({ nullable: true, default: false })
   isPriceInclusiveTax?: boolean;
 
-  @Column("uuid")
+  @Column('uuid')
   companyId!: string;
 
   @Column({ default: true })
@@ -80,15 +80,15 @@ export class Product {
   user!: AuditUsers;
 
   // Related Entities
-  @ManyToOne(() => ProductCategory, { nullable: true, onUpdate: "CASCADE", onDelete: "RESTRICT" })
-  @JoinColumn({ name: "category_id" })
+  @ManyToOne(() => ProductCategory, { nullable: true, onUpdate: 'CASCADE', onDelete: 'RESTRICT' })
+  @JoinColumn({ name: 'category_id' })
   category?: ProductCategory;
 
-  @ManyToOne(() => Unit, { nullable: true, onUpdate: "CASCADE", onDelete: "RESTRICT" })
-  @JoinColumn({ name: "base_unit_id" })
+  @ManyToOne(() => Unit, { nullable: true, onUpdate: 'CASCADE', onDelete: 'RESTRICT' })
+  @JoinColumn({ name: 'base_unit_id' })
   unit?: Unit;
 
-  @ManyToOne(() => Company, { onUpdate: "CASCADE", onDelete: "RESTRICT" })
-  @JoinColumn({ name: "company_id" })
+  @ManyToOne(() => Company, { onUpdate: 'CASCADE', onDelete: 'RESTRICT' })
+  @JoinColumn({ name: 'company_id' })
   company?: Company;
 }

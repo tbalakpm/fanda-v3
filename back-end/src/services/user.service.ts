@@ -1,13 +1,13 @@
-import { Not } from "typeorm";
+import { Not } from 'typeorm';
 
-import { AppDataSource } from "../data-source";
-import { User } from "../entities/user.entity";
-import { UserDto } from "../dto/user.dto";
-import { cache } from "../helpers/cache.helper";
-import { ApiStatus } from "../responses/api-status";
-import { ApiResponse } from "../responses/api-response";
-import { UserSchema } from "../schema/user.schema";
-import { encrypt } from "../helpers/encrypt.helper";
+import { AppDataSource } from '../data-source';
+import { User } from '../entities/user.entity';
+import { UserDto } from '../dto/user.dto';
+import { cache } from '../helpers/cache.helper';
+import { ApiStatus } from '../responses/api-status';
+import { ApiResponse } from '../responses/api-response';
+import { UserSchema } from '../schema/user.schema';
+import { encrypt } from '../helpers/encrypt.helper';
 // import { User } from "../entities";
 // import { UserDto } from "../dto";
 // import { UserSchema } from "../schema";
@@ -18,40 +18,40 @@ export class UserService {
   private static userRepository = AppDataSource.getRepository(User);
 
   static async getAllUsers(): Promise<ApiResponse<UserDto[]>> {
-    const data = await cache.get<UserDto[]>("users");
+    const data = await cache.get<UserDto[]>('users');
     if (data) {
       return {
         success: true,
-        message: "Serving users from cache",
+        message: 'Serving users from cache',
         data,
         status: ApiStatus.OK
       };
     }
     const users = await this.userRepository.find({
-      select: ["userId", "username", "email", "phone", "firstName", "lastName", "role", "isActive"],
-      order: { userId: "ASC" }
+      select: ['userId', 'username', 'email', 'phone', 'firstName', 'lastName', 'role', 'isActive'],
+      order: { userId: 'ASC' }
     });
-    await cache.set("users", users);
+    await cache.set('users', users);
     return {
       success: true,
-      message: "Serving users from database",
+      message: 'Serving users from database',
       data: users,
       status: ApiStatus.OK
     };
   }
 
   static async getUserById(userId: string): Promise<ApiResponse<UserDto>> {
-    const data = await cache.get<User>("users:" + userId);
+    const data = await cache.get<User>('users:' + userId);
     if (data) {
       return {
         success: true,
-        message: "Serving user from cache",
+        message: 'Serving user from cache',
         data,
         status: ApiStatus.OK
       };
     }
     const user = await this.userRepository.findOne({
-      select: ["userId", "username", "email", "phone", "firstName", "lastName", "role", "isActive"],
+      select: ['userId', 'username', 'email', 'phone', 'firstName', 'lastName', 'role', 'isActive'],
       where: { userId }
     });
     if (!user) {
@@ -62,10 +62,10 @@ export class UserService {
       };
     }
     // const { password: _, ...userWithoutPassword } = user;
-    await cache.set("users:" + userId, user);
+    await cache.set('users:' + userId, user);
     return {
       success: true,
-      message: "Serving user from database",
+      message: 'Serving user from database',
       data: user,
       status: ApiStatus.OK
     };
@@ -74,7 +74,7 @@ export class UserService {
   static async getLoginByUsername(username: string): Promise<ApiResponse<User>> {
     const user = await this.userRepository.findOne({
       where: { username },
-      select: ["userId", "username", "password", "email", "phone", "firstName", "lastName", "role", "isActive"]
+      select: ['userId', 'username', 'password', 'email', 'phone', 'firstName', 'lastName', 'role', 'isActive']
     });
     if (!user) {
       return {
@@ -85,7 +85,7 @@ export class UserService {
     }
     return {
       success: true,
-      message: "User found",
+      message: 'User found',
       data: user,
       status: ApiStatus.OK
     };
@@ -118,7 +118,7 @@ export class UserService {
     this.invalidateCache();
     return {
       success: true,
-      message: "User created successfully",
+      message: 'User created successfully',
       data: userWithoutPassword as UserDto,
       status: ApiStatus.CREATED
     };
@@ -150,7 +150,7 @@ export class UserService {
     this.invalidateCache(userId);
     return {
       success: true,
-      message: "User updated successfully",
+      message: 'User updated successfully',
       data: userWithoutPassword as UserDto,
       status: ApiStatus.OK
     };
@@ -173,7 +173,7 @@ export class UserService {
     this.invalidateCache(userId);
     return {
       success: true,
-      message: "User deleted successfully",
+      message: 'User deleted successfully',
       data: userWithoutPassword as UserDto,
       status: ApiStatus.OK
     };
@@ -192,7 +192,7 @@ export class UserService {
   }
 
   static async invalidateCache(userId?: string): Promise<void> {
-    await cache.del("users");
-    if (userId) await cache.del("users:" + userId);
+    await cache.del('users');
+    if (userId) await cache.del('users:' + userId);
   }
 }

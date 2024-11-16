@@ -1,15 +1,15 @@
-import { Not } from "typeorm";
+import { Not } from 'typeorm';
 
-import { cache } from "../../helpers/cache.helper";
+import { cache } from '../../helpers/cache.helper';
 
-import { AppDataSource } from "../../data-source";
-import { AuditUsers } from "../../entities/embedded/audit.entity";
+import { AppDataSource } from '../../data-source';
+import { AuditUsers } from '../../entities/embedded/audit.entity';
 // import { ApiResponse, ApiStatus } from "../../responses";
-import { parseError } from "../../helpers/error.helper";
-import { Supplier } from "./supplier.entity";
-import { SupplierSchema } from "./supplier.schema";
-import { ApiResponse } from "../../responses/api-response";
-import { ApiStatus } from "../../responses/api-status";
+import { parseError } from '../../helpers/error.helper';
+import { Supplier } from './supplier.entity';
+import { SupplierSchema } from './supplier.schema';
+import { ApiResponse } from '../../responses/api-response';
+import { ApiStatus } from '../../responses/api-status';
 
 export class SupplierService {
   private static supplierRepository = AppDataSource.getRepository(Supplier);
@@ -19,37 +19,37 @@ export class SupplierService {
     if (data) {
       return {
         success: true,
-        message: "Serving suppliers from cache",
+        message: 'Serving suppliers from cache',
         data,
         status: ApiStatus.OK
       };
     }
     const suppliers = await this.supplierRepository.find({
-      select: ["supplierId", "code", "name", "description", "address", "contact", "isActive"],
+      select: ['supplierId', 'code', 'name', 'description', 'address', 'contact', 'isActive'],
       where: { companyId },
-      order: { companyId: "ASC", supplierId: "ASC" }
+      order: { companyId: 'ASC', supplierId: 'ASC' }
     });
     await cache.set(`suppliers_${companyId}`, suppliers);
     return {
       success: true,
-      message: "Serving suppliers from database",
+      message: 'Serving suppliers from database',
       data: suppliers,
       status: ApiStatus.OK
     };
   }
 
   static async getSupplierById(companyId: string, supplierId: string): Promise<ApiResponse<Supplier>> {
-    const data = await cache.get<Supplier>("suppliers:" + supplierId);
+    const data = await cache.get<Supplier>('suppliers:' + supplierId);
     if (data) {
       return {
         success: true,
-        message: "Serving a supplier from cache",
+        message: 'Serving a supplier from cache',
         data,
         status: ApiStatus.OK
       };
     }
     const supplier = await this.supplierRepository.findOne({
-      select: ["supplierId", "code", "name", "description", "address", "contact", "isActive"],
+      select: ['supplierId', 'code', 'name', 'description', 'address', 'contact', 'isActive'],
       where: { companyId, supplierId }
     });
     if (!supplier) {
@@ -59,10 +59,10 @@ export class SupplierService {
         status: ApiStatus.NOT_FOUND
       };
     }
-    await cache.set("suppliers:" + supplierId, supplier);
+    await cache.set('suppliers:' + supplierId, supplier);
     return {
       success: true,
-      message: "Serving supplier from database",
+      message: 'Serving supplier from database',
       data: supplier,
       status: ApiStatus.OK
     };
@@ -101,7 +101,7 @@ export class SupplierService {
     this.invalidateCache(companyId);
     return {
       success: true,
-      message: "Supplier created successfully",
+      message: 'Supplier created successfully',
       data: newSupplier,
       status: ApiStatus.CREATED
     };
@@ -149,7 +149,7 @@ export class SupplierService {
     this.invalidateCache(dbSupplier.companyId, supplierId);
     return {
       success: true,
-      message: "Supplier updated successfully",
+      message: 'Supplier updated successfully',
       data: updatedSupplier,
       status: ApiStatus.OK
     };
@@ -171,7 +171,7 @@ export class SupplierService {
     this.invalidateCache(supplier.companyId, supplierId);
     return {
       success: true,
-      message: "Supplier deleted successfully",
+      message: 'Supplier deleted successfully',
       data: supplier,
       status: ApiStatus.OK
     };
@@ -217,6 +217,6 @@ export class SupplierService {
 
   static async invalidateCache(companyId: string, supplierId?: string): Promise<void> {
     await cache.del(`suppliers_${companyId}`);
-    if (supplierId) await cache.del("suppliers:" + supplierId);
+    if (supplierId) await cache.del('suppliers:' + supplierId);
   }
 }

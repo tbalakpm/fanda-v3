@@ -1,5 +1,5 @@
-import { AppDataSource } from "../data-source";
-import { SerialNumber } from "../modules/serial-number/serial-number.entity";
+import { AppDataSource } from '../data-source';
+import { SerialNumber } from '../modules/serial-number/serial-number.entity';
 
 export class SerialNumberHelper {
   private static readonly serialRepository = AppDataSource.getRepository(SerialNumber);
@@ -8,16 +8,16 @@ export class SerialNumberHelper {
     const result = await this.serialRepository
       .createQueryBuilder()
       .update(SerialNumber)
-      .set({ current: () => "current + 1" })
-      .where("yearId = :yearId", { yearId })
-      .andWhere("key = :key", { key })
-      .returning("length, current, prefix")
+      .set({ current: () => 'current + 1' })
+      .where('yearId = :yearId', { yearId })
+      .andWhere('key = :key', { key })
+      .returning('length, current, prefix')
       .execute();
     const serial = result.raw[0];
     // console.log("serial", serial);
 
     if (!serial) {
-      return "";
+      return '';
     }
 
     const endSerial = this.formatSerial(serial.length, serial.current - 1, serial.prefix);
@@ -33,15 +33,15 @@ export class SerialNumberHelper {
       .createQueryBuilder()
       .update(SerialNumber)
       .set({ current: () => `current + ${count}` })
-      .where("yearId = :yearId", { yearId })
-      .andWhere("key = :key", { key })
-      .returning("length, current, prefix")
+      .where('yearId = :yearId', { yearId })
+      .andWhere('key = :key', { key })
+      .returning('length, current, prefix')
       .execute();
     const serial = result.raw[0];
     // console.log("serial", serial);
 
     if (!serial) {
-      return { beginSerial: "", endSerial: "", serial: {} };
+      return { beginSerial: '', endSerial: '', serial: {} };
     }
 
     const beginSerial = this.formatSerial(serial.length, serial.current - count, serial.prefix);
@@ -54,6 +54,6 @@ export class SerialNumberHelper {
   }
 
   static formatSerial(length: number, value: number, prefix?: string): string {
-    return `${prefix ? prefix : ""}${String(value).padStart(length, "0")}`;
+    return `${prefix ? prefix : ''}${String(value).padStart(length, '0')}`;
   }
 }

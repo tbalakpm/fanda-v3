@@ -1,18 +1,18 @@
-import express from "express";
-import { authorization } from "../../middleware/authorization.middleware";
-import { ProductCategoryController } from "./product-category.controller";
+import express from 'express';
+import { authorization } from '../../middleware/authorization.middleware';
+import { ProductCategoryController } from './product-category.controller';
 
 export const productCategoryRoutes = () => {
   const router = express.Router({ mergeParams: true });
 
   router
-    .route("/")
+    .route('/')
     .get(ProductCategoryController.getCategories)
-    .post(authorization(["admin", "manager"]), ProductCategoryController.createCategory);
+    .post(authorization(['admin', 'manager']), ProductCategoryController.createCategory);
   router
-    .route("/:categoryId")
+    .route('/:categoryId')
     .get(ProductCategoryController.getCategoryById)
-    .put(authorization(["admin", "manager"]), ProductCategoryController.updateCategory)
-    .delete(authorization(["admin", "manager"]), ProductCategoryController.deleteCategory);
+    .put(authorization(['admin', 'manager']), ProductCategoryController.updateCategory)
+    .delete(authorization(['admin', 'manager']), ProductCategoryController.deleteCategory);
   return router;
 };
