@@ -1,6 +1,7 @@
 import { DataSource } from 'typeorm';
 import { User } from '../entities';
 import { encrypt } from '../helpers';
+import { UserRole } from '../entities/role.enum';
 
 export const createAdminUser = async (ds: DataSource) => {
   const userRepo = ds.getRepository<User>(User);
@@ -10,7 +11,7 @@ export const createAdminUser = async (ds: DataSource) => {
     adminUser.userId = '0192fc5e-0093-7ccc-a20a-dc844a5bad1c';
     adminUser.username = 'admin';
     adminUser.password = await encrypt.encryptPassword('Welcome!23');
-    adminUser.role = 'admin';
+    adminUser.role = UserRole.ADMIN;
     await userRepo.save(adminUser);
   }
 };

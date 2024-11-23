@@ -1,5 +1,6 @@
 dist/
 node_modules/
 logs/
+.env
 .env.dev
 .env.prod

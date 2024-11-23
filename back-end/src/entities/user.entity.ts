@@ -1,5 +1,6 @@
 import { BeforeInsert, Column, Entity, PrimaryColumn } from 'typeorm';
 import { v7 } from 'uuid';
+import { UserRole } from './role.enum';
 
 @Entity({ name: 'users' })
 export class User {
@@ -29,8 +30,8 @@ export class User {
   @Column({ name: 'last_name', length: 25, nullable: true })
   lastName?: string;
 
-  @Column({ length: 15, default: 'user' })
-  role: string = 'user';
+  @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
+  role!: UserRole;
 
   @Column({ name: 'is_active', default: true })
   isActive!: boolean;

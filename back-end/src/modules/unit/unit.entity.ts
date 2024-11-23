@@ -30,6 +30,12 @@ export class Unit {
   @Column({ nullable: true })
   baseUnitId?: string;
 
+  // @Column({ nullable: true })
+  // conversionFactor?: number;
+
+  // @Column('uuid', { nullable: true })
+  // conversionUnitId?: string;
+
   @Column('uuid')
   companyId!: string;
 

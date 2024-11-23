@@ -46,9 +46,6 @@ export class Product {
   @Column({ nullable: true })
   marginAmt?: number;
 
-  // @Column({ nullable: true }) // enum: Inclusive or Exclusive
-  // taxPricing?: string;
-
   @Column({ nullable: true })
   sellingPrice?: number;
 

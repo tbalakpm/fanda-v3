@@ -83,7 +83,7 @@ export class CompanyService {
       this.invalidateCache();
       return { success: true, message: 'Company created successfully', data: newCompany, status: ApiStatus.CREATED };
     }).catch((error) => {
-      return { success: false, message: error.message, status: ApiStatus.ERROR };
+      return { success: false, message: error.message, status: ApiStatus.INTERNAL_SERVER_ERROR };
     });
     return result;
   }

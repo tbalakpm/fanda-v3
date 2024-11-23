@@ -1,9 +1,6 @@
 import 'reflect-metadata';
 import express from 'express';
 import cors from 'cors';
-
-// import { authentication, notFound, errorHandler, loggerMiddleware } from "./middleware";
-// import { authRoutes, userRoutes, companyRoutes } from "./routes";
 import { loggerMiddleware } from './middleware/logger.middleware';
 import { authentication } from './middleware/authentication.middleware';
 import { notFound } from './middleware/not-found.middleware';
@@ -37,7 +34,13 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded());
-app.use(cors({ origin: '*', methods: ['OPTIONS', 'GET', 'POST', 'PUT', 'DELETE', 'PATCH'] }));
+app.use(
+  cors({
+    origin: '*',
+    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization', 'X-Access-Token', 'X-Refresh-Token', 'X-User-Id'],
+    methods: ['OPTIONS', 'GET', 'POST', 'PUT', 'DELETE', 'PATCH']
+  })
+);
 app.use(loggerMiddleware);
 
 // ############### routers - begin ###############

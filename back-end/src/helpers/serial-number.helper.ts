@@ -1,11 +1,12 @@
+import { QueryRunner } from 'typeorm';
 import { AppDataSource } from '../data-source';
 import { SerialNumber } from '../modules/serial-number/serial-number.entity';
 
 export class SerialNumberHelper {
   private static readonly serialRepository = AppDataSource.getRepository(SerialNumber);
 
-  static async getNextSerial(key: string, yearId: string): Promise<string> {
-    const result = await this.serialRepository
+  static async getNextSerial(queryRunner: QueryRunner, key: string, yearId: string): Promise<string> {
+    const result = await queryRunner.manager //this.serialRepository
       .createQueryBuilder()
       .update(SerialNumber)
       .set({ current: () => 'current + 1' })
@@ -14,22 +15,20 @@ export class SerialNumberHelper {
       .returning('length, current, prefix')
       .execute();
     const serial = result.raw[0];
-    // console.log("serial", serial);
-
     if (!serial) {
       return '';
     }
-
     const endSerial = this.formatSerial(serial.length, serial.current - 1, serial.prefix);
     return endSerial;
   }
 
   static async getNextRangeSerial(
+    queryRunner: QueryRunner,
     count: number,
     key: string,
     yearId?: string
   ): Promise<{ beginSerial: string; endSerial: string; serial: { current?: number; length?: number; prefix?: string } }> {
-    const result = await this.serialRepository
+    const result = await queryRunner.manager
       .createQueryBuilder()
       .update(SerialNumber)
       .set({ current: () => `current + ${count}` })

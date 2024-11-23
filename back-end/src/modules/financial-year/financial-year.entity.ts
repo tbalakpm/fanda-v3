@@ -1,16 +1,7 @@
 import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
-// import * as TypeORM from "typeorm";
 import { Company } from '../../entities/company.entity';
 import { AuditDates, AuditUsers } from '../../entities/embedded/audit.entity';
 import { v7 } from 'uuid';
-
-// const Entity = TypeORM.Entity;
-// const Index = TypeORM.Index;
-// const PrimaryColumn = TypeORM.PrimaryColumn;
-// const Column = TypeORM.Column;
-// const ManyToOne = TypeORM.ManyToMany;
-
-// const { Entity, Index, PrimaryColumn, BeforeInsert, Column, ManyToOne, JoinColumn } = TypeORM;
 
 @Entity({ name: 'financial_years' })
 @Index(['companyId', 'yearId'], { unique: true })
