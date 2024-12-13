@@ -14,10 +14,10 @@ AppDataSource.initialize()
 
     await createAdminUser(db);
 
-    // const current_serial = await SerialNumberHelper.getNextSerial("stock", "01932b09-e344-7998-9a52-06521371f6ad");
+    // const current_serial = await SerialNumberHelper.getNextSerial("01932b09-e344-7998-9a52-06521371f6ad", "stock");
     // console.log("current_serial", current_serial);
 
-    // const next_serial = await SerialNumberHelper.getNextRangeSerial(5, "stock", "01932b09-e344-7998-9a52-06521371f6ad");
+    // const next_serial = await SerialNumberHelper.getNextRangeSerial(5,  "01932b09-e344-7998-9a52-06521371f6ad", "stock");
     // console.log("next_serial", next_serial);
 
     app.listen(PORT, () => {

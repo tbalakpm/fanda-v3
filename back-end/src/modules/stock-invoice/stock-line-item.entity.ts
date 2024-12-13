@@ -45,29 +45,29 @@ export class StockLineItem {
   @Column()
   price!: number;
 
-  @Column({ nullable: true })
-  marginPct?: number;
+  @Column()
+  marginPct!: number;
 
-  @Column({ nullable: true })
-  marginAmt?: number;
+  @Column()
+  marginAmt!: number;
 
-  @Column({ nullable: true })
-  sellingPrice?: number;
+  @Column()
+  sellingPrice!: number;
 
-  @Column({ nullable: true })
-  discountPct?: number;
+  @Column()
+  discountPct!: number;
 
-  @Column({ nullable: true })
-  discountAmt?: number;
+  @Column()
+  discountAmt!: number;
 
   @Column({ nullable: true })
   taxCode?: string;
 
-  @Column({ nullable: true })
-  taxPct?: number;
+  @Column()
+  taxPct!: number;
 
-  @Column({ nullable: true })
-  taxAmt?: number;
+  @Column()
+  taxAmt!: number;
 
   @Column()
   lineTotal!: number;

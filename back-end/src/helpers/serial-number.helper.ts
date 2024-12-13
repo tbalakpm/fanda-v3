@@ -5,7 +5,7 @@ import { SerialNumber } from '../modules/serial-number/serial-number.entity';
 export class SerialNumberHelper {
   private static readonly serialRepository = AppDataSource.getRepository(SerialNumber);
 
-  static async getNextSerial(queryRunner: QueryRunner, key: string, yearId: string): Promise<string> {
+  static async getNextSerial(queryRunner: QueryRunner, yearId: string, key: string): Promise<string> {
     const result = await queryRunner.manager //this.serialRepository
       .createQueryBuilder()
       .update(SerialNumber)
@@ -24,8 +24,8 @@ export class SerialNumberHelper {
 
   static async getNextRangeSerial(
     queryRunner: QueryRunner,
-    key: string,
     yearId: string,
+    key: string,
     count: number
   ): Promise<{ beginSerial: string; endSerial: string; serial: { current?: number; length?: number; prefix?: string } }> {
     const result = await queryRunner.manager

@@ -1,13 +1,16 @@
 import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { v7 } from 'uuid';
 
-import { AuditDates, AuditUsers } from '../../entities/embedded/audit.entity';
+// import { AuditDates, AuditUsers } from '../../entities/embedded/audit.entity';
 import { FinancialYear } from '../financial-year/financial-year.entity';
 
 @Entity({ name: 'serial_numbers' })
-@Index(['yearId', 'serialId'], { unique: true })
+// @Index(['yearId', 'serialId'], { unique: true })
 @Index(['yearId', 'key'], { unique: true })
 export class SerialNumber {
+  @PrimaryColumn('uuid')
+  yearId!: string;
+
   @PrimaryColumn('uuid')
   serialId!: string;
 
@@ -28,17 +31,14 @@ export class SerialNumber {
   @Column({ default: 7 })
   length!: number;
 
-  @Column('uuid')
-  yearId!: string;
+  // @Column({ name: 'is_active', default: true })
+  // isActive!: boolean;
 
-  @Column({ name: 'is_active', default: true })
-  isActive!: boolean;
+  // @Column(() => AuditDates)
+  // date!: AuditDates;
 
-  @Column(() => AuditDates)
-  date!: AuditDates;
-
-  @Column(() => AuditUsers)
-  user!: AuditUsers;
+  // @Column(() => AuditUsers)
+  // user!: AuditUsers;
 
   // Related Entities
   @ManyToOne(() => FinancialYear, { onUpdate: 'CASCADE', onDelete: 'RESTRICT' })

@@ -48,7 +48,7 @@ export class StockInvoiceService {
     try {
       // create invoice
       const createdInvoice = queryRunner.manager.create(StockInvoice, invoice);
-      createdInvoice.invoiceNumber = await SerialNumberHelper.getNextSerial(queryRunner, 'stock', yearId);
+      createdInvoice.invoiceNumber = await SerialNumberHelper.getNextSerial(queryRunner, yearId, 'stock');
       createdInvoice.companyId = companyId;
       createdInvoice.yearId = yearId;
       createdInvoice.user = { created: userId, updated: userId };
@@ -60,10 +60,38 @@ export class StockInvoiceService {
         let endSerial: string = '';
         let serial = null;
 
+        // calculations - start
+        lineItem.qty = Number(lineItem.qty);
+        lineItem.rate = Number(lineItem.rate);
+        lineItem.price = Number(Math.round((lineItem.qty * lineItem.rate * 100) / 100).toFixed(2));
+        lineItem.discountPct = lineItem.discountPct || 0;
+        if (lineItem.discountPct > 0) {
+          lineItem.discountAmt = Number(Math.round((lineItem.price * (lineItem.discountPct / 100) * 100) / 100).toFixed(2));
+        } else {
+          lineItem.discountAmt = lineItem.discountAmt || 0;
+        }
+
+        lineItem.taxPct = lineItem.taxPct || 0;
+        if (lineItem.taxPct > 0) {
+          lineItem.taxAmt = Number(Math.round((lineItem.price * (lineItem.taxPct / 100) * 100) / 100).toFixed(2));
+        } else {
+          lineItem.taxAmt = lineItem.taxAmt || 0;
+        }
+
+        lineItem.lineTotal = Number(Math.round(((lineItem.price - lineItem.discountAmt + lineItem.taxAmt) * 100) / 100).toFixed(2));
+        lineItem.marginPct = lineItem.marginPct || 0;
+        if (lineItem.marginPct > 0) {
+          lineItem.marginAmt = Number(Math.round((lineItem.price * (lineItem.marginPct / 100) * 100) / 100).toFixed(2));
+        } else {
+          lineItem.marginAmt = lineItem.marginAmt || 0;
+        }
+        lineItem.sellingPrice = Number(lineItem.rate + lineItem.marginAmt);
+        // calculations - end
+
         if (!lineItem.gtn) {
           lineItem.gtn = '';
         } else if (lineItem.gtn.toLowerCase() === 'tbd') {
-          const result = await SerialNumberHelper.getNextRangeSerial(queryRunner, 'gtn', yearId, lineItem.qty);
+          const result = await SerialNumberHelper.getNextRangeSerial(queryRunner, yearId, 'gtn', lineItem.qty);
           beginSerial = result.beginSerial;
           endSerial = result.endSerial;
           serial = { current: result.serial.current || 0, length: result.serial.length || 0, prefix: result.serial.prefix || '' };

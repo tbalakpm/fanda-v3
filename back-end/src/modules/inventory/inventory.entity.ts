@@ -51,17 +51,17 @@ export class Inventory {
   @Column()
   qtyOnHand!: number;
 
-  @Column({ nullable: true })
-  buyingPrice?: number;
+  @Column()
+  buyingPrice!: number;
 
-  @Column({ nullable: true })
-  marginPct?: number;
+  @Column()
+  marginPct!: number;
 
-  @Column({ nullable: true })
-  marginAmt?: number;
+  @Column()
+  marginAmt!: number;
 
-  @Column({ nullable: true })
-  sellingPrice?: number;
+  @Column()
+  sellingPrice!: number;
 
   @Column({ nullable: true })
   mfdDate?: Date;

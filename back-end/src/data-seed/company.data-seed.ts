@@ -116,7 +116,7 @@ export class CompanyDataSeeder {
     // await UnitService.createUnit(companyId, numberUnit, adminUserId);
   }
 
-  static getDefaultSequences(yearId: string, adminUserId: string): SerialNumber[] {
+  static getDefaultSequences(yearId: string): SerialNumber[] {
     const serials = this.defaultSerials.map((serial) => {
       const newSerial = new SerialNumber();
       newSerial.key = serial.key;
@@ -124,15 +124,15 @@ export class CompanyDataSeeder {
       newSerial.current = serial.current;
       newSerial.length = serial.length;
       newSerial.yearId = yearId;
-      newSerial.isActive = true;
-      newSerial.date = {
-        created: new Date(),
-        updated: new Date()
-      };
-      newSerial.user = {
-        created: adminUserId,
-        updated: adminUserId
-      };
+      // newSerial.isActive = true;
+      // newSerial.date = {
+      //   created: new Date(),
+      //   updated: new Date()
+      // };
+      // newSerial.user = {
+      //   created: adminUserId,
+      //   updated: adminUserId
+      // };
 
       return newSerial;
     });

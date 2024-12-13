@@ -75,7 +75,7 @@ export class CompanyService {
       const newCompany = await transactionalEntityManager.save<Company>(createCompany);
       // Seed company data
       const year = await transactionalEntityManager.save<FinancialYear>(CompanyDataSeeder.getNewYear(newCompany.companyId, userId, new Date()));
-      await transactionalEntityManager.save<SerialNumber>(CompanyDataSeeder.getDefaultSequences(year.yearId, userId));
+      await transactionalEntityManager.save<SerialNumber>(CompanyDataSeeder.getDefaultSequences(year.yearId));
       await transactionalEntityManager.save<Customer>(CompanyDataSeeder.getDefaultCashCustomer(newCompany.companyId, userId));
       await transactionalEntityManager.save<Supplier>(CompanyDataSeeder.getDefaultCashSupplier(newCompany.companyId, userId));
       await transactionalEntityManager.save<ProductCategory>(CompanyDataSeeder.getDefaultProductCategory(newCompany.companyId, userId));

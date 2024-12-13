@@ -35,7 +35,10 @@ Authorization: Bearer {{token}}
       "qty": "5",
       "rate": "12500",
       "price": "12500",
-      "lineTotal": "12500"
+      "discountPct": 10,
+      "taxPct": 5,
+      "lineTotal": "12500",
+      "marginPct": 10
     },
     {
       "productId": "{{productId}}",
@@ -44,7 +47,10 @@ Authorization: Bearer {{token}}
       "qty": "10",
       "rate": "12500",
       "price": "12500",
-      "lineTotal": "12500"
+      "discountPct": 10,
+      "taxPct": 5,
+      "lineTotal": "12500",
+      "marginPct": 10
     }
   ]
 }
