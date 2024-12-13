@@ -55,7 +55,7 @@ export class StockInvoiceService {
 
       const serials = [];
 
-      for (const lineItem of invoice.lineItems || []) {
+      for (const lineItem of createdInvoice.lineItems || []) {
         let beginSerial: string = '';
         let endSerial: string = '';
         let serial = null;
@@ -101,7 +101,7 @@ export class StockInvoiceService {
       let index = 0;
       for (const lineItem of savedInvoice.lineItems || []) {
         const serial = serials[index++];
-        console.log('SERIAL', serial, 'LINEITEM.GTN', lineItem.gtn);
+        // console.log('SERIAL', serial, 'LINEITEM.GTN', lineItem.gtn);
 
         for (let i = 0; i < lineItem.qty; i++) {
           const inventory = queryRunner.manager.create(Inventory, {

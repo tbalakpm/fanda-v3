@@ -6,6 +6,10 @@ import { InvoiceTypes } from '../shared/invoice-type.enum';
 export class InventoryService {
   static readonly inventoryRepository = AppDataSource.getRepository(Inventory);
 
+  static async getInventoryByGtn(companyId: string, gtn: string): Promise<Inventory | null> {
+    return await this.inventoryRepository.findOneBy({ companyId, gtn });
+  }
+
   static async saveInventory(queryRunner: QueryRunner, inventory: Inventory): Promise<Inventory> {
     const dbInventory = await queryRunner.manager
       .createQueryBuilder(Inventory, 'inventory')

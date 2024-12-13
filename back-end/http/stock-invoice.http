@@ -31,8 +31,8 @@ Authorization: Bearer {{token}}
     {
       "productId": "{{productId}}",
       "unitId": "{{unitId}}",
-      "gtn": "K-00001",
-      "qty": "1",
+      "gtn": "tbd",
+      "qty": "5",
       "rate": "12500",
       "price": "12500",
       "lineTotal": "12500"
@@ -40,8 +40,8 @@ Authorization: Bearer {{token}}
     {
       "productId": "{{productId}}",
       "unitId": "{{unitId}}",
-      "gtn": "K-00002",
-      "qty": "1",
+      "gtn": "tbd",
+      "qty": "10",
       "rate": "12500",
       "price": "12500",
       "lineTotal": "12500"

@@ -27,7 +27,7 @@ export class StockLineItem {
   @Column({ length: 255, nullable: true })
   description?: string;
 
-  @Column({ length: 15, nullable: true, default: '' })
+  @Column({ length: 50, nullable: true, default: '' })
   gtn?: string;
 
   @Column({ nullable: true })

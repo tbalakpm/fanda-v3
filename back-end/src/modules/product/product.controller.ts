@@ -9,7 +9,7 @@ export class ProductController {
     try {
       const { companyId } = req.params;
       const result = await ProductService.getAllProducts(companyId);
-      res.status(200).json(result);
+      res.status(result.status).json(result);
     } catch (error) {
       return next(error);
     }
@@ -22,7 +22,7 @@ export class ProductController {
       if (!result.success) {
         return next(new ApiError(result.message, result.status));
       }
-      res.status(200).json(result);
+      res.status(result.status).json(result);
     } catch (error) {
       return next(error);
     }
@@ -35,7 +35,7 @@ export class ProductController {
       if (!result.success) {
         return next(new ApiError(result.message, result.status));
       }
-      res.status(200).json(result);
+      res.status(result.status).json(result);
     } catch (error) {
       return next(error);
     }
@@ -48,7 +48,7 @@ export class ProductController {
       if (!result.success) {
         return next(new ApiError(result.message, result.status));
       }
-      res.status(200).json(result);
+      res.status(result.status).json(result);
     } catch (error) {
       return next(error);
     }
@@ -61,7 +61,7 @@ export class ProductController {
       if (!result.success) {
         return next(new ApiError(result.message, 400));
       }
-      res.status(200).json(result);
+      res.status(result.status).json(result);
     } catch (error) {
       return next(error);
     }

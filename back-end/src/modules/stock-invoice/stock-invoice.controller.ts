@@ -3,6 +3,8 @@ import { NextFunction, Request, Response } from 'express';
 import { StockInvoiceService } from './stock-invoice.service';
 import { User } from '../../entities/user.entity';
 import { ApiError } from '../../responses/api-error';
+import { ApiResponse, ApiStatus } from '../../responses';
+import { StockInvoice } from './stock-invoice.entity';
 
 export class StockInvoiceController {
   static async getStockInvoices(req: Request, res: Response, next: NextFunction) {
@@ -10,7 +12,7 @@ export class StockInvoiceController {
       const { companyId, yearId } = req.params;
       // console.log('companyId', companyId, 'yearId', yearId);
       const result = await StockInvoiceService.getAllStockInvoices(companyId, yearId);
-      res.status(200).json(result);
+      res.status(result.status).json(result);
     } catch (error) {
       return next(error);
     }
@@ -25,7 +27,7 @@ export class StockInvoiceController {
       if (!result.success) {
         return next(new ApiError(result.message, result.status));
       }
-      res.status(200).json(result);
+      res.status(result.status).json(result);
     } catch (error) {
       return next(error);
     }
@@ -40,7 +42,7 @@ export class StockInvoiceController {
       if (!result.success) {
         return next(new ApiError(result.message, result.status));
       }
-      res.status(200).json(result);
+      res.status(result.status).json(result);
     } catch (error) {
       return next(error);
     }
@@ -53,8 +55,10 @@ export class StockInvoiceController {
       // if (!result.success) {
       //   return next(new ApiError(result.message, result.status));
       // }
-      // res.status(200).json(result);
-      res.status(200).json({ success: true, message: 'Not implemented yet' });
+      // res.status(result.status).json(result);
+      const result = new ApiResponse<StockInvoice>();
+      result.status = ApiStatus.NOT_IMPLEMENTED;
+      res.status(result.status).json({ success: true, message: 'Not implemented yet' });
     } catch (error) {
       return next(error);
     }
@@ -67,8 +71,10 @@ export class StockInvoiceController {
       // if (!result.success) {
       //   return next(new ApiError(result.message, 400));
       // }
-      // res.status(200).json(result);
-      res.status(200).json({ success: true, message: 'Not implemented yet' });
+      // res.status(result.status).json(result);
+      const result = new ApiResponse<StockInvoice>();
+      result.status = ApiStatus.NOT_IMPLEMENTED;
+      res.status(result.status).json({ success: true, message: 'Not implemented yet' });
     } catch (error) {
       return next(error);
     }
