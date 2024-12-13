@@ -24,9 +24,9 @@ export class SerialNumberHelper {
 
   static async getNextRangeSerial(
     queryRunner: QueryRunner,
-    count: number,
     key: string,
-    yearId?: string
+    yearId: string,
+    count: number
   ): Promise<{ beginSerial: string; endSerial: string; serial: { current?: number; length?: number; prefix?: string } }> {
     const result = await queryRunner.manager
       .createQueryBuilder()

@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Fanda v3",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

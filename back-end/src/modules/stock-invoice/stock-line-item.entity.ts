@@ -61,6 +61,9 @@ export class StockLineItem {
   discountAmt?: number;
 
   @Column({ nullable: true })
+  taxCode?: string;
+
+  @Column({ nullable: true })
   taxPct?: number;
 
   @Column({ nullable: true })

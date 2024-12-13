@@ -17,6 +17,8 @@ import { supplierRoutes } from './modules/supplier/supplier.route';
 import { customerRoutes } from './modules/customer/customer.route';
 import { consumerRoutes } from './modules/consumer/consumer.route';
 
+import { stockInvoiceRoutes } from './modules/stock-invoice/stock-invoice.route';
+
 const app = express();
 
 // Allow any method from any host and log requests
@@ -45,6 +47,7 @@ app.use(loggerMiddleware);
 
 // ############### routers - begin ###############
 const companyRouter = companyRoutes();
+const yearRouter = financialYearRoutes();
 
 // auth routes
 app.use('/api/auth', authRoutes());
@@ -54,7 +57,7 @@ app.use(authentication);
 app.use('/api/users', userRoutes());
 app.use('/api/companies', companyRouter);
 // company routes
-companyRouter.use('/:companyId/years', financialYearRoutes());
+companyRouter.use('/:companyId/years', yearRouter);
 companyRouter.use('/:companyId/units', unitRoutes());
 companyRouter.use('/:companyId/product-categories', productCategoryRoutes());
 companyRouter.use('/:companyId/products', productRoutes());
@@ -62,6 +65,7 @@ companyRouter.use('/:companyId/suppliers', supplierRoutes());
 companyRouter.use('/:companyId/customers', customerRoutes());
 companyRouter.use('/:companyId/consumers', consumerRoutes());
 // year routes
+yearRouter.use('/:yearId/stock-invoices', stockInvoiceRoutes());
 
 // ############### routers - end ###############
 

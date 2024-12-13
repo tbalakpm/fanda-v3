@@ -5,6 +5,8 @@ import { AuditDates, AuditUsers } from '../../entities/embedded/audit.entity';
 import { Company } from '../../entities/company.entity';
 import { ProductCategory } from '../product-category/product-category.entity';
 import { Unit } from '../unit/unit.entity';
+import { ProductTypes } from './product-type.enum';
+import { TaxPreferences } from './tax-preference.enum';
 
 @Entity({ name: 'products' })
 @Index(['companyId', 'productId'], { unique: true })
@@ -28,8 +30,9 @@ export class Product {
   @Column({ length: 255, nullable: true })
   description?: string;
 
-  @Column({ length: 10, default: 'Good' }) // enum: Good or Service
-  type!: string;
+  // @Column({ length: 10, default: 'Good' }) // enum: Good or Service
+  @Column({ type: 'enum', enum: ProductTypes, default: ProductTypes.GOODS })
+  productType!: ProductTypes;
 
   @Column('uuid')
   categoryId!: string;
@@ -58,8 +61,9 @@ export class Product {
   @Column({ nullable: true })
   taxPct?: number;
 
-  @Column({ length: 15, default: 'NO_TAX' }) // enum: No Tax, Taxable, Non-Taxable, Zero-Rated, Exempt, Out-of-Scope, Reverse Charge, Withholding
-  taxPreference!: string;
+  // @Column({ length: 15, default: 'NO_TAX' }) // enum: No Tax, Taxable, Non-Taxable, Zero-Rated, Exempt, Out-of-Scope, Reverse Charge, Withholding
+  @Column({ type: 'enum', enum: TaxPreferences, default: TaxPreferences.NO_TAX })
+  taxPreference!: TaxPreferences;
 
   @Column({ nullable: true, default: false })
   isPriceInclusiveTax?: boolean;

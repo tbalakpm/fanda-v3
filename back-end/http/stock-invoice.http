@@ -1,0 +1,66 @@
+@baseUrl=http://localhost:4000
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTkyZmM1ZS0wMDkzLTdjY2MtYTIwYS1kYzg0NGE1YmFkMWMiLCJpYXQiOjE3MzA4MTI0MjQsImV4cCI6NDg4NDQxMjQyNH0.kpqWbQXwp9GsKhB-Yd1eGPdq8NHw5mj_9xpRT5Ggmkw
+@companyId=01932b09-e33e-7998-9a51-f89d2d4271ad
+@yearId=01932b09-e344-7998-9a52-06521371f6ad
+@categoryId=01932b09-e357-7998-9a52-513d73aef4ba
+@unitId=01932b09-e35a-7998-9a52-5ad147f0bdf6
+@productId=01932b09-e357-7998-9a52-513d73aef4ba
+
+### Get all stock invoices
+GET {{baseUrl}}/api/companies/{{companyId}}/years/{{yearId}}/stock-invoices
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Get stock invoice by id
+GET {{baseUrl}}/api/companies/{{companyId}}/years/{{yearId}}/stock-invoices/d768a1ac-b2a3-4500-9b9d-7d5d00030f95
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+### Create stock invoice
+POST {{baseUrl}}/api/companies/{{companyId}}/years/{{yearId}}/stock-invoices
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "invoiceDate": "2024-12-07",
+  "totalQty": "10",
+  "totalAmount": "25000",
+  "notes": "This is test stock invoice",
+  "lineItems": [
+    {
+      "productId": "{{productId}}",
+      "unitId": "{{unitId}}",
+      "gtn": "K-00001",
+      "qty": "1",
+      "rate": "12500",
+      "price": "12500",
+      "lineTotal": "12500"
+    },
+    {
+      "productId": "{{productId}}",
+      "unitId": "{{unitId}}",
+      "gtn": "K-00002",
+      "qty": "1",
+      "rate": "12500",
+      "price": "12500",
+      "lineTotal": "12500"
+    }
+  ]
+}
+
+### Update stock invoice
+PUT {{baseUrl}}/api/companies/{{companyId}}/years/{{yearId}}/stock-invoices/d768a1ac-b2a3-4500-9b9d-7d5d00030f95
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "code": "FY-2024-25",
+  "beginDate": "2024-04-01",
+  "endDate": "2025-03-31"
+}
+
+### Delete stock invoice
+DELETE {{baseUrl}}/api/companies/{{companyId}}/years/{{yearId}}/stock-invoices/d768a1ac-b2a3-4500-9b9d-7d5d00030f95
+Content-Type: application/json
+Authorization: Bearer {{token}}

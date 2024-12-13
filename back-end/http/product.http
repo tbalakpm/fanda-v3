@@ -1,0 +1,65 @@
+@baseUrl=http://localhost:4000
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTkyZmM1ZS0wMDkzLTdjY2MtYTIwYS1kYzg0NGE1YmFkMWMiLCJpYXQiOjE3MzA4MTI0MjQsImV4cCI6NDg4NDQxMjQyNH0.kpqWbQXwp9GsKhB-Yd1eGPdq8NHw5mj_9xpRT5Ggmkw
+@companyId=01932b09-e33e-7998-9a51-f89d2d4271ad
+@categoryId=01932b09-e357-7998-9a52-513d73aef4ba
+@unitId=01932b09-e35a-7998-9a52-5ad147f0bdf6
+@productId=01932b09-e357-7998-9a52-513d73aef4ba
+
+### Get all product categories
+GET {{baseUrl}}/api/companies/{{companyId}}/products
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Get product category by id
+GET {{baseUrl}}/api/companies/{{companyId}}/products/{{productId}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+### Create product category
+POST {{baseUrl}}/api/companies/{{companyId}}/products
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "productId": "{{productId}}",
+  "code": "MONITORS",
+  "name": "Monitq",
+  "description": "Display monitors",
+  "type": "Good",
+  "categoryId": "{{categoryId}}",
+  "baseUnitId": "{{unitId}}",
+  "buyingPrice": 10000,
+  "marginAmount": 2500,
+  "sellingPrice": 12500,
+  "taxCode": "G-M00001",
+  "taxPct": 18,
+  "taxPreference": "Taxable",
+  "isPriceInclusiveTax": true
+}
+
+### Update product
+PUT {{baseUrl}}/api/companies/{{companyId}}/products/{{productId}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "productId": "{{productId}}",
+  "code": "MONITORS",
+  "name": "Monitq",
+  "description": "Display monitors",
+  "type": "Good",
+  "baseUnitId": "{{unitId}}",
+  "buyingPrice": 10000,
+  "marginAmount": 2500,
+  "sellingPrice": 12500,
+  "taxCode": "G-M00001",
+  "taxPct": 18,
+  "taxPreference": "Taxable",
+  "isPriceInclusiveTax": true
+}
+
+### Delete product
+DELETE {{baseUrl}}/api/companies/{{companyId}}/products/{{productId}}
+Content-Type: application/json
+Authorization: Bearer {{token}}

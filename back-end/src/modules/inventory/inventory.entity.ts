@@ -5,10 +5,12 @@ import { Company } from '../../entities';
 import { Product } from '../product/product.entity';
 import { Unit } from '../unit/unit.entity';
 import { Supplier } from '../supplier/supplier.entity';
+import { InvoiceTypes } from '../shared/invoice-type.enum';
 
 @Entity({ name: 'inventories' })
-@Index(['invoiceId', 'lineItemId'])
+@Index(['companyId', 'productId', 'gtn'], { unique: true })
 @Index(['companyId', 'gtn'], { unique: true })
+@Index(['companyId', 'invoiceId', 'lineItemId'])
 export class Inventory {
   @PrimaryColumn('uuid')
   companyId!: string;
@@ -27,8 +29,9 @@ export class Inventory {
   @Column('uuid')
   lineItemId!: string;
 
-  @Column({ length: 15 })
-  invoiceType!: string; // enum: ['purchase', 'sales-return', 'stock', 'transfer']
+  // @Column({ length: 15 })
+  @Column({ type: 'enum', enum: InvoiceTypes, default: InvoiceTypes.STOCK })
+  invoiceType!: InvoiceTypes; // enum: ['purchase', 'sales-return', 'stock', 'transfer']
 
   @Column('uuid', { nullable: true })
   supplierId?: string;
@@ -49,7 +52,7 @@ export class Inventory {
   qtyOnHand!: number;
 
   @Column({ nullable: true })
-  buyinPrice?: number;
+  buyingPrice?: number;
 
   @Column({ nullable: true })
   marginPct?: number;

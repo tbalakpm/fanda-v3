@@ -1,0 +1,44 @@
+@baseUrl=http://localhost:4000
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTkyZmM1ZS0wMDkzLTdjY2MtYTIwYS1kYzg0NGE1YmFkMWMiLCJpYXQiOjE3MzA4MTI0MjQsImV4cCI6NDg4NDQxMjQyNH0.kpqWbQXwp9GsKhB-Yd1eGPdq8NHw5mj_9xpRT5Ggmkw
+@companyId=01932b09-e33e-7998-9a51-f89d2d4271ad
+@categoryId=01932b09-e357-7998-9a52-513d73aef4bb
+
+### Get all product categories
+GET {{baseUrl}}/api/companies/{{companyId}}/product-categories
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Get product category by id
+GET {{baseUrl}}/api/companies/{{companyId}}/product-categories/01932b09-e357-7998-9a52-513d73aef4ba
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+### Create product category
+POST {{baseUrl}}/api/companies/{{companyId}}/product-categories
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "categoryId": "{{categoryId}}",
+  "code": "DEFDAULT",
+  "name": "Default",
+  "description": "Default product category"
+}
+
+### Update product
+PUT {{baseUrl}}/api/companies/{{companyId}}/product-categories/d768a1ac-b2a3-4500-9b9d-7d5d00030f95
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "username": "tbala",
+  "firstName": "Balamurugan",
+  "lastName": "Thanikachalam",
+  "email": "tbala@fandatech.net"
+}
+
+### Delete product
+DELETE {{baseUrl}}/api/companies/{{companyId}}/product-categories/01930141-ef9a-7bba-915a-3e4ed9df0c18
+Content-Type: application/json
+Authorization: Bearer {{token}}

@@ -4,10 +4,11 @@ import { v7 } from 'uuid';
 import { AuditDates, AuditUsers } from '../../entities/embedded/audit.entity';
 import { FinancialYear } from '../financial-year/financial-year.entity';
 import { StockLineItem } from './stock-line-item.entity';
+import { Company } from '../../entities';
 
 @Entity({ name: 'stock_invoices' })
-@Index(['yearId', 'invoiceId'], { unique: true })
-@Index(['yearId', 'invoiceNumber'], { unique: true })
+@Index(['companyId', 'yearId', 'invoiceId'], { unique: true })
+@Index(['companyId', 'yearId', 'invoiceNumber'], { unique: true })
 export class StockInvoice {
   @PrimaryColumn('uuid')
   invoiceId!: string;
@@ -33,6 +34,9 @@ export class StockInvoice {
   notes?: string;
 
   @Column('uuid')
+  companyId!: string;
+
+  @Column('uuid')
   yearId!: string;
 
   @Column(() => AuditDates)
@@ -42,8 +46,12 @@ export class StockInvoice {
   user!: AuditUsers;
 
   // Related Entities
-  @OneToMany(() => StockLineItem, (lineItem) => lineItem.invoice, { cascade: false, onUpdate: 'CASCADE', onDelete: 'CASCADE' })
+  @OneToMany(() => StockLineItem, (lineItem) => lineItem.invoice, { cascade: true, onUpdate: 'CASCADE', onDelete: 'CASCADE' })
   lineItems?: StockLineItem[];
+
+  @ManyToOne(() => Company, { onUpdate: 'CASCADE', onDelete: 'RESTRICT' })
+  @JoinColumn({ name: 'company_id' })
+  company?: Company;
 
   @ManyToOne(() => FinancialYear, { onUpdate: 'CASCADE', onDelete: 'RESTRICT' })
   @JoinColumn({ name: 'year_id' })
