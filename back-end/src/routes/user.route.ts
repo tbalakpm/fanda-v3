@@ -1,19 +1,18 @@
 import express from 'express';
 import { authorization } from '../middleware/authorization.middleware';
 import { UserController } from '../controllers/user.controller';
-// import { authorization } from "../middleware";
-// import { UserController } from "../controllers";
+import { UserRoles } from '../entities';
 
 export const userRoutes = () => {
   const router = express.Router();
   router
     .route('/')
-    .get(authorization(['admin']), UserController.getUsers)
-    .post(authorization(['admin']), UserController.createUser);
+    .get(authorization([UserRoles.Admin]), UserController.getUsers)
+    .post(authorization([UserRoles.Admin]), UserController.createUser);
   router
     .route('/:userId')
-    .get(authorization(['admin']), UserController.getUserById)
-    .put(authorization(['admin']), UserController.updateUser)
-    .delete(authorization(['admin']), UserController.deleteUser);
+    .get(authorization([UserRoles.Admin]), UserController.getUserById)
+    .put(authorization([UserRoles.Admin]), UserController.updateUser)
+    .delete(authorization([UserRoles.Admin]), UserController.deleteUser);
   return router;
 };

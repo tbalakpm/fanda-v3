@@ -36,40 +36,40 @@ export class StockLineItem {
   @Column({ nullable: true })
   expiryDate?: Date;
 
-  @Column()
+  @Column({ type: 'numeric', precision: 10, scale: 3, default: 0.0 })
   qty!: number;
 
-  @Column()
+  @Column({ type: 'numeric', precision: 10, scale: 2, default: 0.0 })
   rate!: number;
 
-  @Column()
+  @Column({ type: 'numeric', precision: 10, scale: 2, default: 0.0 })
   price!: number;
 
-  @Column()
+  @Column({ type: 'numeric', precision: 10, scale: 2, default: 0.0 })
   marginPct!: number;
 
-  @Column()
+  @Column({ type: 'numeric', precision: 10, scale: 2, default: 0.0 })
   marginAmt!: number;
 
-  @Column()
+  @Column({ type: 'numeric', precision: 10, scale: 2, default: 0.0 })
   sellingPrice!: number;
 
-  @Column()
+  @Column({ type: 'numeric', precision: 10, scale: 2, default: 0.0 })
   discountPct!: number;
 
-  @Column()
+  @Column({ type: 'numeric', precision: 10, scale: 2, default: 0.0 })
   discountAmt!: number;
 
   @Column({ nullable: true })
   taxCode?: string;
 
-  @Column()
+  @Column({ type: 'numeric', precision: 10, scale: 2, default: 0.0 })
   taxPct!: number;
 
-  @Column()
+  @Column({ type: 'numeric', precision: 10, scale: 2, default: 0.0 })
   taxAmt!: number;
 
-  @Column()
+  @Column({ type: 'numeric', precision: 10, scale: 2, default: 0.0 })
   lineTotal!: number;
 
   // Related Entities

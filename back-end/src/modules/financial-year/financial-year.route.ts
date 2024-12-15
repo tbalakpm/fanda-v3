@@ -1,6 +1,7 @@
 import express from 'express';
 import { authorization } from '../../middleware/authorization.middleware';
 import { FinancialYearController } from './financial-year.controller';
+import { UserRoles } from '../../entities';
 
 export const financialYearRoutes = () => {
   const router = express.Router({ mergeParams: true });
@@ -8,11 +9,11 @@ export const financialYearRoutes = () => {
   router
     .route('/')
     .get(FinancialYearController.getYears)
-    .post(authorization(['admin', 'manager']), FinancialYearController.createYear);
+    .post(authorization([UserRoles.Admin, UserRoles.Manager]), FinancialYearController.createYear);
   router
     .route('/:yearId')
     .get(FinancialYearController.getYearById)
-    .put(authorization(['admin', 'manager']), FinancialYearController.updateYear)
-    .delete(authorization(['admin']), FinancialYearController.deleteYear);
+    .put(authorization([UserRoles.Admin, UserRoles.Manager]), FinancialYearController.updateYear)
+    .delete(authorization([UserRoles.Admin]), FinancialYearController.deleteYear);
   return router;
 };

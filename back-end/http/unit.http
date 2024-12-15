@@ -1,6 +1,6 @@
 @baseUrl=http://localhost:4000
 @token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTkyZmM1ZS0wMDkzLTdjY2MtYTIwYS1kYzg0NGE1YmFkMWMiLCJpYXQiOjE3MzA4MTI0MjQsImV4cCI6NDg4NDQxMjQyNH0.kpqWbQXwp9GsKhB-Yd1eGPdq8NHw5mj_9xpRT5Ggmkw
-@companyId=0192fb1b-ce1a-7ff2-955c-2912f7b645f0
+@companyId=0193c5eb-c2d8-7118-a7b1-aa7767181dbd
 @unitId=0192fc47-ac9b-7001-a290-788777a046a1
 
 ### Get all units
@@ -21,9 +21,9 @@ Authorization: Bearer {{token}}
 
 {
   "unitId": "{{unitId}}",
-  "code": "NO",
-  "name": "Numbers",
-  "description": "Numbers"
+  "code": "DEFAULT",
+  "name": "Default Unit",
+  "description": "Default Unit"
 }
 
 ### Update unit

@@ -1,20 +1,14 @@
 import { QueryRunner } from 'typeorm';
 import { AppDataSource } from '../data-source';
 import { SerialNumber } from '../modules/serial-number/serial-number.entity';
+import { InvoiceTypes } from '../modules/shared/invoice-type.enum';
 
 export class SerialNumberHelper {
   private static readonly serialRepository = AppDataSource.getRepository(SerialNumber);
 
-  static async getNextSerial(queryRunner: QueryRunner, yearId: string, key: string): Promise<string> {
-    const result = await queryRunner.manager //this.serialRepository
-      .createQueryBuilder()
-      .update(SerialNumber)
-      .set({ current: () => 'current + 1' })
-      .where('yearId = :yearId', { yearId })
-      .andWhere('key = :key', { key })
-      .returning('length, current, prefix')
-      .execute();
-    const serial = result.raw[0];
+  static async getNextSerial(queryRunner: QueryRunner, yearId: string, key: InvoiceTypes | 'GTN'): Promise<string> {
+    const serial = await this.incrementSerial(queryRunner, yearId, key, 1);
+
     if (!serial) {
       return '';
     }
@@ -25,20 +19,10 @@ export class SerialNumberHelper {
   static async getNextRangeSerial(
     queryRunner: QueryRunner,
     yearId: string,
-    key: string,
+    key: InvoiceTypes | 'GTN',
     count: number
   ): Promise<{ beginSerial: string; endSerial: string; serial: { current?: number; length?: number; prefix?: string } }> {
-    const result = await queryRunner.manager
-      .createQueryBuilder()
-      .update(SerialNumber)
-      .set({ current: () => `current + ${count}` })
-      .where('yearId = :yearId', { yearId })
-      .andWhere('key = :key', { key })
-      .returning('length, current, prefix')
-      .execute();
-    const serial = result.raw[0];
-    // console.log("serial", serial);
-
+    const serial = await this.incrementSerial(queryRunner, yearId, key, count);
     if (!serial) {
       return { beginSerial: '', endSerial: '', serial: {} };
     }
@@ -55,4 +39,57 @@ export class SerialNumberHelper {
   static formatSerial(length: number, value: number, prefix?: string): string {
     return `${prefix ? prefix : ''}${String(value).padStart(length, '0')}`;
   }
+
+  static async incrementSerial(queryRunner: QueryRunner, yearId: string, key: InvoiceTypes | 'GTN', count: number): Promise<SerialNumber> {
+    const result = await queryRunner.manager.query<SerialNumber[]>(
+      'UPDATE serial_numbers SET current = (current + ?) WHERE year_id = ? AND key = ? RETURNING length, current, prefix',
+      [count, yearId, key]
+    );
+    return result[0];
+  }
 }
+
+export const DefaultSerials = [
+  {
+    key: InvoiceTypes.Purchase,
+    prefix: 'I',
+    current: 1,
+    length: 7
+  },
+  {
+    key: InvoiceTypes.Sales,
+    prefix: 'B',
+    current: 1,
+    length: 7
+  },
+  {
+    key: InvoiceTypes.SalesReturn,
+    prefix: 'R',
+    current: 1,
+    length: 7
+  },
+  {
+    key: InvoiceTypes.PurchaseReturn,
+    prefix: 'U',
+    current: 1,
+    length: 7
+  },
+  {
+    key: InvoiceTypes.Stock,
+    prefix: 'K',
+    current: 1,
+    length: 7
+  },
+  {
+    key: InvoiceTypes.Transfer,
+    prefix: 'T',
+    current: 1,
+    length: 7
+  },
+  {
+    key: 'GTN',
+    prefix: 'A',
+    current: 1,
+    length: 7
+  }
+];

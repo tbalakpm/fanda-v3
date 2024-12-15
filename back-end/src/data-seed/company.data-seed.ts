@@ -4,6 +4,7 @@ import { ProductCategory } from '../modules/product-category/product-category.en
 import { Supplier } from '../modules/supplier/supplier.entity';
 import { Unit } from '../modules/unit/unit.entity';
 import { SerialNumber } from '../modules/serial-number/serial-number.entity';
+import { DefaultSerials } from '../helpers/serial-number.helper';
 
 export class CompanyDataSeeder {
   static getNewYear(companyId: string, adminUserId: string, date: Date = new Date()): FinancialYear {
@@ -117,7 +118,7 @@ export class CompanyDataSeeder {
   }
 
   static getDefaultSequences(yearId: string): SerialNumber[] {
-    const serials = this.defaultSerials.map((serial) => {
+    const serials = DefaultSerials.map((serial) => {
       const newSerial = new SerialNumber();
       newSerial.key = serial.key;
       newSerial.prefix = serial.prefix;
@@ -139,49 +140,4 @@ export class CompanyDataSeeder {
     return serials;
     // await AppDataSource.getRepository("SequenceGenerator").insert(sequences);
   }
-
-  static defaultSerials = [
-    {
-      key: 'purchase',
-      prefix: 'I',
-      current: 1,
-      length: 7
-    },
-    {
-      key: 'sales',
-      prefix: 'B',
-      current: 1,
-      length: 7
-    },
-    {
-      key: 'salesreturn',
-      prefix: 'R',
-      current: 1,
-      length: 7
-    },
-    {
-      key: 'purchasereturn',
-      prefix: 'U',
-      current: 1,
-      length: 7
-    },
-    {
-      key: 'stock',
-      prefix: 'K',
-      current: 1,
-      length: 7
-    },
-    {
-      key: 'transfer',
-      prefix: 'T',
-      current: 1,
-      length: 7
-    },
-    {
-      key: 'gtn',
-      prefix: 'A',
-      current: 1,
-      length: 7
-    }
-  ];
 }

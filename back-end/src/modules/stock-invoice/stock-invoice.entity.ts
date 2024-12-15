@@ -24,10 +24,10 @@ export class StockInvoice {
   @Column()
   invoiceDate!: Date;
 
-  @Column()
+  @Column({ type: 'numeric', precision: 10, scale: 3, default: 0.0 })
   totalQty!: number;
 
-  @Column()
+  @Column({ type: 'numeric', precision: 10, scale: 2, default: 0.0 })
   totalAmount!: number;
 
   @Column({ length: 255, nullable: true })

@@ -4,6 +4,7 @@ import { v7 } from 'uuid';
 import { AuditDates, AuditUsers } from './embedded/audit.entity';
 import { Address } from './address.entity';
 import { Contact } from './contact.entity';
+import 'dotenv/config';
 
 @Entity({ name: 'companies' })
 export class Company {
@@ -24,10 +25,10 @@ export class Company {
   @Column({ length: 255, nullable: true })
   description?: string;
 
-  @Column({ type: 'jsonb', default: {} })
+  @Column({ type: process.env.DB_TYPE === 'postgres' ? 'jsonb' : 'simple-json', default: process.env.DB_TYPE === 'postgres' ? {} : '{}' })
   address?: Address;
 
-  @Column({ type: 'jsonb', default: {} })
+  @Column({ type: process.env.DB_TYPE === 'postgres' ? 'jsonb' : 'simple-json', default: process.env.DB_TYPE === 'postgres' ? {} : '{}' })
   contact?: Contact;
 
   @Column({ name: 'is_active', default: true })

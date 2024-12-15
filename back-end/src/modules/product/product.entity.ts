@@ -7,6 +7,8 @@ import { ProductCategory } from '../product-category/product-category.entity';
 import { Unit } from '../unit/unit.entity';
 import { ProductTypes } from './product-type.enum';
 import { TaxPreferences } from './tax-preference.enum';
+import { GtnGeneration } from './gtn-generation.enum';
+import 'dotenv/config';
 
 @Entity({ name: 'products' })
 @Index(['companyId', 'productId'], { unique: true })
@@ -30,8 +32,7 @@ export class Product {
   @Column({ length: 255, nullable: true })
   description?: string;
 
-  // @Column({ length: 10, default: 'Good' }) // enum: Good or Service
-  @Column({ type: 'enum', enum: ProductTypes, default: ProductTypes.GOODS })
+  @Column({ type: process.env.DB_TYPE === 'postgres' ? 'enum' : 'text', default: ProductTypes.Goods }) // enum: ProductTypes,
   productType!: ProductTypes;
 
   @Column('uuid')
@@ -40,33 +41,32 @@ export class Product {
   @Column('uuid')
   baseUnitId!: string;
 
-  @Column({ nullable: true })
-  buyingPrice?: number;
+  @Column({ type: 'numeric', precision: 10, scale: 2, default: 0.0 })
+  buyingPrice!: number;
 
-  @Column({ nullable: true })
-  marginPct?: number;
+  @Column({ type: 'numeric', precision: 10, scale: 2, default: 0.0 })
+  marginPct!: number;
 
-  @Column({ nullable: true })
-  marginAmt?: number;
+  @Column({ type: 'numeric', precision: 10, scale: 2, default: 0.0 })
+  marginAmt!: number;
 
-  @Column({ nullable: true })
-  sellingPrice?: number;
-
-  // @Column({ length: 5, default: "GST" }) // enum: GST, VAT, PST, QST, HST, RST, etc.,
-  // taxType!: string;
+  @Column({ type: 'numeric', precision: 10, scale: 2, default: 0.0 })
+  sellingPrice!: number;
 
   @Column({ nullable: true })
   taxCode?: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'numeric', precision: 10, scale: 2, default: 0.0 })
   taxPct?: number;
 
-  // @Column({ length: 15, default: 'NO_TAX' }) // enum: No Tax, Taxable, Non-Taxable, Zero-Rated, Exempt, Out-of-Scope, Reverse Charge, Withholding
-  @Column({ type: 'enum', enum: TaxPreferences, default: TaxPreferences.NO_TAX })
+  @Column({ type: process.env.DB_TYPE === 'postgres' ? 'enum' : 'text', default: TaxPreferences.NoTax }) // enum: TaxPreferences,
   taxPreference!: TaxPreferences;
 
   @Column({ nullable: true, default: false })
   isPriceInclusiveTax?: boolean;
+
+  @Column({ type: process.env.DB_TYPE === 'postgres' ? 'enum' : 'text', default: GtnGeneration.Tag }) // enum: GtnGeneration,
+  gtnGeneration!: GtnGeneration;
 
   @Column('uuid')
   companyId!: string;

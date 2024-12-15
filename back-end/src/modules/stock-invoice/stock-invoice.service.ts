@@ -6,6 +6,7 @@ import { Inventory } from '../inventory/inventory.entity';
 import { StockInvoice } from './stock-invoice.entity';
 import { InvoiceTypes } from '../shared/invoice-type.enum';
 import { InventoryService } from '../inventory/inventory.service';
+import { StockLineItem } from './stock-line-item.entity';
 
 export class StockInvoiceService {
   private static readonly stockInvoiceRepository = AppDataSource.getRepository(StockInvoice);
@@ -30,13 +31,16 @@ export class StockInvoiceService {
       return { success: true, message: 'Serving a stock invoice from cache', data, status: ApiStatus.OK };
     }
     const invoice = await this.stockInvoiceRepository.findOne({
-      select: ['invoiceId', 'invoiceNumber', 'invoiceDate', 'lineItems', 'totalQty', 'totalAmount', 'notes', 'yearId'],
-      relations: ['lineItems'],
+      select: ['invoiceId', 'invoiceNumber', 'invoiceDate', /*'lineItems',*/ 'totalQty', 'totalAmount', 'notes', 'yearId'],
+      // relations: ['lineItems'],
       where: { companyId, yearId, invoiceId }
     });
     if (!invoice) {
       return { success: false, message: `Stock Invoice with id '${invoiceId}' not found`, status: ApiStatus.NOT_FOUND };
     }
+    const lineItems = await AppDataSource.getRepository(StockLineItem).findBy({ invoiceId });
+    invoice.lineItems = lineItems;
+
     await cache.set(`stockInvoices_${companyId}_${yearId}:${invoiceId}`, invoice);
     return { success: true, message: 'Serving stock invoice from database', data: invoice, status: ApiStatus.OK };
   }
@@ -48,11 +52,13 @@ export class StockInvoiceService {
     try {
       // create invoice
       const createdInvoice = queryRunner.manager.create(StockInvoice, invoice);
-      createdInvoice.invoiceNumber = await SerialNumberHelper.getNextSerial(queryRunner, yearId, 'stock');
+      createdInvoice.invoiceNumber = await SerialNumberHelper.getNextSerial(queryRunner, yearId, InvoiceTypes.Stock);
       createdInvoice.companyId = companyId;
       createdInvoice.yearId = yearId;
       createdInvoice.user = { created: userId, updated: userId };
 
+      let totalQty = 0;
+      let totalAmount = 0;
       const serials = [];
 
       for (const lineItem of createdInvoice.lineItems || []) {
@@ -63,105 +69,92 @@ export class StockInvoiceService {
         // calculations - start
         lineItem.qty = Number(lineItem.qty);
         lineItem.rate = Number(lineItem.rate);
-        lineItem.price = Number(Math.round((lineItem.qty * lineItem.rate * 100) / 100).toFixed(2));
+        lineItem.price = Number(Math.round((lineItem.qty * lineItem.rate * 100.0) / 100.0).toFixed(2));
+        // discount
         lineItem.discountPct = lineItem.discountPct || 0;
         if (lineItem.discountPct > 0) {
-          lineItem.discountAmt = Number(Math.round((lineItem.price * (lineItem.discountPct / 100) * 100) / 100).toFixed(2));
+          lineItem.discountAmt = Number(Math.round((lineItem.price * (lineItem.discountPct / 100.0) * 100.0) / 100.0).toFixed(2));
         } else {
           lineItem.discountAmt = lineItem.discountAmt || 0;
         }
-
+        // tax
         lineItem.taxPct = lineItem.taxPct || 0;
         if (lineItem.taxPct > 0) {
-          lineItem.taxAmt = Number(Math.round((lineItem.price * (lineItem.taxPct / 100) * 100) / 100).toFixed(2));
+          lineItem.taxAmt = Number(Math.round(((lineItem.price - lineItem.discountAmt) * (lineItem.taxPct / 100.0) * 100.0) / 100.0).toFixed(2));
         } else {
           lineItem.taxAmt = lineItem.taxAmt || 0;
         }
-
-        lineItem.lineTotal = Number(Math.round(((lineItem.price - lineItem.discountAmt + lineItem.taxAmt) * 100) / 100).toFixed(2));
+        // line total, margin, selling price
+        lineItem.lineTotal = Number(Math.round(((lineItem.price - lineItem.discountAmt + lineItem.taxAmt) * 100.0) / 100.0).toFixed(2));
         lineItem.marginPct = lineItem.marginPct || 0;
         if (lineItem.marginPct > 0) {
-          lineItem.marginAmt = Number(Math.round((lineItem.price * (lineItem.marginPct / 100) * 100) / 100).toFixed(2));
+          lineItem.marginAmt = Number(Math.round((lineItem.rate * (lineItem.marginPct / 100.0) * 100.0) / 100.0).toFixed(2));
         } else {
           lineItem.marginAmt = lineItem.marginAmt || 0;
         }
         lineItem.sellingPrice = Number(lineItem.rate + lineItem.marginAmt);
+        totalQty += lineItem.qty;
+        totalAmount += lineItem.lineTotal;
         // calculations - end
 
         if (!lineItem.gtn) {
           lineItem.gtn = '';
         } else if (lineItem.gtn.toLowerCase() === 'tbd') {
-          const result = await SerialNumberHelper.getNextRangeSerial(queryRunner, yearId, 'gtn', lineItem.qty);
+          const result = await SerialNumberHelper.getNextRangeSerial(queryRunner, yearId, 'GTN', lineItem.qty);
           beginSerial = result.beginSerial;
           endSerial = result.endSerial;
           serial = { current: result.serial.current || 0, length: result.serial.length || 0, prefix: result.serial.prefix || '' };
           lineItem.gtn = beginSerial === endSerial ? beginSerial : `${beginSerial}-${endSerial}`;
         }
         serials.push(serial);
-
-        // const newLineItem = {
-        //   gtn: lineItem.gtn,
-        //   productId: lineItem.productId,
-        //   unitId: lineItem.unitId,
-        //   description: lineItem.description,
-        //   mfdDate: lineItem.mfdDate,
-        //   expiryDate: lineItem.expiryDate,
-        //   taxCode: lineItem.taxCode,
-        //   qty: lineItem.qty,
-        //   rate: lineItem.rate,
-        //   price: lineItem.qty * lineItem.rate,
-        //   discountPct: lineItem.discountPct,
-        //   discountAmt: lineItem.discountAmt,
-        //   taxPct: lineItem.taxPct,
-        //   taxAmt: lineItem.taxAmt,
-        //   marginPct: lineItem.marginPct,
-        //   marginAmt: lineItem.marginAmt,
-        //   sellingPrice: lineItem.sellingPrice,
-        //   lineTotal: lineItem.lineTotal,
-        //   serial: serial
-        // };
-        // newLineItems.push(newLineItem);
       }
 
+      createdInvoice.totalQty = totalQty;
+      createdInvoice.totalAmount = totalAmount;
       const savedInvoice = await queryRunner.manager.save(createdInvoice);
 
       //const inventories: Inventory[] = [];
       let index = 0;
       for (const lineItem of savedInvoice.lineItems || []) {
         const serial = serials[index++];
-        // console.log('SERIAL', serial, 'LINEITEM.GTN', lineItem.gtn);
 
-        for (let i = 0; i < lineItem.qty; i++) {
-          const inventory = queryRunner.manager.create(Inventory, {
-            companyId: companyId,
-            //inventoryId: v7(),
-            invoiceId: savedInvoice.invoiceId,
-            lineItemId: lineItem.lineItemId,
-            invoiceType: InvoiceTypes.STOCK,
-            gtn: serial ? SerialNumberHelper.formatSerial(serial.length || 0, (serial.current || 1) + i, serial.prefix || '') : lineItem.gtn,
-            productId: lineItem.productId,
-            unitId: lineItem.unitId,
-            qtyOnHand: 1,
-            description: lineItem.description,
-            buyingPrice: lineItem.rate,
-            marginPct: lineItem.marginPct,
-            marginAmt: lineItem.marginAmt,
-            sellingPrice: lineItem.sellingPrice,
-            mfdDate: lineItem.mfdDate,
-            expiryDate: lineItem.expiryDate
-          });
+        const inventory = queryRunner.manager.create(Inventory, {
+          companyId: companyId,
+          invoiceId: savedInvoice.invoiceId,
+          lineItemId: lineItem.lineItemId,
+          invoiceType: InvoiceTypes.Stock,
+          productId: lineItem.productId,
+          unitId: lineItem.unitId,
+          description: lineItem.description,
+          buyingPrice: lineItem.rate,
+          marginPct: lineItem.marginPct,
+          marginAmt: lineItem.marginAmt,
+          sellingPrice: lineItem.sellingPrice,
+          mfdDate: lineItem.mfdDate,
+          expiryDate: lineItem.expiryDate
+        });
+
+        if (!serial) {
+          inventory.gtn = lineItem.gtn;
+          inventory.qtyOnHand = lineItem.qty;
           await InventoryService.saveInventory(queryRunner, inventory);
-
-          // console.log(index - 1 + i, inventories[index - 1 + i].gtn);
+        } else {
+          for (let i = 0; i < lineItem.qty; i++) {
+            inventory.gtn = SerialNumberHelper.formatSerial(serial.length || 0, (serial.current || 1) + i, serial.prefix || '');
+            inventory.qtyOnHand = 1;
+            await InventoryService.saveInventory(queryRunner, inventory);
+          }
         }
       }
 
       await queryRunner.commitTransaction();
       await cache.del(`stockInvoices_${companyId}_${yearId}`);
       return { success: true, message: 'Stock Invoice created successfully', data: savedInvoice, status: ApiStatus.CREATED };
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (_error) {
+    } catch (error) {
       await queryRunner.rollbackTransaction();
+      if (process.env.NODE_ENV === 'development') {
+        console.log(error);
+      }
       return { success: false, message: 'Failed to create Stock Invoice', status: ApiStatus.INTERNAL_SERVER_ERROR };
     } finally {
       await queryRunner.release();

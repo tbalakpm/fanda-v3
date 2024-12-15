@@ -1,13 +1,14 @@
 import { Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import 'dotenv/config';
 // import { User } from "../user.entity";
 
 export class AuditDates {
   // @Column({ name: "created_at", type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
-  @CreateDateColumn({ name: 'created', type: 'timestamptz' })
+  @CreateDateColumn({ name: 'created', type: process.env.DB_TYPE === 'postgres' ? 'timestamptz' : 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   created?: Date;
 
   // @Column({ name: "updated_at", type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
-  @UpdateDateColumn({ name: 'updated', type: 'timestamptz' })
+  @UpdateDateColumn({ name: 'updated', type: process.env.DB_TYPE === 'postgres' ? 'timestamptz' : 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   updated?: Date;
 }
 

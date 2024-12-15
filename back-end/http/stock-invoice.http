@@ -1,9 +1,9 @@
 @baseUrl=http://localhost:4000
 @token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTkyZmM1ZS0wMDkzLTdjY2MtYTIwYS1kYzg0NGE1YmFkMWMiLCJpYXQiOjE3MzA4MTI0MjQsImV4cCI6NDg4NDQxMjQyNH0.kpqWbQXwp9GsKhB-Yd1eGPdq8NHw5mj_9xpRT5Ggmkw
-@companyId=01932b09-e33e-7998-9a51-f89d2d4271ad
-@yearId=01932b09-e344-7998-9a52-06521371f6ad
-@categoryId=01932b09-e357-7998-9a52-513d73aef4ba
-@unitId=01932b09-e35a-7998-9a52-5ad147f0bdf6
+@companyId=0193c5eb-c2d8-7118-a7b1-aa7767181dbd
+@yearId=0193c5eb-c2de-7118-a7b1-b2bb1d1f289c
+# @categoryId=01932b09-e357-7998-9a52-513d73aef4ba
+@unitId=0192fc47-ac9b-7001-a290-788777a046a1
 @productId=01932b09-e357-7998-9a52-513d73aef4ba
 
 ### Get all stock invoices
@@ -12,7 +12,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 ### Get stock invoice by id
-GET {{baseUrl}}/api/companies/{{companyId}}/years/{{yearId}}/stock-invoices/d768a1ac-b2a3-4500-9b9d-7d5d00030f95
+GET {{baseUrl}}/api/companies/{{companyId}}/years/{{yearId}}/stock-invoices/0193c87d-90d9-7443-a14f-760a2d3fb668
 Content-Type: application/json
 Authorization: Bearer {{token}}
 

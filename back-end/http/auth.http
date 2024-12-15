@@ -21,7 +21,7 @@ Content-Type: application/json
     "phone": "+9789813931",
     "firstName": "Seethalakshmi",
     "lastName": "Balamurugan",
-    "role": "manager"
+    "role": "Manager"
 }
 
 ### Profile

@@ -11,7 +11,7 @@ export const createAdminUser = async (ds: DataSource) => {
     adminUser.userId = '0192fc5e-0093-7ccc-a20a-dc844a5bad1c';
     adminUser.username = 'admin';
     adminUser.password = await encrypt.encryptPassword('Welcome!23');
-    adminUser.role = UserRoles.ADMIN;
+    adminUser.role = UserRoles.Admin;
     await userRepo.save(adminUser);
   }
 };

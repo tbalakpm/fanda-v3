@@ -21,6 +21,8 @@
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "better-sqlite3": "^9.6.0",
+    "bindings": "^1.5.0",
     "cache-manager": "^6.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -28,6 +30,7 @@
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.13.0",
     "reflect-metadata": "^0.2.2",
+    "sqlite3": "^5.1.7",
     "typeorm": "0.3.20",
     "typeorm-naming-strategies": "^4.1.0",
     "uuid": "^10.0.0",

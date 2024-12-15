@@ -1,17 +1,18 @@
 import express from 'express';
 import { authorization } from '../middleware/authorization.middleware';
 import { CompanyController } from '../controllers/company.controller';
+import { UserRoles } from '../entities';
 
 export const companyRoutes = () => {
   const router = express.Router();
   router
     .route('/')
-    .get(authorization(['admin']), CompanyController.getCompanies)
-    .post(authorization(['admin']), CompanyController.createCompany);
+    .get(authorization([UserRoles.Admin]), CompanyController.getCompanies)
+    .post(authorization([UserRoles.Admin]), CompanyController.createCompany);
   router
     .route('/:companyId')
-    .get(authorization(['admin']), CompanyController.getCompanyById)
-    .put(authorization(['admin']), CompanyController.updateCompany)
-    .delete(authorization(['admin']), CompanyController.deleteCompany);
+    .get(authorization([UserRoles.Admin]), CompanyController.getCompanyById)
+    .put(authorization([UserRoles.Admin]), CompanyController.updateCompany)
+    .delete(authorization([UserRoles.Admin]), CompanyController.deleteCompany);
   return router;
 };

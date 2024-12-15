@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { AuditDatesSchema, AuditUsersSchema } from '../../schema/embedded/audit.schema';
 import { ProductTypes } from './product-type.enum';
 import { TaxPreferences } from './tax-preference.enum';
+import { GtnGeneration } from './gtn-generation.enum';
 
 export const ProductSchema = z.object({
   productId: z.string().uuid().optional(),
@@ -19,6 +20,7 @@ export const ProductSchema = z.object({
   taxPct: z.number().optional(),
   taxPreference: z.nativeEnum(TaxPreferences),
   isPriceInclusiveTax: z.boolean().default(false),
+  gtnGeneration: z.nativeEnum(GtnGeneration),
   companyId: z.string().uuid().optional(),
   isActive: z.boolean().default(true),
   date: AuditDatesSchema.optional(),

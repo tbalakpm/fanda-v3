@@ -1,6 +1,6 @@
 @baseUrl=http://localhost:4000
 @token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTkyZmM1ZS0wMDkzLTdjY2MtYTIwYS1kYzg0NGE1YmFkMWMiLCJpYXQiOjE3MzA4MTI0MjQsImV4cCI6NDg4NDQxMjQyNH0.kpqWbQXwp9GsKhB-Yd1eGPdq8NHw5mj_9xpRT5Ggmkw
-@companyId=01932b09-e33e-7998-9a51-f89d2d4271ad
+@companyId=0193c5eb-c2d8-7118-a7b1-aa7767181dbd
 @categoryId=01932b09-e357-7998-9a52-513d73aef4bb
 
 ### Get all product categories
@@ -21,9 +21,9 @@ Authorization: Bearer {{token}}
 
 {
   "categoryId": "{{categoryId}}",
-  "code": "DEFDAULT",
-  "name": "Default",
-  "description": "Default product category"
+  "code": "ELECTRONICS",
+  "name": "Electronics",
+  "description": "Electronic products"
 }
 
 ### Update product

@@ -6,6 +6,8 @@ import { Product } from '../product/product.entity';
 import { Unit } from '../unit/unit.entity';
 import { Supplier } from '../supplier/supplier.entity';
 import { InvoiceTypes } from '../shared/invoice-type.enum';
+import { GtnGeneration } from '../product/gtn-generation.enum';
+import 'dotenv/config';
 
 @Entity({ name: 'inventories' })
 @Index(['companyId', 'productId', 'gtn'], { unique: true })
@@ -29,9 +31,8 @@ export class Inventory {
   @Column('uuid')
   lineItemId!: string;
 
-  // @Column({ length: 15 })
-  @Column({ type: 'enum', enum: InvoiceTypes, default: InvoiceTypes.STOCK })
-  invoiceType!: InvoiceTypes; // enum: ['purchase', 'sales-return', 'stock', 'transfer']
+  @Column({ type: process.env.DB_TYPE === 'postgres' ? 'enum' : 'text', default: InvoiceTypes.Stock }) //  enum: InvoiceTypes,
+  invoiceType!: InvoiceTypes;
 
   @Column('uuid', { nullable: true })
   supplierId?: string;
@@ -48,19 +49,19 @@ export class Inventory {
   @Column({ length: 255, nullable: true })
   description?: string;
 
-  @Column()
+  @Column({ type: 'numeric', precision: 10, scale: 3, default: 0.0 })
   qtyOnHand!: number;
 
-  @Column()
+  @Column({ type: 'numeric', precision: 10, scale: 2, default: 0.0 })
   buyingPrice!: number;
 
-  @Column()
+  @Column({ type: 'numeric', precision: 10, scale: 2, default: 0.0 })
   marginPct!: number;
 
-  @Column()
+  @Column({ type: 'numeric', precision: 10, scale: 2, default: 0.0 })
   marginAmt!: number;
 
-  @Column()
+  @Column({ type: 'numeric', precision: 10, scale: 2, default: 0.0 })
   sellingPrice!: number;
 
   @Column({ nullable: true })
@@ -68,6 +69,9 @@ export class Inventory {
 
   @Column({ nullable: true })
   expiryDate?: Date;
+
+  @Column({ type: process.env.DB_TYPE === 'postgres' ? 'enum' : 'text', default: GtnGeneration.Tag }) // enum: GtnGeneration,
+  gtnGeneration!: GtnGeneration;
 
   // Related Entities
   @ManyToOne(() => Supplier, { onUpdate: 'CASCADE', onDelete: 'RESTRICT' })

@@ -14,20 +14,20 @@ export class InventoryService {
     const dbInventory = await queryRunner.manager
       .createQueryBuilder(Inventory, 'inventory')
       .useTransaction(true)
-      .setLock('pessimistic_write')
+      // .setLock('pessimistic_write')
       .where('inventory.companyId = :companyId', { companyId: inventory.companyId })
       .andWhere('inventory.productId = :productId', { productId: inventory.productId })
       .andWhere('inventory.gtn = :gtn', { gtn: inventory.gtn })
       .getOne();
 
     switch (inventory.invoiceType) {
-      case InvoiceTypes.STOCK:
-      case InvoiceTypes.PURCHASE:
-      case InvoiceTypes.SALESRETURN:
+      case InvoiceTypes.Stock:
+      case InvoiceTypes.Purchase:
+      case InvoiceTypes.SalesReturn:
         inventory.qtyOnHand = Math.abs(inventory.qtyOnHand);
         break;
-      case InvoiceTypes.SALES:
-      case InvoiceTypes.PURCHASERETURN:
+      case InvoiceTypes.Sales:
+      case InvoiceTypes.PurchaseReturn:
         inventory.qtyOnHand = -Math.abs(inventory.qtyOnHand);
         break;
       default:

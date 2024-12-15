@@ -17,15 +17,49 @@ import { SerialNumber } from './modules/serial-number/serial-number.entity';
 import { StockInvoice } from './modules/stock-invoice/stock-invoice.entity';
 import { StockLineItem } from './modules/stock-invoice/stock-line-item.entity';
 
-const { DB_HOST = 'localhost', DB_PORT = '5432', DB_USERNAME, DB_PASSWORD, DB_DATABASE, NODE_ENV = 'development' } = process.env;
+const {
+  NODE_ENV = 'development',
+  DB_TYPE = 'postgres',
+  DB_HOST = 'localhost',
+  DB_PORT = '5432',
+  DB_USER,
+  DB_PASSWORD,
+  DB_NAME = 'fanda_v3'
+} = process.env;
+
+const dbConnection: {
+  type: 'postgres' | 'sqlite' | 'better-sqlite3' | 'mysql' | 'mariadb' | 'mssql';
+  host?: string;
+  port?: number;
+  username?: string;
+  password?: string;
+  database: string;
+} = {
+  type: 'postgres',
+  database: 'fanda_v3'
+};
+
+if (DB_TYPE === 'postgres') {
+  dbConnection.type = 'postgres';
+  dbConnection.host = DB_HOST;
+  dbConnection.port = Number(DB_PORT);
+  dbConnection.username = DB_USER!;
+  dbConnection.password = DB_PASSWORD!;
+  dbConnection.database = DB_NAME;
+} else if (DB_TYPE === 'sqlite') {
+  dbConnection.type = 'better-sqlite3';
+  dbConnection.database = `${DB_NAME}.db`;
+}
 
 export const AppDataSource = new DataSource({
-  type: 'postgres',
-  host: DB_HOST,
-  port: Number(DB_PORT),
-  username: DB_USERNAME,
-  password: DB_PASSWORD,
-  database: DB_DATABASE,
+  // type: 'postgres',
+  // type: 'better-sqlite3',
+  // host: DB_HOST,
+  // port: Number(DB_PORT),
+  // username: DB_USERNAME,
+  // password: DB_PASSWORD,
+  // database: 'fanda-v3.db', //DB_DATABASE,
+  ...dbConnection,
   synchronize: true,
   logging: NODE_ENV === 'development' ? true : false,
   entities: [

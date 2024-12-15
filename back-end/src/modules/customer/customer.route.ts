@@ -1,6 +1,7 @@
 import express from 'express';
 import { authorization } from '../../middleware/authorization.middleware';
 import { CustomerController } from './customer.controller';
+import { UserRoles } from '../../entities';
 
 export const customerRoutes = () => {
   const router = express.Router({ mergeParams: true });
@@ -8,11 +9,11 @@ export const customerRoutes = () => {
   router
     .route('/')
     .get(CustomerController.getCustomers)
-    .post(authorization(['admin', 'manager']), CustomerController.createCustomer);
+    .post(authorization([UserRoles.Admin, UserRoles.Manager]), CustomerController.createCustomer);
   router
     .route('/:customerId')
     .get(CustomerController.getCustomerById)
-    .put(authorization(['admin', 'manager']), CustomerController.updateCustomer)
-    .delete(authorization(['admin', 'manager']), CustomerController.deleteCustomer);
+    .put(authorization([UserRoles.Admin, UserRoles.Manager]), CustomerController.updateCustomer)
+    .delete(authorization([UserRoles.Admin, UserRoles.Manager]), CustomerController.deleteCustomer);
   return router;
 };

@@ -5,6 +5,7 @@ import { AuditDates, AuditUsers } from '../../entities/embedded/audit.entity';
 import { Company } from '../../entities/company.entity';
 import { Address } from '../../entities/address.entity';
 import { Contact } from '../../entities/contact.entity';
+import 'dotenv/config';
 
 @Entity({ name: 'suppliers' })
 @Index(['companyId', 'supplierId'], { unique: true })
@@ -28,10 +29,10 @@ export class Supplier {
   @Column({ length: 255, nullable: true })
   description?: string;
 
-  @Column({ type: 'jsonb', default: {} })
+  @Column({ type: process.env.DB_TYPE === 'postgres' ? 'jsonb' : 'simple-json', default: process.env.DB_TYPE === 'postgres' ? '{}' : '{}' })
   address?: Address;
 
-  @Column({ type: 'jsonb', default: {} })
+  @Column({ type: process.env.DB_TYPE === 'postgres' ? 'jsonb' : 'simple-json', default: process.env.DB_TYPE === 'postgres' ? '{}' : '{}' })
   contact?: Contact;
 
   @Column('uuid')

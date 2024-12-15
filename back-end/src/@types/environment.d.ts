@@ -1,14 +1,4 @@
-// import * as jwt from "jsonwebtoken";
-// import { User } from "../../entity/user.entity";
-
-import { User } from '../../entities/user.entity';
-
 declare global {
-  interface ImportMeta {
-    url: string;
-    main: boolean;
-  }
-
   namespace NodeJS {
     interface ProcessEnv extends Dict<string> {
       NODE_ENV: 'development' | 'production' | 'test';
@@ -24,20 +14,8 @@ declare global {
       TZ: string;
     }
   }
-
-  interface JwtPayload {
-    userId?: string;
-  }
-
-  namespace Express {
-    interface Request {
-      // jwtPayload?: string | jwt.JwtPayload;
-      currentUser?: User; //Record<string, any>;
-    }
-    interface Response {
-      timeTakenMs?: number;
-    }
-  }
 }
 
+// If this file has no import/export statements (i.e. is a script)
+// convert it into a module by adding an empty export statement.
 export {};
