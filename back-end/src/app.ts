@@ -17,7 +17,7 @@ import { supplierRoutes } from './modules/supplier/supplier.route';
 import { customerRoutes } from './modules/customer/customer.route';
 import { consumerRoutes } from './modules/consumer/consumer.route';
 
-import { stockInvoiceRoutes } from './modules/stock-invoice/stock-invoice.route';
+import { stockInvoiceRoutes } from './modules/invoices/stock-invoice/stock-invoice.route';
 
 const app = express();
 

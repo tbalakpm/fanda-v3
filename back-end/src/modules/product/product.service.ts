@@ -1,4 +1,4 @@
-import { Not } from 'typeorm';
+import { Not, QueryRunner } from 'typeorm';
 
 import { cache } from '../../helpers/cache.helper';
 
@@ -40,6 +40,7 @@ export class ProductService {
         'taxPct',
         'taxPreference',
         'isPriceInclusiveTax',
+        'gtnGeneration',
         'isActive'
       ],
       where: { companyId },
@@ -54,7 +55,7 @@ export class ProductService {
     };
   }
 
-  static async getProductById(companyId: string, productId: string): Promise<ApiResponse<Product>> {
+  static async getProductById(companyId: string, productId: string, queryRunner?: QueryRunner): Promise<ApiResponse<Product>> {
     const data = await cache.get<Product>('products:' + productId);
     if (data) {
       return {
@@ -64,7 +65,7 @@ export class ProductService {
         status: ApiStatus.OK
       };
     }
-    const product = await this.productRepository.findOne({
+    const product = await (queryRunner ? queryRunner.manager.getRepository(Product) : this.productRepository).findOne({
       select: [
         'productId',
         'code',
@@ -80,6 +81,7 @@ export class ProductService {
         'taxPct',
         'taxPreference',
         'isPriceInclusiveTax',
+        'gtnGeneration',
         'isActive'
       ],
       where: { companyId, productId }

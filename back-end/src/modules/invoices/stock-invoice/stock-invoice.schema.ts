@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { AuditDatesSchema, AuditUsersSchema } from '../../schema';
+import { AuditDatesSchema, AuditUsersSchema } from '../../../schema';
 
 export const StockLineItemSchema = z.object({
   invoiceId: z.string().uuid().optional(),

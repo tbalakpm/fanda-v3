@@ -5,6 +5,7 @@
 # @categoryId=01932b09-e357-7998-9a52-513d73aef4ba
 @unitId=0192fc47-ac9b-7001-a290-788777a046a1
 @productId=01932b09-e357-7998-9a52-513d73aef4ba
+@productId2=0193cd7f-616b-7aac-9f47-0befc8f791a5
 
 ### Get all stock invoices
 GET {{baseUrl}}/api/companies/{{companyId}}/years/{{yearId}}/stock-invoices
@@ -32,19 +33,19 @@ Authorization: Bearer {{token}}
       "productId": "{{productId}}",
       "unitId": "{{unitId}}",
       "gtn": "tbd",
-      "qty": "5",
-      "rate": "12500",
-      "price": "12500",
+      "qty": "100",
+      "rate": "25000",
+      "price": "2000000",
       "discountPct": 10,
       "taxPct": 5,
       "lineTotal": "12500",
       "marginPct": 10
     },
     {
-      "productId": "{{productId}}",
+      "productId": "{{productId2}}",
       "unitId": "{{unitId}}",
       "gtn": "tbd",
-      "qty": "10",
+      "qty": "5",
       "rate": "12500",
       "price": "12500",
       "discountPct": 10,

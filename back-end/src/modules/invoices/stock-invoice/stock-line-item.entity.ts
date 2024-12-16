@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryColumn, JoinColumn, ManyToOne, BeforeInsert } from 'typeorm';
 import { StockInvoice } from './stock-invoice.entity';
-import { Product } from '../product/product.entity';
-import { Unit } from '../unit/unit.entity';
+import { Product } from '../../product/product.entity';
+import { Unit } from '../../unit/unit.entity';
 import { v7 } from 'uuid';
 
 @Entity({ name: 'stock_line_items' })

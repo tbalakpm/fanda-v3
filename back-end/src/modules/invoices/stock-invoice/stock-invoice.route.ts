@@ -1,7 +1,7 @@
 import express from 'express';
-import { authorization } from '../../middleware/authorization.middleware';
+import { authorization } from '../../../middleware/authorization.middleware';
 import { StockInvoiceController } from './stock-invoice.controller';
-import { UserRoles } from '../../entities';
+import { UserRoles } from '../../../entities';
 
 export const stockInvoiceRoutes = () => {
   const router = express.Router({ mergeParams: true });

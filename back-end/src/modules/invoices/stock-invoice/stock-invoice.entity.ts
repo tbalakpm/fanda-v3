@@ -1,10 +1,10 @@
 import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 import { v7 } from 'uuid';
 
-import { AuditDates, AuditUsers } from '../../entities/embedded/audit.entity';
-import { FinancialYear } from '../financial-year/financial-year.entity';
+import { AuditDates, AuditUsers } from '../../../entities/embedded/audit.entity';
+import { FinancialYear } from '../../financial-year/financial-year.entity';
 import { StockLineItem } from './stock-line-item.entity';
-import { Company } from '../../entities';
+import { Company } from '../../../entities';
 
 @Entity({ name: 'stock_invoices' })
 @Index(['companyId', 'yearId', 'invoiceId'], { unique: true })

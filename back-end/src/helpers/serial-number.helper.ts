@@ -1,7 +1,7 @@
 import { QueryRunner } from 'typeorm';
 import { AppDataSource } from '../data-source';
 import { SerialNumber } from '../modules/serial-number/serial-number.entity';
-import { InvoiceTypes } from '../modules/shared/invoice-type.enum';
+import { InvoiceTypes } from '../modules/invoices/invoice-type.enum';
 
 export class SerialNumberHelper {
   private static readonly serialRepository = AppDataSource.getRepository(SerialNumber);
