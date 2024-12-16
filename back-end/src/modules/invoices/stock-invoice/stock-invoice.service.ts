@@ -1,12 +1,15 @@
-import { AppDataSource } from '../../data-source';
-import { cache } from '../../helpers';
-import { SerialNumberHelper } from '../../helpers/serial-number.helper';
-import { ApiResponse, ApiStatus } from '../../responses';
-import { Inventory } from '../inventory/inventory.entity';
+import { AppDataSource } from '../../../data-source';
+import { cache } from '../../../helpers';
+import { SerialNumberHelper } from '../../../helpers/serial-number.helper';
+import { ApiResponse, ApiStatus } from '../../../responses';
+import { Inventory } from '../../inventory/inventory.entity';
 import { StockInvoice } from './stock-invoice.entity';
-import { InvoiceTypes } from '../shared/invoice-type.enum';
-import { InventoryService } from '../inventory/inventory.service';
+import { InvoiceTypes } from '../invoice-type.enum';
+import { InventoryService } from '../../inventory/inventory.service';
 import { StockLineItem } from './stock-line-item.entity';
+import { ProductService } from '../../product/product.service';
+import { GtnGeneration } from '../../product/gtn-generation.enum';
+import { ProductSerialDto } from '../product-serial.dto';
 
 export class StockInvoiceService {
   private static readonly stockInvoiceRepository = AppDataSource.getRepository(StockInvoice);
@@ -59,13 +62,9 @@ export class StockInvoiceService {
 
       let totalQty = 0;
       let totalAmount = 0;
-      const serials = [];
+      const productSerials: ProductSerialDto[] = [];
 
       for (const lineItem of createdInvoice.lineItems || []) {
-        let beginSerial: string = '';
-        let endSerial: string = '';
-        let serial = null;
-
         // calculations - start
         lineItem.qty = Number(lineItem.qty);
         lineItem.rate = Number(lineItem.rate);
@@ -97,16 +96,56 @@ export class StockInvoiceService {
         totalAmount += lineItem.lineTotal;
         // calculations - end
 
-        if (!lineItem.gtn) {
-          lineItem.gtn = '';
-        } else if (lineItem.gtn.toLowerCase() === 'tbd') {
-          const result = await SerialNumberHelper.getNextRangeSerial(queryRunner, yearId, 'GTN', lineItem.qty);
-          beginSerial = result.beginSerial;
-          endSerial = result.endSerial;
-          serial = { current: result.serial.current || 0, length: result.serial.length || 0, prefix: result.serial.prefix || '' };
-          lineItem.gtn = beginSerial === endSerial ? beginSerial : `${beginSerial}-${endSerial}`;
+        // if (!lineItem.gtn) {
+        //   lineItem.gtn = '';
+        // } else if (lineItem.gtn.toLowerCase() === 'tbd') {
+        //   const result = await SerialNumberHelper.getNextRangeSerial(queryRunner, yearId, 'GTN', lineItem.qty);
+        //   beginSerial = result.beginSerial;
+        //   endSerial = result.endSerial;
+        //   serial = { current: result.serial.current || 0, length: result.serial.length || 0, prefix: result.serial.prefix || '' };
+        //   lineItem.gtn = beginSerial === endSerial ? beginSerial : `${beginSerial}-${endSerial}`;
+        // }
+
+        // let beginSerial: string = '';
+        // let endSerial: string = '';
+        // let serial = null;
+        const productSerial: ProductSerialDto = {};
+
+        const productResponse = await ProductService.getProductById(companyId, lineItem.productId, queryRunner);
+        if (productResponse.success && productResponse.data) {
+          const product = productResponse.data;
+
+          productSerial.product = {
+            productId: lineItem.productId,
+            isPriceInclusiveTax: product.isPriceInclusiveTax,
+            gtnGeneration: product.gtnGeneration
+          };
+
+          // switch (product.gtnGeneration) {
+          if (product.gtnGeneration == GtnGeneration.Batch) {
+            const result = await SerialNumberHelper.getNextSerial(queryRunner, yearId, 'GTN');
+            // beginSerial = result.beginSerial;
+            // endSerial = result.endSerial;
+            // productSerial.serial = null; //{ current: result.serial.current || 0, length: result.serial.length || 0, prefix: result.serial.prefix || '' };
+            lineItem.gtn = result; //beginSerial === endSerial ? beginSerial : `${beginSerial}-${endSerial}`;
+          } else if (product.gtnGeneration == GtnGeneration.Tag) {
+            const result = await SerialNumberHelper.getNextRangeSerial(queryRunner, yearId, 'GTN', lineItem.qty);
+            // beginSerial = result.beginSerial;
+            // endSerial = result.endSerial;
+            // serial = { current: result.serial.current || 0, length: result.serial.length || 0, prefix: result.serial.prefix || '' };
+            productSerial.serial = { length: result.serial.length, current: result.serial.current, prefix: result.serial.prefix };
+            lineItem.gtn = result.beginSerial === result.endSerial ? result.beginSerial : `${result.beginSerial}-${result.endSerial}`;
+          } else if (product.gtnGeneration == GtnGeneration.Code) {
+            // productSerial.serial = null;
+            lineItem.gtn = product.code;
+          } else {
+            console.log('Invalid GTN generation', product.gtnGeneration);
+          }
+        } else {
+          console.log('Product not found');
         }
-        serials.push(serial);
+
+        productSerials.push(productSerial);
       }
 
       createdInvoice.totalQty = totalQty;
@@ -116,7 +155,7 @@ export class StockInvoiceService {
       //const inventories: Inventory[] = [];
       let index = 0;
       for (const lineItem of savedInvoice.lineItems || []) {
-        const serial = serials[index++];
+        const productSerial = productSerials[index++];
 
         const inventory = queryRunner.manager.create(Inventory, {
           companyId: companyId,
@@ -131,16 +170,22 @@ export class StockInvoiceService {
           marginAmt: lineItem.marginAmt,
           sellingPrice: lineItem.sellingPrice,
           mfdDate: lineItem.mfdDate,
-          expiryDate: lineItem.expiryDate
+          expiryDate: lineItem.expiryDate,
+          gtnGeneration: productSerial.product!.gtnGeneration,
+          isPriceInclusiveTax: productSerial.product!.isPriceInclusiveTax
         });
 
-        if (!serial) {
+        if (!productSerial.serial) {
           inventory.gtn = lineItem.gtn;
           inventory.qtyOnHand = lineItem.qty;
           await InventoryService.saveInventory(queryRunner, inventory);
         } else {
           for (let i = 0; i < lineItem.qty; i++) {
-            inventory.gtn = SerialNumberHelper.formatSerial(serial.length || 0, (serial.current || 1) + i, serial.prefix || '');
+            inventory.gtn = SerialNumberHelper.formatSerial(
+              productSerial.serial.length || 7,
+              (productSerial.serial.current || 1) + i,
+              productSerial.serial.prefix || ''
+            );
             inventory.qtyOnHand = 1;
             await InventoryService.saveInventory(queryRunner, inventory);
           }

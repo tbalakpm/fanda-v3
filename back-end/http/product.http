@@ -22,21 +22,21 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "productId": "{{productId}}",
-  "code": "MONITORS",
-  "name": "Monitors",
-  "description": "Display monitors",
-  "productType": "goods",
+  # "productId": "{{productId}}",
+  "code": "MONITOR",
+  "name": "Monitor",
+  "description": "Monitors",
+  "productType": "Goods",
   "categoryId": "{{categoryId}}",
   "baseUnitId": "{{unitId}}",
-  "buyingPrice": 10000,
-  "marginAmt": 2500,
-  "sellingPrice": 12500,
-  "taxCode": "G-M00001",
+  "buyingPrice": 20000,
+  "marginAmt": 5000,
+  "sellingPrice": 15000,
+  "taxCode": "G-C00001",
   "taxPct": 18,
-  "taxPreference": "taxable",
-  "isPriceInclusiveTax": true,
-  "gtnGeneration": "tagnumber"
+  "taxPreference": "Taxable",
+  "isPriceInclusiveTax": false,
+  "gtnGeneration": "Tag"
 }
 
 ### Update product

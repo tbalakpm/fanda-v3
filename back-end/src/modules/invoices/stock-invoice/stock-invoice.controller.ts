@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 
 import { StockInvoiceService } from './stock-invoice.service';
-import { User } from '../../entities/user.entity';
-import { ApiError } from '../../responses/api-error';
-import { ApiResponse, ApiStatus } from '../../responses';
+import { User } from '../../../entities/user.entity';
+import { ApiError } from '../../../responses/api-error';
+import { ApiResponse, ApiStatus } from '../../../responses';
 import { StockInvoice } from './stock-invoice.entity';
 
 export class StockInvoiceController {

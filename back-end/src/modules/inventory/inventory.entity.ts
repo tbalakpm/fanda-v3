@@ -5,7 +5,7 @@ import { Company } from '../../entities';
 import { Product } from '../product/product.entity';
 import { Unit } from '../unit/unit.entity';
 import { Supplier } from '../supplier/supplier.entity';
-import { InvoiceTypes } from '../shared/invoice-type.enum';
+import { InvoiceTypes } from '../invoices/invoice-type.enum';
 import { GtnGeneration } from '../product/gtn-generation.enum';
 import 'dotenv/config';
 
@@ -69,6 +69,9 @@ export class Inventory {
 
   @Column({ nullable: true })
   expiryDate?: Date;
+
+  @Column({ nullable: true, default: false })
+  isPriceInclusiveTax?: boolean;
 
   @Column({ type: process.env.DB_TYPE === 'postgres' ? 'enum' : 'text', default: GtnGeneration.Tag }) // enum: GtnGeneration,
   gtnGeneration!: GtnGeneration;
