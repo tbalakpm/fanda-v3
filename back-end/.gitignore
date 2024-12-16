@@ -1,6 +1,8 @@
+.DS_Store
 dist/
 node_modules/
 logs/
 .env
 .env.dev
 .env.prod
+.env.test
