@@ -1,5 +1,5 @@
 # Fanda v3.0
-Finance and accounting system
+## Finance and accounting system
 
 Technology stack:
 * Node JS

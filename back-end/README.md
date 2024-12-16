@@ -1,4 +1,4 @@
-# Awesome Project Build with TypeORM
+# Fanda v3.0 Project Build with TypeORM
 
 Steps to run this project:
 
