@@ -13,7 +13,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 ### Get stock invoice by id
-GET {{baseUrl}}/api/companies/{{companyId}}/years/{{yearId}}/stock-invoices/0193c87d-90d9-7443-a14f-760a2d3fb668
+GET {{baseUrl}}/api/companies/{{companyId}}/years/{{yearId}}/stock-invoices/0193d058-a12c-7ccf-9886-16fd767d7a71
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -24,7 +24,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "invoiceDate": "2024-12-07",
+  "invoiceDate": "2024-12-17",
   "totalQty": "10",
   "totalAmount": "25000",
   "notes": "This is test stock invoice",

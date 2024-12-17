@@ -1,0 +1,22 @@
+{
+  "sqltools.useNodeRuntime": true,
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "driver": "SQLite",
+      "name": "SQLite",
+      "group": "Fanda Local Databases",
+      "database": "${workspaceFolder:fanda-v3}/back-end/fanda_v3.db"
+    },
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 6432,
+      "driver": "PostgreSQL",
+      "name": "PostgreSQL",
+      "group": "Fanda Local Databases",
+      "database": "fanda_v3",
+      "username": "postgres"
+    }
+  ]
+}

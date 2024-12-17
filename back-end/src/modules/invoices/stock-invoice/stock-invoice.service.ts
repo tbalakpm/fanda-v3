@@ -1,20 +1,22 @@
 import { AppDataSource } from '../../../data-source';
-import { cache } from '../../../helpers';
-import { SerialNumberHelper } from '../../../helpers/serial-number.helper';
 import { ApiResponse, ApiStatus } from '../../../responses';
-import { Inventory } from '../../inventory/inventory.entity';
+import { cache } from '../../../helpers';
+
 import { StockInvoice } from './stock-invoice.entity';
-import { InvoiceTypes } from '../invoice-type.enum';
-import { InventoryService } from '../../inventory/inventory.service';
 import { StockLineItem } from './stock-line-item.entity';
-import { ProductService } from '../../product/product.service';
+import { Inventory } from '../../inventory/inventory.entity';
 import { GtnGeneration } from '../../product/gtn-generation.enum';
+import { InvoiceTypes } from '../invoice-type.enum';
 import { ProductSerialDto } from '../product-serial.dto';
 
-export class StockInvoiceService {
-  private static readonly stockInvoiceRepository = AppDataSource.getRepository(StockInvoice);
+import { InventoryService } from '../../inventory/inventory.service';
+import { ProductService } from '../../product/product.service';
+import { SerialNumberHelper } from '../../../helpers/serial-number.helper';
 
-  static async getAllStockInvoices(companyId: string, yearId: string): Promise<ApiResponse<StockInvoice[]>> {
+class StockInvoiceService {
+  private readonly stockInvoiceRepository = AppDataSource.getRepository(StockInvoice);
+
+  async getAllStockInvoices(companyId: string, yearId: string): Promise<ApiResponse<StockInvoice[]>> {
     const data = await cache.get<StockInvoice[]>(`stockInvoices_${companyId}_${yearId}`);
     if (data) {
       return { success: true, message: 'Serving stock invoices from cache', data, status: ApiStatus.OK };
@@ -28,7 +30,7 @@ export class StockInvoiceService {
     return { success: true, message: 'Serving stock invoices from database', data: invoices, status: ApiStatus.OK };
   }
 
-  static async getStockInvoiceById(companyId: string, yearId: string, invoiceId: string): Promise<ApiResponse<StockInvoice>> {
+  async getStockInvoiceById(companyId: string, yearId: string, invoiceId: string): Promise<ApiResponse<StockInvoice>> {
     const data = await cache.get<StockInvoice>(`stockInvoices_${companyId}_${yearId}:${invoiceId}`);
     if (data) {
       return { success: true, message: 'Serving a stock invoice from cache', data, status: ApiStatus.OK };
@@ -48,7 +50,7 @@ export class StockInvoiceService {
     return { success: true, message: 'Serving stock invoice from database', data: invoice, status: ApiStatus.OK };
   }
 
-  static async createStockInvoice(companyId: string, yearId: string, invoice: StockInvoice, userId: string): Promise<ApiResponse<StockInvoice>> {
+  async createStockInvoice(companyId: string, yearId: string, invoice: StockInvoice, userId: string): Promise<ApiResponse<StockInvoice>> {
     const queryRunner = AppDataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -206,3 +208,5 @@ export class StockInvoiceService {
     }
   }
 }
+
+export const StockInvoiceServiceInstance = new StockInvoiceService();

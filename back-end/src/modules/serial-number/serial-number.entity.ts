@@ -22,7 +22,7 @@ export class SerialNumber {
   @Column({ length: 15 })
   key!: string;
 
-  @Column({ length: 5, nullable: true })
+  @Column({ length: 15, nullable: true })
   prefix?: string;
 
   @Column({ default: 1 })

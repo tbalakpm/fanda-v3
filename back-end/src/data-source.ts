@@ -16,6 +16,7 @@ import { FinancialYear } from './modules/financial-year/financial-year.entity';
 import { SerialNumber } from './modules/serial-number/serial-number.entity';
 import { StockInvoice } from './modules/invoices/stock-invoice/stock-invoice.entity';
 import { StockLineItem } from './modules/invoices/stock-invoice/stock-line-item.entity';
+import { ProductSerial } from './modules/product/product-serial.entity';
 
 const {
   NODE_ENV = 'development',
@@ -73,6 +74,7 @@ export const AppDataSource = new DataSource({
     Consumer,
     Inventory,
     FinancialYear,
+    ProductSerial,
     SerialNumber,
     StockInvoice,
     StockLineItem
