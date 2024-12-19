@@ -15,3 +15,21 @@ Companies             - done
     Invoices
       LineItems
   Inventories
+
+--
+
+Serial number - dynamic values:
+  {JJJ}     - 001-366
+  {YY}      - 25
+  {YYYY}    - 2025
+  {MM}      - 09
+  {DD}      - 15
+  {MMM}     - SEP
+  {MMMM}    - SEPTEMBER
+
+
+{STATIC CONST}    - AA:001-
+{DYNAMIC VARS}    - {YY}{JJJ}
+{SEQUENCE NUMBER}
+
+Example: AA:2523:001-3664-3453-3434-4556
