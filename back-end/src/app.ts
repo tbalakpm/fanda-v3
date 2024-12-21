@@ -39,7 +39,19 @@ app.use(express.urlencoded());
 app.use(
   cors({
     origin: '*',
-    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization', 'X-Access-Token', 'X-Refresh-Token', 'X-User-Id'],
+    allowedHeaders: [
+      'Origin',
+      'X-Requested-With',
+      'Content-Type',
+      'Accept',
+      'Authorization',
+      'X-Access-Token',
+      'X-Refresh-Token',
+      'X-User-Id',
+      'X-Forwarded-For',
+      'X-Forwarded-Host',
+      'X-Forwarded-Proto'
+    ],
     methods: ['OPTIONS', 'GET', 'POST', 'PUT', 'DELETE', 'PATCH']
   })
 );

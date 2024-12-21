@@ -2,6 +2,7 @@ import { BeforeInsert, Column, Entity, PrimaryColumn } from 'typeorm';
 import { v7 } from 'uuid';
 import { UserRoles } from './role.enum';
 import 'dotenv/config';
+import { enumDataType } from '../helpers/dataType.helper';
 
 @Entity({ name: 'users' })
 export class User {
@@ -31,7 +32,7 @@ export class User {
   @Column({ name: 'last_name', length: 25, nullable: true })
   lastName?: string;
 
-  @Column({ type: process.env.DB_TYPE === 'postgres' ? 'enum' : 'text', default: UserRoles.User }) // enum: UserRoles,
+  @Column({ type: enumDataType(), enum: UserRoles, default: UserRoles.User }) // enum: UserRoles,
   role!: UserRoles;
 
   @Column({ name: 'is_active', default: true })

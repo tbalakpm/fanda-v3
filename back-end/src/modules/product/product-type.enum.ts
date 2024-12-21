@@ -1,4 +1,4 @@
 export enum ProductTypes {
-  Goods = 'Goods',
-  Services = 'Services'
+  Goods = 'goods',
+  Services = 'services'
 }
