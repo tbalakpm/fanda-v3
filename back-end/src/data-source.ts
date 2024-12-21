@@ -28,6 +28,8 @@ const {
   DB_NAME = 'fanda_v3'
 } = process.env;
 
+console.log('DB_TYPE:', DB_TYPE);
+
 const dbConnection: {
   type: 'postgres' | 'sqlite' | 'better-sqlite3' | 'mysql' | 'mariadb' | 'mssql';
   host?: string;
@@ -40,16 +42,31 @@ const dbConnection: {
   database: 'fanda_v3'
 };
 
-if (DB_TYPE === 'postgres') {
-  dbConnection.type = 'postgres';
+if (DB_TYPE === 'sqlite' || DB_TYPE === 'better-sqlite3') {
+  dbConnection.type = 'better-sqlite3';
+  dbConnection.database = `${DB_NAME}.db`;
+} else {
   dbConnection.host = DB_HOST;
   dbConnection.port = Number(DB_PORT);
   dbConnection.username = DB_USER!;
   dbConnection.password = DB_PASSWORD!;
   dbConnection.database = DB_NAME;
-} else if (DB_TYPE === 'sqlite') {
-  dbConnection.type = 'better-sqlite3';
-  dbConnection.database = `${DB_NAME}.db`;
+  switch (DB_TYPE) {
+    case 'postgres':
+      dbConnection.type = 'postgres';
+      break;
+    case 'mysql':
+      dbConnection.type = 'mysql';
+      break;
+    case 'mariadb':
+      dbConnection.type = 'mariadb';
+      break;
+    case 'mssql':
+      dbConnection.type = 'mssql';
+      break;
+    default:
+      dbConnection.type = 'postgres';
+  }
 }
 
 export const AppDataSource = new DataSource({

@@ -9,6 +9,7 @@ import { ProductTypes } from './product-type.enum';
 import { TaxPreferences } from './tax-preference.enum';
 import { GtnGeneration } from './gtn-generation.enum';
 import 'dotenv/config';
+import { enumDataType } from '../../helpers/dataType.helper';
 
 @Entity({ name: 'products' })
 @Index(['companyId', 'productId'], { unique: true })
@@ -32,7 +33,7 @@ export class Product {
   @Column({ length: 255, nullable: true })
   description?: string;
 
-  @Column({ type: process.env.DB_TYPE === 'postgres' ? 'enum' : 'text', default: ProductTypes.Goods }) // enum: ProductTypes,
+  @Column({ type: enumDataType(), enum: ProductTypes, default: ProductTypes.Goods }) // enum: ProductTypes,
   productType!: ProductTypes;
 
   @Column('uuid')
@@ -59,13 +60,13 @@ export class Product {
   @Column({ type: 'numeric', precision: 10, scale: 2, default: 0.0 })
   taxPct?: number;
 
-  @Column({ type: process.env.DB_TYPE === 'postgres' ? 'enum' : 'text', default: TaxPreferences.NoTax }) // enum: TaxPreferences,
+  @Column({ type: enumDataType(), enum: TaxPreferences, default: TaxPreferences.NoTax }) // enum: TaxPreferences,
   taxPreference!: TaxPreferences;
 
   @Column({ nullable: true, default: false })
   isPriceInclusiveTax?: boolean;
 
-  @Column({ type: process.env.DB_TYPE === 'postgres' ? 'enum' : 'text', default: GtnGeneration.Tag }) // enum: GtnGeneration,
+  @Column({ type: enumDataType(), enum: GtnGeneration, default: GtnGeneration.Tag }) // enum: GtnGeneration,
   gtnGeneration!: GtnGeneration;
 
   @Column('uuid')

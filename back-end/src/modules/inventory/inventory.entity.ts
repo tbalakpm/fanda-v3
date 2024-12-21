@@ -8,6 +8,7 @@ import { Supplier } from '../supplier/supplier.entity';
 import { InvoiceTypes } from '../invoices/invoice-type.enum';
 import { GtnGeneration } from '../product/gtn-generation.enum';
 import 'dotenv/config';
+import { enumDataType } from '../../helpers/dataType.helper';
 
 @Entity({ name: 'inventories' })
 @Index(['companyId', 'productId', 'gtn'], { unique: true })
@@ -31,7 +32,7 @@ export class Inventory {
   @Column('uuid')
   lineItemId!: string;
 
-  @Column({ type: process.env.DB_TYPE === 'postgres' ? 'enum' : 'text', default: InvoiceTypes.Stock }) //  enum: InvoiceTypes,
+  @Column({ type: enumDataType(), enum: InvoiceTypes, default: InvoiceTypes.Stock }) //  enum: InvoiceTypes,
   invoiceType!: InvoiceTypes;
 
   @Column('uuid', { nullable: true })
@@ -73,7 +74,7 @@ export class Inventory {
   @Column({ nullable: true, default: false })
   isPriceInclusiveTax?: boolean;
 
-  @Column({ type: process.env.DB_TYPE === 'postgres' ? 'enum' : 'text', default: GtnGeneration.Tag }) // enum: GtnGeneration,
+  @Column({ type: enumDataType(), enum: GtnGeneration, default: GtnGeneration.Tag }) // enum: GtnGeneration,
   gtnGeneration!: GtnGeneration;
 
   // Related Entities

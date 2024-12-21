@@ -1,8 +1,8 @@
 export enum InvoiceTypes {
-  Stock = 'Stock',
-  Purchase = 'Purchase',
-  Sales = 'Sales',
-  SalesReturn = 'SalesReturn',
-  PurchaseReturn = 'PurchaseReturn',
-  Transfer = 'Transfer'
+  Stock = 'stock',
+  Purchase = 'purchase',
+  Sales = 'sales',
+  SalesReturn = 'salesreturn',
+  PurchaseReturn = 'purchasereturn',
+  Transfer = 'transfer'
 }
