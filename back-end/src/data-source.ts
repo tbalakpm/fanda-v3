@@ -28,7 +28,7 @@ const {
   DB_NAME = 'fanda_v3'
 } = process.env;
 
-console.log('DB_TYPE:', DB_TYPE);
+// console.log('DB_TYPE:', DB_TYPE);
 
 const dbConnection: {
   type: 'postgres' | 'sqlite' | 'better-sqlite3' | 'mysql' | 'mariadb' | 'mssql';

@@ -66,15 +66,13 @@ export class StockInvoiceController {
 
   static async deleteStockInvoice(req: Request, res: Response, next: NextFunction) {
     try {
-      // const { companyId, yearId } = req.params;
-      // const result = await StockInvoiceService.deleteStockInvoice(companyId, yearId);
-      // if (!result.success) {
-      //   return next(new ApiError(result.message, 400));
-      // }
-      // res.status(result.status).json(result);
-      const result = new ApiResponse<StockInvoice>();
-      result.status = ApiStatus.NOT_IMPLEMENTED;
-      res.status(result.status).json({ success: true, message: 'Not implemented yet' });
+      const { companyId, yearId, invoiceId } = req.params;
+      const result = await StockInvoiceService.deleteStockInvoice(companyId, yearId, invoiceId);
+      if (!result.success) {
+        return next(new ApiError(result.message, 400));
+      }
+
+      res.status(result.status).json({ success: result.success, message: result.message });
     } catch (error) {
       return next(error);
     }

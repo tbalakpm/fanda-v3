@@ -1,6 +1,6 @@
 import { AppDataSource } from '../../../data-source';
 import { ApiResponse, ApiStatus } from '../../../responses';
-import { cache } from '../../../helpers';
+import { cache, parseError } from '../../../helpers';
 
 import { StockInvoice } from './stock-invoice.entity';
 import { StockLineItem } from './stock-line-item.entity';
@@ -12,6 +12,8 @@ import { ProductSerialDto } from '../product-serial.dto';
 import { InventoryService } from '../../inventory/inventory.service';
 import { ProductService } from '../../product/product.service';
 import { SerialNumberHelper } from '../../../helpers/serial-number.helper';
+import logger from '../../../logger';
+import { StockInvoiceSchema } from './stock-invoice.schema';
 
 class StockInvoiceService {
   private readonly stockInvoiceRepository = AppDataSource.getRepository(StockInvoice);
@@ -36,8 +38,7 @@ class StockInvoiceService {
       return { success: true, message: 'Serving a stock invoice from cache', data, status: ApiStatus.OK };
     }
     const invoice = await this.stockInvoiceRepository.findOne({
-      select: ['invoiceId', 'invoiceNumber', 'invoiceDate', /*'lineItems',*/ 'totalQty', 'totalAmount', 'notes', 'yearId'],
-      // relations: ['lineItems'],
+      select: ['invoiceId', 'invoiceNumber', 'invoiceDate', 'totalQty', 'totalAmount', 'notes', 'yearId'],
       where: { companyId, yearId, invoiceId }
     });
     if (!invoice) {
@@ -51,16 +52,28 @@ class StockInvoiceService {
   }
 
   async createStockInvoice(companyId: string, yearId: string, invoice: StockInvoice, userId: string): Promise<ApiResponse<StockInvoice>> {
+    const parsedResult = StockInvoiceSchema.safeParse(invoice);
+    if (!parsedResult.success) {
+      return {
+        success: false,
+        message: parseError(parsedResult),
+        status: ApiStatus.BAD_REQUEST
+      };
+    }
+
+    const parsedInvoice = parsedResult.data as StockInvoice;
+    parsedInvoice.companyId = companyId;
+    parsedInvoice.yearId = yearId;
+    parsedInvoice.user = { created: userId, updated: userId };
+
     const queryRunner = AppDataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
       // create invoice
-      const createdInvoice = queryRunner.manager.create(StockInvoice, invoice);
+      const createdInvoice = queryRunner.manager.create(StockInvoice, parsedInvoice);
       createdInvoice.invoiceNumber = await SerialNumberHelper.getNextSerial(queryRunner, yearId, InvoiceTypes.Stock);
-      createdInvoice.companyId = companyId;
-      createdInvoice.yearId = yearId;
-      createdInvoice.user = { created: userId, updated: userId };
+      // console.log('INVOICE', createdInvoice);
 
       let totalQty = 0;
       let totalAmount = 0;
@@ -68,8 +81,6 @@ class StockInvoiceService {
 
       for (const lineItem of createdInvoice.lineItems || []) {
         // calculations - start
-        lineItem.qty = Number(lineItem.qty);
-        lineItem.rate = Number(lineItem.rate);
         lineItem.price = Number(Math.round((lineItem.qty * lineItem.rate * 100.0) / 100.0).toFixed(2));
         // discount
         lineItem.discountPct = lineItem.discountPct || 0;
@@ -93,24 +104,11 @@ class StockInvoiceService {
         } else {
           lineItem.marginAmt = lineItem.marginAmt || 0;
         }
-        lineItem.sellingPrice = Number(lineItem.rate + lineItem.marginAmt);
+        lineItem.sellingPrice = lineItem.rate + lineItem.marginAmt;
         totalQty += lineItem.qty;
         totalAmount += lineItem.lineTotal;
         // calculations - end
 
-        // if (!lineItem.gtn) {
-        //   lineItem.gtn = '';
-        // } else if (lineItem.gtn.toLowerCase() === 'tbd') {
-        //   const result = await SerialNumberHelper.getNextRangeSerial(queryRunner, yearId, 'GTN', lineItem.qty);
-        //   beginSerial = result.beginSerial;
-        //   endSerial = result.endSerial;
-        //   serial = { current: result.serial.current || 0, length: result.serial.length || 0, prefix: result.serial.prefix || '' };
-        //   lineItem.gtn = beginSerial === endSerial ? beginSerial : `${beginSerial}-${endSerial}`;
-        // }
-
-        // let beginSerial: string = '';
-        // let endSerial: string = '';
-        // let serial = null;
         const productSerial: ProductSerialDto = {};
 
         const productResponse = await ProductService.getProductById(companyId, lineItem.productId, queryRunner);
@@ -123,28 +121,26 @@ class StockInvoiceService {
             gtnGeneration: product.gtnGeneration
           };
 
-          // switch (product.gtnGeneration) {
-          if (product.gtnGeneration == GtnGeneration.Batch) {
-            const result = await SerialNumberHelper.getNextSerial(queryRunner, yearId, 'GTN');
-            // beginSerial = result.beginSerial;
-            // endSerial = result.endSerial;
-            // productSerial.serial = null; //{ current: result.serial.current || 0, length: result.serial.length || 0, prefix: result.serial.prefix || '' };
-            lineItem.gtn = result; //beginSerial === endSerial ? beginSerial : `${beginSerial}-${endSerial}`;
-          } else if (product.gtnGeneration == GtnGeneration.Tag) {
-            const result = await SerialNumberHelper.getNextRangeSerial(queryRunner, yearId, 'GTN', lineItem.qty);
-            // beginSerial = result.beginSerial;
-            // endSerial = result.endSerial;
-            // serial = { current: result.serial.current || 0, length: result.serial.length || 0, prefix: result.serial.prefix || '' };
-            productSerial.serial = { length: result.serial.length, current: result.serial.current, prefix: result.serial.prefix };
-            lineItem.gtn = result.beginSerial === result.endSerial ? result.beginSerial : `${result.beginSerial}-${result.endSerial}`;
-          } else if (product.gtnGeneration == GtnGeneration.Code) {
-            // productSerial.serial = null;
-            lineItem.gtn = product.code;
-          } else {
-            console.log('Invalid GTN generation', product.gtnGeneration);
+          switch (product.gtnGeneration) {
+            case GtnGeneration.Batch: {
+              const result = await SerialNumberHelper.getNextSerial(queryRunner, yearId, 'gtn');
+              lineItem.gtn = result;
+              break;
+            }
+            case GtnGeneration.Tag: {
+              const result = await SerialNumberHelper.getNextRangeSerial(queryRunner, yearId, 'gtn', lineItem.qty);
+              productSerial.serial = { length: result.serial.length, current: result.serial.current, prefix: result.serial.prefix };
+              lineItem.gtn = result.beginSerial === result.endSerial ? result.beginSerial : `${result.beginSerial}~${result.endSerial}`;
+              break;
+            }
+            case GtnGeneration.Code:
+              lineItem.gtn = product.code;
+              break;
+            default:
+              logger.error('Invalid GTN generation', product.gtnGeneration);
           }
         } else {
-          console.log('Product not found');
+          logger.error('Product not found');
         }
 
         productSerials.push(productSerial);
@@ -154,7 +150,6 @@ class StockInvoiceService {
       createdInvoice.totalAmount = totalAmount;
       const savedInvoice = await queryRunner.manager.save(createdInvoice);
 
-      //const inventories: Inventory[] = [];
       let index = 0;
       for (const lineItem of savedInvoice.lineItems || []) {
         const productSerial = productSerials[index++];
@@ -197,12 +192,53 @@ class StockInvoiceService {
       await queryRunner.commitTransaction();
       await cache.del(`stockInvoices_${companyId}_${yearId}`);
       return { success: true, message: 'Stock Invoice created successfully', data: savedInvoice, status: ApiStatus.CREATED };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      await queryRunner.rollbackTransaction();
+      if (process.env.NODE_ENV === 'development') {
+        // console.log(error);
+        logger.error(error.message);
+      }
+      return { success: false, message: 'Failed to create Stock Invoice', status: ApiStatus.INTERNAL_SERVER_ERROR };
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  async deleteStockInvoice(companyId: string, yearId: string, invoiceId: string): Promise<ApiResponse<StockInvoice>> {
+    const queryRunner = AppDataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const invoice = await queryRunner.manager.findOne(StockInvoice, {
+        select: ['invoiceId', 'invoiceNumber', 'invoiceDate', 'totalQty', 'totalAmount', 'notes', 'yearId'],
+        where: { companyId, yearId, invoiceId }
+      });
+      if (!invoice) {
+        return { success: false, message: `Stock Invoice with id '${invoiceId}' not found`, status: ApiStatus.NOT_FOUND };
+      }
+      const lineItems = await queryRunner.manager.findBy(StockLineItem, { invoiceId });
+      invoice.lineItems = lineItems;
+
+      lineItems.forEach(async (lineItem) => {
+        // GTN Rage generated by TAG generation option for bulk quantity
+        if (lineItem.gtn?.includes('~')) {
+          await InventoryService.updateQtyOnHandByInvoice(queryRunner, companyId, invoiceId, lineItem.lineItemId, -1);
+        } else {
+          await InventoryService.updateQtyOnHandByInvoice(queryRunner, companyId, invoiceId, lineItem.lineItemId, -lineItem.qty);
+        }
+      });
+      queryRunner.manager.remove(invoice);
+
+      await queryRunner.commitTransaction();
+      await cache.del(`stockInvoices_${companyId}_${yearId}`);
+      return { success: true, message: 'Stock invoice deleted successfully', data: invoice, status: ApiStatus.OK };
     } catch (error) {
       await queryRunner.rollbackTransaction();
       if (process.env.NODE_ENV === 'development') {
         console.log(error);
       }
-      return { success: false, message: 'Failed to create Stock Invoice', status: ApiStatus.INTERNAL_SERVER_ERROR };
+      return { success: false, message: 'Failed to delete Stock Invoice', status: ApiStatus.INTERNAL_SERVER_ERROR };
     } finally {
       await queryRunner.release();
     }

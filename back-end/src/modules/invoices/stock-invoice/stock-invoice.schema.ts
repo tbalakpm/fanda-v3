@@ -12,16 +12,16 @@ export const StockLineItemSchema = z.object({
   expiryDate: z.coerce.date().optional(),
   qty: z.coerce.number(),
   rate: z.coerce.number(),
-  price: z.coerce.number(),
-  marginPct: z.coerce.number(),
-  marginAmt: z.coerce.number(),
-  sellingPrice: z.coerce.number(),
-  discountPct: z.coerce.number(),
-  discountAmt: z.coerce.number(),
+  price: z.coerce.number().optional(),
+  marginPct: z.coerce.number().optional(),
+  marginAmt: z.coerce.number().optional(),
+  sellingPrice: z.coerce.number().optional(),
+  discountPct: z.coerce.number().optional(),
+  discountAmt: z.coerce.number().optional(),
   taxCode: z.string().optional(),
-  taxPct: z.coerce.number(),
-  taxAmt: z.coerce.number(),
-  lineTotal: z.number()
+  taxPct: z.coerce.number().optional(),
+  taxAmt: z.coerce.number().optional(),
+  lineTotal: z.coerce.number().optional()
 });
 
 export type StockLineItemType = z.infer<typeof StockLineItemSchema>;

@@ -86,3 +86,10 @@ itemRouter.route('/:itemId')
             .send('hello item ' + req.params.itemId + ' from user ' + req.params.userId);
     });
 **********************************************************************************************************
+
+Raw sql query parameters in TypeORM:
+
+Oracle: query('SELECT * FROM table WHERE name = :name', [ { val: 'something' } ])
+MySQL: query('SELECT * FROM table WHERE name = ?', [ 'something' ])
+MSSQL: query('SELECT * FROM table WHERE name = @0', [ 'something' ])
+Postgres: query('SELECT * FROM table WHERE name = $1', [ 'something' ])

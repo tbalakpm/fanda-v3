@@ -46,8 +46,23 @@ export class InventoryService {
     return savedInventory;
   }
 
-  static async updateQtyOnHand(queryRunner: QueryRunner, companyId: string, productId: string, gtn: string, qty: number): Promise<Inventory> {
+  static async updateQtyOnHandByGTN(queryRunner: QueryRunner, companyId: string, productId: string, gtn: string, qty: number): Promise<Inventory> {
     const updatedInventory = await queryRunner.manager.update(Inventory, { companyId, productId, gtn }, { qtyOnHand: () => `qtyOnHand + ${qty}` });
+    return updatedInventory.raw[0];
+  }
+
+  static async updateQtyOnHandByInvoice(
+    queryRunner: QueryRunner,
+    companyId: string,
+    invoiceId: string,
+    lineItemId: string,
+    qty: number
+  ): Promise<Inventory> {
+    const updatedInventory = await queryRunner.manager.update(
+      Inventory,
+      { companyId, invoiceId, lineItemId },
+      { qtyOnHand: () => `qtyOnHand + ${qty}` }
+    );
     return updatedInventory.raw[0];
   }
 }
