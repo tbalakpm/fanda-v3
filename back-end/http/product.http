@@ -1,9 +1,10 @@
 @baseUrl=http://localhost:4000
 @token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTkyZmM1ZS0wMDkzLTdjY2MtYTIwYS1kYzg0NGE1YmFkMWMiLCJpYXQiOjE3MzA4MTI0MjQsImV4cCI6NDg4NDQxMjQyNH0.kpqWbQXwp9GsKhB-Yd1eGPdq8NHw5mj_9xpRT5Ggmkw
-@companyId=0193ea18-9b4d-76ac-b03b-79702d1265a0
-@categoryId=0193ea18-9b5a-777b-85bf-35a6c63ca1be
-@unitId=0193ea18-9b5b-77ba-bcc9-ad330d1262b6
-@productId=01932b09-e357-7998-9a52-513d73aef4ba
+@companyId=0193ea0e-12b0-704e-b888-cf085466b612
+@unitId=0193ea0e-12ca-71ad-a5fd-ec3aa58be8d3
+@categoryId=0193ea0e-12c7-7620-8f5e-0aa5fdeb613a
+@productId=0193f233-fc38-7360-8bb1-b317340fee32
+@productId2=0193f233-fc38-7360-8bb1-b317340fee33
 
 ### Get all products
 GET {{baseUrl}}/api/companies/{{companyId}}/products
@@ -16,13 +17,13 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 
-### Create product
+### Create first product
 POST {{baseUrl}}/api/companies/{{companyId}}/products
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  # "productId": "{{productId}}",
+  "productId": "{{productId}}",
   "code": "MONITOR",
   "name": "Monitor",
   "description": "Monitors",
@@ -35,8 +36,31 @@ Authorization: Bearer {{token}}
   "taxCode": "G-C00001",
   "taxPct": 18,
   "taxPreference": "taxable",
-  "isPriceInclusiveTax": false,
+  "isPriceInclusiveTax": true,
   "gtnGeneration": "tag"
+}
+
+### Create second product
+POST {{baseUrl}}/api/companies/{{companyId}}/products
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "productId": "{{productId2}}",
+  "code": "CPU",
+  "name": "CPU",
+  "description": "Central processign units",
+  "productType": "goods",
+  "categoryId": "{{categoryId}}",
+  "baseUnitId": "{{unitId}}",
+  "buyingPrice": 25000,
+  "marginAmt": 5000,
+  "sellingPrice": 30000,
+  "taxCode": "G-C00002",
+  "taxPct": 18,
+  "taxPreference": "taxable",
+  "isPriceInclusiveTax": false,
+  "gtnGeneration": "batch"
 }
 
 ### Update product
@@ -47,16 +71,17 @@ Authorization: Bearer {{token}}
 {
   "productId": "{{productId}}",
   "code": "MONITORS",
-  "name": "Monitq",
+  "name": "Monits",
   "description": "Display monitors",
-  "type": "Good",
+  "type": "goods",
   "baseUnitId": "{{unitId}}",
-  "buyingPrice": 10000,
-  "marginAmount": 2500,
-  "sellingPrice": 12500,
+  "buyingPrice": 20000,
+  "marginPct": 0,
+  "marginAmt": 5000,
+  "sellingPrice": 25000,
   "taxCode": "G-M00001",
   "taxPct": 18,
-  "taxPreference": "Taxable",
+  "taxPreference": "taxable",
   "isPriceInclusiveTax": true
 }
 

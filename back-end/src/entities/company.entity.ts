@@ -6,7 +6,7 @@ import { Address } from './address.entity';
 import { Contact } from './contact.entity';
 import 'dotenv/config';
 
-console.log('Company.DB_TYPE:', process.env.DB_TYPE);
+// console.log('Company.DB_TYPE:', process.env.DB_TYPE);
 
 @Entity({ name: 'companies' })
 export class Company {

@@ -1,15 +1,14 @@
 import { Not } from 'typeorm';
 
-import { AppDataSource } from '../../data-source';
-import { FinancialYear } from './financial-year.entity';
-import { FinancialYearSchema } from './financial-year.schema';
-import { AuditUsers } from '../../entities/embedded/audit.entity';
 import { ApiResponse } from '../../responses/api-response';
 import { cache } from '../../helpers/cache.helper';
 import { ApiStatus } from '../../responses/api-status';
 import { parseError } from '../../helpers/error.helper';
-// import { cache, parseError } from "../../helpers";
-// import { ApiResponse, ApiStatus } from "../../responses";
+
+import { AppDataSource } from '../../data-source';
+import { FinancialYear } from './financial-year.entity';
+import { FinancialYearSchema } from './financial-year.schema';
+import { AuditUsers } from '../../entities/embedded/audit.entity';
 
 export class FinancialYearService {
   private static yearRepository = AppDataSource.getRepository(FinancialYear);
@@ -94,7 +93,7 @@ export class FinancialYearService {
     this.invalidateCache(companyId);
     return {
       success: true,
-      message: 'year created successfully',
+      message: 'Year created successfully',
       data: newyear,
       status: ApiStatus.CREATED
     };
@@ -132,7 +131,7 @@ export class FinancialYearService {
     this.invalidateCache(dbyear.companyId, yearId);
     return {
       success: true,
-      message: 'year updated successfully',
+      message: 'Year updated successfully',
       data: updatedyear,
       status: ApiStatus.OK
     };
@@ -143,7 +142,7 @@ export class FinancialYearService {
     if (!year) {
       return {
         success: false,
-        message: `year with id '${yearId}' not found`,
+        message: `Year with id '${yearId}' not found`,
         status: ApiStatus.NOT_FOUND
       };
     }
@@ -151,7 +150,7 @@ export class FinancialYearService {
     this.invalidateCache(year.companyId, yearId);
     return {
       success: true,
-      message: 'year deleted successfully',
+      message: 'Year deleted successfully',
       data: year,
       status: ApiStatus.OK
     };
