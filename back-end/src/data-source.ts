@@ -43,8 +43,18 @@ const dbConnection: {
 };
 
 if (DB_TYPE === 'sqlite' || DB_TYPE === 'better-sqlite3') {
-  dbConnection.type = 'better-sqlite3';
+  // dbConnection.type = 'better-sqlite3';
   dbConnection.database = `${DB_NAME}.db`;
+  switch (DB_TYPE) {
+    case 'sqlite':
+      dbConnection.type = 'sqlite';
+      break;
+    case 'better-sqlite3':
+      dbConnection.type = 'better-sqlite3';
+      break;
+    default:
+      dbConnection.type = 'better-sqlite3';
+  }
 } else {
   dbConnection.host = DB_HOST;
   dbConnection.port = Number(DB_PORT);
