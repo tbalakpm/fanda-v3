@@ -1,8 +1,8 @@
 @baseUrl=http://localhost:4000
 @token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTkyZmM1ZS0wMDkzLTdjY2MtYTIwYS1kYzg0NGE1YmFkMWMiLCJpYXQiOjE3MzA4MTI0MjQsImV4cCI6NDg4NDQxMjQyNH0.kpqWbQXwp9GsKhB-Yd1eGPdq8NHw5mj_9xpRT5Ggmkw
-@companyId=0193c5eb-c2d8-7118-a7b1-aa7767181dbd
-@categoryId=01932b09-e357-7998-9a52-513d73aef4bb
-@unitId=0192fc47-ac9b-7001-a290-788777a046a1
+@companyId=0193ea18-9b4d-76ac-b03b-79702d1265a0
+@categoryId=0193ea18-9b5a-777b-85bf-35a6c63ca1be
+@unitId=0193ea18-9b5b-77ba-bcc9-ad330d1262b6
 @productId=01932b09-e357-7998-9a52-513d73aef4ba
 
 ### Get all products
@@ -26,7 +26,7 @@ Authorization: Bearer {{token}}
   "code": "MONITOR",
   "name": "Monitor",
   "description": "Monitors",
-  "productType": "Goods",
+  "productType": "goods",
   "categoryId": "{{categoryId}}",
   "baseUnitId": "{{unitId}}",
   "buyingPrice": 20000,
@@ -34,9 +34,9 @@ Authorization: Bearer {{token}}
   "sellingPrice": 15000,
   "taxCode": "G-C00001",
   "taxPct": 18,
-  "taxPreference": "Taxable",
+  "taxPreference": "taxable",
   "isPriceInclusiveTax": false,
-  "gtnGeneration": "Tag"
+  "gtnGeneration": "tag"
 }
 
 ### Update product

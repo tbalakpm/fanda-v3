@@ -1,13 +1,13 @@
 export enum TaxPreferences {
-  NoTax = 'NoTax',
-  Taxable = 'Taxable',
-  Nontaxable = 'Nontaxable',
-  ZeroRated = 'ZeroRated',
-  Exempt = 'Exempt',
-  OutOfScope = 'OutOfScope',
-  ReverseCharge = 'ReverseCharge',
-  Withholding = 'Withholding',
-  NotApplicable = 'NotApplicable'
+  NoTax = 'notax',
+  Taxable = 'taxable',
+  Nontaxable = 'nontaxable',
+  ZeroRated = 'zerorated',
+  Exempt = 'exempt',
+  OutOfScope = 'outofscope',
+  ReverseCharge = 'reversecharge',
+  Withholding = 'withholding',
+  NotApplicable = 'notapplicable'
 }
 
 // No Tax, Taxable, Non-Taxable, Zero-Rated, Exempt, Out-of-Scope, Reverse Charge, Withholding

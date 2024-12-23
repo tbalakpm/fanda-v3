@@ -1,5 +1,5 @@
 export enum GtnGeneration {
-  Batch = 'Batch',
-  Tag = 'Tag',
-  Code = 'Code'
+  Batch = 'batch',
+  Tag = 'tag',
+  Code = 'code'
 }
