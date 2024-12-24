@@ -251,6 +251,8 @@ export class ProductService {
 
   static async invalidateCache(companyId: string, productId?: string): Promise<void> {
     await cache.del(`products_${companyId}`);
-    if (productId) await cache.del('products:' + productId);
+    if (productId) {
+      await cache.del('products:' + productId);
+    }
   }
 }

@@ -14,7 +14,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 ### Get stock invoice by id
-GET {{baseUrl}}/api/companies/{{companyId}}/years/{{yearId}}/stock-invoices/0193d058-a12c-7ccf-9886-16fd767d7a71
+GET {{baseUrl}}/api/companies/{{companyId}}/years/{{yearId}}/stock-invoices/0193f6e2-8c11-715f-8ea6-af501159be94
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -93,6 +93,6 @@ Authorization: Bearer {{token}}
 }
 
 ### Delete stock invoice
-DELETE {{baseUrl}}/api/companies/{{companyId}}/years/{{yearId}}/stock-invoices/0193f398-3d92-7479-aa90-a1caec9ad725
+DELETE {{baseUrl}}/api/companies/{{companyId}}/years/{{yearId}}/stock-invoices/0193f6e2-8c11-715f-8ea6-af501159be94
 Content-Type: application/json
 Authorization: Bearer {{token}}
