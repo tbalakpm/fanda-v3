@@ -19,6 +19,7 @@ import { consumerRoutes } from './modules/consumer/consumer.route';
 
 import { stockInvoiceRoutes } from './modules/invoices/stock-invoice/stock-invoice.route';
 import { purchaseRoutes } from './modules/invoices/purchase/purchase.route';
+import { rateLimiter } from './middleware/rate-limiter.middleware';
 
 const app = express();
 
@@ -57,6 +58,7 @@ app.use(
   })
 );
 app.use(loggerMiddleware);
+app.use(rateLimiter);
 
 // ############### routers - begin ###############
 const companyRouter = companyRoutes();
