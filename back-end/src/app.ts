@@ -18,6 +18,7 @@ import { customerRoutes } from './modules/customer/customer.route';
 import { consumerRoutes } from './modules/consumer/consumer.route';
 
 import { stockInvoiceRoutes } from './modules/invoices/stock-invoice/stock-invoice.route';
+import { purchaseRoutes } from './modules/invoices/purchase/purchase.route';
 
 const app = express();
 
@@ -78,6 +79,7 @@ companyRouter.use('/:companyId/customers', customerRoutes());
 companyRouter.use('/:companyId/consumers', consumerRoutes());
 // year routes
 yearRouter.use('/:yearId/stock-invoices', stockInvoiceRoutes());
+yearRouter.use('/:yearId/purchases', purchaseRoutes());
 
 // ############### routers - end ###############
 

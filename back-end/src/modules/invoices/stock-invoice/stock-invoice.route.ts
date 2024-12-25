@@ -8,7 +8,7 @@ export const stockInvoiceRoutes = () => {
 
   router
     .route('/')
-    .get(StockInvoiceController.getStockInvoices)
+    .get(StockInvoiceController.getAllStockInvoices)
     .post(authorization([UserRoles.Admin, UserRoles.Manager]), StockInvoiceController.createStockInvoice);
   router
     .route('/:invoiceId')

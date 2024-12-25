@@ -17,6 +17,8 @@ import { SerialNumber } from './modules/serial-number/serial-number.entity';
 import { StockInvoice } from './modules/invoices/stock-invoice/stock-invoice.entity';
 import { StockLineItem } from './modules/invoices/stock-invoice/stock-line-item.entity';
 import { ProductSerial } from './modules/product/product-serial.entity';
+import { Purchase } from './modules/invoices/purchase/purchase.entity';
+import { PurchaseLineItem } from './modules/invoices/purchase/purchase-line-item.entity';
 
 const {
   NODE_ENV = 'development',
@@ -27,8 +29,6 @@ const {
   DB_PASSWORD,
   DB_NAME = 'fanda_v3'
 } = process.env;
-
-// console.log('DB_TYPE:', DB_TYPE);
 
 const dbConnection: {
   type: 'postgres' | 'sqlite' | 'better-sqlite3' | 'mysql' | 'mariadb' | 'mssql';
@@ -104,7 +104,9 @@ export const AppDataSource = new DataSource({
     ProductSerial,
     SerialNumber,
     StockInvoice,
-    StockLineItem
+    StockLineItem,
+    Purchase,
+    PurchaseLineItem
   ],
   migrations: [__dirname + '/migrations/*.ts'],
   subscribers: [],

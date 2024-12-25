@@ -2,7 +2,7 @@ import { AppDataSource } from '../../../data-source';
 import { ApiResponse, ApiStatus } from '../../../responses';
 import { cache, parseError } from '../../../helpers';
 
-import { StockInvoice } from './stock-invoice.entity';
+import { Purchase } from './purchase.entity';
 import { Inventory } from '../../inventory/inventory.entity';
 import { GtnGeneration } from '../../product/gtn-generation.enum';
 import { InvoiceTypes } from '../invoice-type.enum';
@@ -12,49 +12,92 @@ import { InventoryService } from '../../inventory/inventory.service';
 import { ProductService } from '../../product/product.service';
 import { SerialNumberHelper } from '../../../helpers/serial-number.helper';
 import logger from '../../../logger';
-import { StockInvoiceSchema } from './stock-invoice.schema';
-import { StockLineItem } from './stock-line-item.entity';
+import { PurchaseSchema } from './purchase.schema';
+import { PurchaseLineItem } from './purchase-line-item.entity';
 
-class StockInvoiceService {
-  private readonly stockInvoiceRepository = AppDataSource.getRepository(StockInvoice);
+class PurchaseService {
+  private readonly purchaseRepository = AppDataSource.getRepository(Purchase);
 
-  async getAllStockInvoices(companyId: string, yearId: string): Promise<ApiResponse<StockInvoice[]>> {
-    const data = await cache.get<StockInvoice[]>(`stockInvoices_${companyId}_${yearId}`);
+  async getAllPurchases(companyId: string, yearId: string): Promise<ApiResponse<Purchase[]>> {
+    const data = await cache.get<Purchase[]>(`purchases_${companyId}_${yearId}`);
     if (data) {
-      return { success: true, message: 'Serving stock invoices from cache', data, status: ApiStatus.OK };
+      return { success: true, message: 'Serving purchases from cache', data, status: ApiStatus.OK };
     }
-    const invoices = await this.stockInvoiceRepository.find({
-      select: ['invoiceId', 'invoiceNumber', 'invoiceDate', 'totalQty', 'totalAmount', 'notes'],
+    const invoices = await this.purchaseRepository.find({
+      select: {
+        invoiceId: true,
+        invoiceNumber: true,
+        invoiceDate: true,
+        refDate: true,
+        refNumber: true,
+        supplierId: true,
+        supplier: {
+          supplierId: true,
+          code: true,
+          name: true
+        },
+        totalQty: true,
+        subtotal: true,
+        discountPct: true,
+        discountAmt: true,
+        totalTaxAmt: true,
+        additionalCharges: true,
+        netAmount: true,
+        notes: true,
+        lineItems: false
+      },
+      relations: ['supplier'],
       where: { companyId, yearId },
       order: { companyId: 'ASC', yearId: 'ASC', invoiceId: 'ASC' }
     });
-    await cache.set(`stockInvoices_${companyId}_${yearId}`, invoices);
-    return { success: true, message: 'Serving stock invoices from database', data: invoices, status: ApiStatus.OK };
+    await cache.set(`purchases_${companyId}_${yearId}`, invoices);
+    return { success: true, message: 'Serving purchases from database', data: invoices, status: ApiStatus.OK };
   }
 
-  async getStockInvoiceById(companyId: string, yearId: string, invoiceId: string): Promise<ApiResponse<StockInvoice>> {
-    const data = await cache.get<StockInvoice>(`stockInvoices_${companyId}_${yearId}:${invoiceId}`);
+  async getPurchaseById(companyId: string, yearId: string, invoiceId: string): Promise<ApiResponse<Purchase>> {
+    const data = await cache.get<Purchase>(`purchases_${companyId}_${yearId}:${invoiceId}`);
     if (data) {
-      return { success: true, message: 'Serving a stock invoice from cache', data, status: ApiStatus.OK };
+      return { success: true, message: 'Serving a purchase from cache', data, status: ApiStatus.OK };
     }
-    const invoice = await this.stockInvoiceRepository.findOne({
-      select: ['invoiceId', 'invoiceNumber', 'invoiceDate', 'totalQty', 'totalAmount', 'notes'],
-      // where: { companyId, yearId, invoiceId }
+    const invoice = await this.purchaseRepository.findOne({
+      select: {
+        invoiceId: true,
+        invoiceNumber: true,
+        invoiceDate: true,
+        refDate: true,
+        refNumber: true,
+        supplierId: true,
+        supplier: {
+          supplierId: true,
+          code: true,
+          name: true
+        },
+        totalQty: true,
+        subtotal: true,
+        discountPct: true,
+        discountAmt: true,
+        totalTaxAmt: true,
+        additionalCharges: true,
+        netAmount: true,
+        notes: true,
+        lineItems: false
+      },
+      relations: ['supplier'],
+      relationLoadStrategy: 'query',
       where: { invoiceId }
     });
-    // const invoice = await this.stockInvoiceRepository.findOne({ where: { invoiceId }, relationLoadStrategy: 'query', relations: ['lineItems'] });
     if (!invoice) {
-      return { success: false, message: `Stock Invoice with id '${invoiceId}' not found`, status: ApiStatus.NOT_FOUND };
+      return { success: false, message: `Purchase with id '${invoiceId}' not found`, status: ApiStatus.NOT_FOUND };
     }
-    const lineItems = await AppDataSource.getRepository(StockLineItem).findBy({ invoiceId });
+    const lineItems = await AppDataSource.getRepository(PurchaseLineItem).findBy({ invoiceId });
     invoice.lineItems = lineItems;
 
-    await cache.set(`stockInvoices_${companyId}_${yearId}:${invoiceId}`, invoice);
-    return { success: true, message: 'Serving a stock invoice from database', data: invoice, status: ApiStatus.OK };
+    await cache.set(`purchases_${companyId}_${yearId}:${invoiceId}`, invoice);
+    return { success: true, message: 'Serving a purchase from database', data: invoice, status: ApiStatus.OK };
   }
 
-  async createStockInvoice(companyId: string, yearId: string, invoice: StockInvoice, userId: string): Promise<ApiResponse<StockInvoice>> {
-    const parsedResult = StockInvoiceSchema.safeParse(invoice);
+  async createPurchase(companyId: string, yearId: string, invoice: Purchase, userId: string): Promise<ApiResponse<Purchase>> {
+    const parsedResult = PurchaseSchema.safeParse(invoice);
     if (!parsedResult.success) {
       return {
         success: false,
@@ -63,7 +106,7 @@ class StockInvoiceService {
       };
     }
 
-    const parsedInvoice = parsedResult.data as StockInvoice;
+    const parsedInvoice = parsedResult.data as Purchase;
     parsedInvoice.companyId = companyId;
     parsedInvoice.yearId = yearId;
     parsedInvoice.user = { created: userId, updated: userId };
@@ -73,12 +116,13 @@ class StockInvoiceService {
     await queryRunner.startTransaction();
     try {
       // create invoice
-      const createdInvoice = queryRunner.manager.create(StockInvoice, parsedInvoice);
-      createdInvoice.invoiceNumber = await SerialNumberHelper.getNextSerial(queryRunner, yearId, InvoiceTypes.Stock);
-      // console.log('INVOICE', createdInvoice);
+      const createdInvoice = queryRunner.manager.create(Purchase, parsedInvoice);
+      createdInvoice.invoiceNumber = await SerialNumberHelper.getNextSerial(queryRunner, yearId, InvoiceTypes.Purchase);
 
       let totalQty = 0;
-      let totalAmount = 0;
+      let subtotal = 0;
+      let totalDiscountAmt = 0;
+      let totalTaxAmt = 0;
       const productSerials: ProductSerialDto[] = [];
 
       for (const lineItem of createdInvoice.lineItems || []) {
@@ -107,8 +151,12 @@ class StockInvoiceService {
           lineItem.marginAmt = lineItem.marginAmt || 0;
         }
         lineItem.sellingPrice = lineItem.rate + lineItem.marginAmt;
+
+        // Footer totals
         totalQty += lineItem.qty;
-        totalAmount += lineItem.lineTotal;
+        subtotal += lineItem.lineTotal;
+        totalDiscountAmt += lineItem.discountAmt;
+        totalTaxAmt += lineItem.taxAmt;
         // calculations - end
 
         const productSerial: ProductSerialDto = {};
@@ -152,7 +200,20 @@ class StockInvoiceService {
       }
 
       createdInvoice.totalQty = totalQty;
-      createdInvoice.totalAmount = totalAmount;
+      createdInvoice.subtotal = subtotal;
+      // Total discount amount
+      if (totalDiscountAmt > 0) {
+        createdInvoice.discountAmt = totalDiscountAmt;
+      } else {
+        createdInvoice.discountPct = createdInvoice.discountPct || 0;
+        if (createdInvoice.discountPct > 0) {
+          createdInvoice.discountAmt = Number(Math.round((subtotal * (createdInvoice.discountPct / 100.0) * 100.0) / 100.0).toFixed(2));
+        } else {
+          createdInvoice.discountAmt = invoice.discountAmt || 0;
+        }
+      }
+      createdInvoice.totalTaxAmt = totalTaxAmt;
+      createdInvoice.netAmount = subtotal - createdInvoice.discountAmt - totalTaxAmt + Number(invoice.additionalCharges || 0);
       const savedInvoice = await queryRunner.manager.save(createdInvoice);
 
       let index = 0;
@@ -163,7 +224,7 @@ class StockInvoiceService {
           companyId: companyId,
           invoiceId: savedInvoice.invoiceId,
           lineItemId: lineItem.lineItemId,
-          invoiceType: InvoiceTypes.Stock,
+          invoiceType: InvoiceTypes.Purchase,
           productId: lineItem.productId,
           unitId: lineItem.unitId,
           description: lineItem.description,
@@ -196,7 +257,7 @@ class StockInvoiceService {
 
       await queryRunner.commitTransaction();
       await this.invalidateCache(companyId, yearId);
-      return { success: true, message: 'Stock Invoice created successfully', data: savedInvoice, status: ApiStatus.CREATED };
+      return { success: true, message: 'Purchase created successfully', data: savedInvoice, status: ApiStatus.CREATED };
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       await queryRunner.rollbackTransaction();
@@ -204,22 +265,22 @@ class StockInvoiceService {
         // console.log(error);
         logger.error(error.message);
       }
-      return { success: false, message: 'Failed to create stock invoice', status: ApiStatus.INTERNAL_SERVER_ERROR };
+      return { success: false, message: 'Failed to create purchase', status: ApiStatus.INTERNAL_SERVER_ERROR };
     } finally {
       await queryRunner.release();
     }
   }
 
-  async deleteStockInvoice(companyId: string, yearId: string, invoiceId: string): Promise<ApiResponse<StockInvoice>> {
+  async deletePurchase(companyId: string, yearId: string, invoiceId: string): Promise<ApiResponse<Purchase>> {
     const queryRunner = AppDataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      const invoice = await queryRunner.manager.findOne(StockInvoice, { where: { invoiceId } });
+      const invoice = await queryRunner.manager.findOne(Purchase, { where: { invoiceId } });
       if (!invoice) {
-        return { success: false, message: `Stock Invoice with id '${invoiceId}' not found`, status: ApiStatus.NOT_FOUND };
+        return { success: false, message: `Purchase with id '${invoiceId}' not found`, status: ApiStatus.NOT_FOUND };
       }
-      const lineItems = await queryRunner.manager.findBy(StockLineItem, { invoiceId });
+      const lineItems = await queryRunner.manager.findBy(PurchaseLineItem, { invoiceId });
       invoice.lineItems = lineItems;
 
       invoice.lineItems?.forEach(async (lineItem) => {
@@ -231,28 +292,28 @@ class StockInvoiceService {
         }
       });
       //await queryRunner.manager.remove(invoice);
-      await queryRunner.manager.delete(StockInvoice, { invoiceId });
+      await queryRunner.manager.delete(Purchase, { invoiceId });
 
       await queryRunner.commitTransaction();
       await this.invalidateCache(companyId, yearId, invoiceId);
-      return { success: true, message: 'Stock invoice deleted successfully', data: invoice, status: ApiStatus.OK };
+      return { success: true, message: 'Purchase deleted successfully', data: invoice, status: ApiStatus.OK };
     } catch (error) {
       await queryRunner.rollbackTransaction();
       if (process.env.NODE_ENV === 'development') {
         console.log(error);
       }
-      return { success: false, message: 'Failed to delete stock invoice', status: ApiStatus.INTERNAL_SERVER_ERROR };
+      return { success: false, message: 'Failed to delete purchase', status: ApiStatus.INTERNAL_SERVER_ERROR };
     } finally {
       await queryRunner.release();
     }
   }
 
   async invalidateCache(companyId: string, yearId: string, invoiceId?: string): Promise<void> {
-    await cache.del(`stockInvoices_${companyId}_${yearId}`);
+    await cache.del(`purchases_${companyId}_${yearId}`);
     if (invoiceId) {
-      await cache.del(`stockInvoices_${companyId}_${yearId}:${invoiceId}`);
+      await cache.del(`purchases_${companyId}_${yearId}:${invoiceId}`);
     }
   }
 }
 
-export const StockInvoiceServiceInstance = new StockInvoiceService();
+export const PurchaseServiceInstance = new PurchaseService();

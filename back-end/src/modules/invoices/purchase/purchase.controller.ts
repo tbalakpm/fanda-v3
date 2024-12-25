@@ -1,29 +1,29 @@
 import { NextFunction, Request, Response } from 'express';
 
-import { StockInvoiceServiceInstance as StockInvoiceService } from './stock-invoice.service';
+import { PurchaseServiceInstance as PurchaseService } from './purchase.service';
 import { User } from '../../../entities/user.entity';
 import { ApiError } from '../../../responses/api-error';
 import { ApiResponse, ApiStatus } from '../../../responses';
-import { StockInvoice } from './stock-invoice.entity';
+import { Purchase } from './purchase.entity';
 
-export class StockInvoiceController {
-  static async getAllStockInvoices(req: Request, res: Response, next: NextFunction) {
+export class PurchaseController {
+  static async getAllPurchases(req: Request, res: Response, next: NextFunction) {
     try {
       const { companyId, yearId } = req.params;
       // console.log('companyId', companyId, 'yearId', yearId);
-      const result = await StockInvoiceService.getAllStockInvoices(companyId, yearId);
+      const result = await PurchaseService.getAllPurchases(companyId, yearId);
       res.status(result.status).json(result);
     } catch (error) {
       return next(error);
     }
   }
 
-  static async getStockInvoiceById(req: Request, res: Response, next: NextFunction) {
+  static async getPurchaseById(req: Request, res: Response, next: NextFunction) {
     try {
       const { companyId, yearId, invoiceId } = req.params;
       // console.log('companyId', companyId, 'yearId', yearId);
 
-      const result = await StockInvoiceService.getStockInvoiceById(companyId, yearId, invoiceId);
+      const result = await PurchaseService.getPurchaseById(companyId, yearId, invoiceId);
       if (!result.success) {
         return next(new ApiError(result.message, result.status));
       }
@@ -33,12 +33,12 @@ export class StockInvoiceController {
     }
   }
 
-  static async createStockInvoice(req: Request, res: Response, next: NextFunction) {
+  static async createPurchase(req: Request, res: Response, next: NextFunction) {
     try {
       const { companyId, yearId } = req.params;
       // console.log('companyId', companyId, 'yearId', yearId);
 
-      const result = await StockInvoiceService.createStockInvoice(companyId, yearId, req.body, (req.currentUser as User).userId);
+      const result = await PurchaseService.createPurchase(companyId, yearId, req.body, (req.currentUser as User).userId);
       if (!result.success) {
         return next(new ApiError(result.message, result.status));
       }
@@ -48,7 +48,7 @@ export class StockInvoiceController {
     }
   }
 
-  static async updateStockInvoice(req: Request, res: Response, next: NextFunction) {
+  static async updatePurchase(req: Request, res: Response, next: NextFunction) {
     try {
       // const { companyId, yearId } = req.params;
       // const result = await StockInvoiceService.updateStockInvoice(companyId, yearId, req.body, (req.currentUser as User).userId);
@@ -56,7 +56,7 @@ export class StockInvoiceController {
       //   return next(new ApiError(result.message, result.status));
       // }
       // res.status(result.status).json(result);
-      const result = new ApiResponse<StockInvoice>();
+      const result = new ApiResponse<Purchase>();
       result.status = ApiStatus.NOT_IMPLEMENTED;
       res.status(result.status).json({ success: true, message: 'Not implemented yet' });
     } catch (error) {
@@ -64,10 +64,10 @@ export class StockInvoiceController {
     }
   }
 
-  static async deleteStockInvoice(req: Request, res: Response, next: NextFunction) {
+  static async deletePurchase(req: Request, res: Response, next: NextFunction) {
     try {
       const { companyId, yearId, invoiceId } = req.params;
-      const result = await StockInvoiceService.deleteStockInvoice(companyId, yearId, invoiceId);
+      const result = await PurchaseService.deletePurchase(companyId, yearId, invoiceId);
       if (!result.success) {
         return next(new ApiError(result.message, 400));
       }
