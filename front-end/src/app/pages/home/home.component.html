@@ -115,22 +115,22 @@
         <nz-select
           *ngIf="selectedOrganization.years.length > 0"
           class="w-[250px]"
-          [(ngModel)]="selectedYear._id"
+          [(ngModel)]="selectedYear.yearId"
           (ngModelChange)="switchOrganization($event)"
         >
           <nz-option
-            [nzValue]="year._id"
+            [nzValue]="year.yearId"
             [nzLabel]="year.code"
             *ngFor="let year of selectedOrganization.years"
           ></nz-option>
         </nz-select>
         <nz-select
           class="w-[250px]"
-          [(ngModel)]="selectedOrganization._id"
+          [(ngModel)]="selectedOrganization.companyId"
           (ngModelChange)="switchOrganization($event)"
         >
           <nz-option
-            [nzValue]="org._id"
+            [nzValue]="org.companyId"
             [nzLabel]="org.name"
             *ngFor="let org of organizations"
           ></nz-option>

@@ -63,7 +63,7 @@ export class OrganizationAddComponent {
     public router: Router
   ) {
     this.organizationForm = this.fb.group({
-      companyId: [''],
+      companyId: [null],
       code: ['', [Validators.required]],
       name: ['', [Validators.required]],
       description: [''],
@@ -78,13 +78,13 @@ export class OrganizationAddComponent {
     //   password: 'F2Gn9LxI5JU0eJZ@123',
     // });
     this.orgAddressForm = this.fb.group({
-      attention: [''],
       line1: [''],
       line2: [''],
       city: [''],
       state: [''],
       postalCode: [''],
       // not available
+      attention: [''],
       phone: [''],
       fax: [''],
       email: [''],

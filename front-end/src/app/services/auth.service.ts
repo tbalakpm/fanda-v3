@@ -85,6 +85,7 @@ export class AuthService {
   }
 
   public setOrganization(organization: Organization): void {
+    console.log(organization);
     sessionStorage.setItem('organization', JSON.stringify(organization));
     this.organization.next(organization);
     console.log(organization.years[organization.years.length - 1]);

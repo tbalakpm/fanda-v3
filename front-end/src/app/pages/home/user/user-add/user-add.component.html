@@ -54,13 +54,13 @@
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label for="mobile">Mobile</nz-form-label>
+    <nz-form-label for="phone">Phone</nz-form-label>
     <nz-form-control>
       <input
-        id="mobile"
+        id="phone"
         nz-input
-        formControlName="mobile"
-        placeholder="Input your mobile number"
+        formControlName="phone"
+        placeholder="Input your phone number"
       />
     </nz-form-control>
   </nz-form-item>
@@ -69,17 +69,14 @@
     <nz-form-label for="role" nzRequired>Role</nz-form-label>
     <nz-form-control [nzErrorTip]="getErrorMessage('roles')">
       <nz-select
-        [nzMaxTagCount]="3"
-        [nzMaxTagPlaceholder]="tagPlaceHolder"
-        nzMode="multiple"
         id="role"
-        formControlName="roles"
+        formControlName="role"
         nzPlaceHolder="Select user role"
       >
-        <nz-option nzLabel="Administrator" nzValue="ADMIN"></nz-option>
-        <nz-option nzLabel="Manager" nzValue="MANAGER"></nz-option>
-        <nz-option nzLabel="User" nzValue="USER"></nz-option>
-        <nz-option nzLabel="Sales Person" nzValue="SALESPERSON"></nz-option>
+        <nz-option nzLabel="Administrator" nzValue="admin"></nz-option>
+        <nz-option nzLabel="Manager" nzValue="manager"></nz-option>
+        <nz-option nzLabel="User" nzValue="user"></nz-option>
+        <nz-option nzLabel="Sales Person" nzValue="salesperson"></nz-option>
       </nz-select>
     </nz-form-control>
   </nz-form-item>

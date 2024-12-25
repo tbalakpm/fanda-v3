@@ -3,6 +3,7 @@ export interface Response<T> {
   message: string;
   data: T;
   status: number;
+  total: number;
 }
 
 export interface LoginResponse<T> extends Response<T> {

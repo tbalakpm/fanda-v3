@@ -64,32 +64,31 @@ export class PartyAddComponent {
   ) {
     this.isCustomer = this.router.url.includes('customer');
     this.partyForm = this.fb.group({
-      _id: [null],
-      code: [null, [Validators.required]],
-      name: [null, [Validators.required]],
-      gstTreatment: [null, [Validators.required]],
-      gstin: [null],
+      code: ['', [Validators.required]],
+      name: ['', [Validators.required]],
+      gstTreatment: ['', [Validators.required]],
+      gstin: [''],
     });
+    if (this.isCustomer)
+      this.partyForm.addControl('customerId', this.fb.control(null));
+    else this.partyForm.addControl('supplierId', this.fb.control(null));
     // this.orgUserForm = this.fb.group({
-    //   email: [null, [Validators.required, Validators.email]],
+    //   email: ['', [Validators.required, Validators.email]],
     //   password: 'F2Gn9LxI5JU0eJZ@123',
     // });
     this.partyAddressForm = this.fb.group({
-      _id: [null],
-      line1: [null],
-      line2: [null],
-      area: [null],
-      city: [null],
-      state: [null],
-      postalCode: [null],
+      line1: [''],
+      line2: [''],
+      city: [''],
+      state: [''],
+      postalCode: [''],
     });
     this.partyContactForm = this.fb.group({
-      _id: [null],
-      salutation: [null],
-      firstName: [null],
-      lastName: [null],
-      mobile: [null, [Validators.minLength(10)]],
-      email: [null, [Validators.email]],
+      salutation: [''],
+      firstName: [''],
+      lastName: [''],
+      mobile: ['', [Validators.minLength(10)]],
+      email: ['', [Validators.email]],
     });
 
     this.id = this.route.snapshot.params['id'];

@@ -1,5 +1,5 @@
 export interface Organization {
-  _id?: string;
+  companyId?: string;
   isActive: boolean;
   code: string;
   name: string;
@@ -17,12 +17,13 @@ export interface Organization {
 }
 
 export interface OrgYear {
-  _id?: string;
+  yearId?: string;
   code: string;
   beginDate: Date;
   endDate: Date;
+  companyId: string;
   isActive: boolean;
-  sequences?: OrgYearSequence[];
+  // sequences?: OrgYearSequence[];
 }
 
 export interface OrgYearSequence {

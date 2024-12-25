@@ -55,13 +55,13 @@ abstract class GenericService<T> {
   constructor(httpClient: HttpClient, module: string) {
     this.auth.getOrganization().subscribe({
       next: (value) => {
-        if (value?._id) this.orgId = value._id;
+        if (value?.companyId) this.orgId = value.companyId;
       },
     });
 
     this.auth.getYear().subscribe({
       next: (value) => {
-        if (value?._id) this.yearId = value._id;
+        if (value?.yearId) this.yearId = value.yearId;
       },
     });
 
@@ -73,7 +73,7 @@ abstract class GenericService<T> {
     return `/${this.module}`;
   }
   protected get orgApiUrl() {
-    return `/orgs/${this.orgId}`;
+    return `/companies/${this.orgId}`;
   }
   protected get yearApiUrl() {
     return `/years/${this.yearId}`;
@@ -195,7 +195,7 @@ export class SupplierService extends GenericService<Party> {
 @Injectable({ providedIn: 'root' })
 export class InwardInvoiceService extends GenericService<InwardInvoice> {
   constructor(private http: HttpClient) {
-    super(http, 'inward-invoices');
+    super(http, 'purchases');
     this.setApiUrl(this.orgApiUrl + this.yearApiUrl + this.moduleUrl);
   }
 }
@@ -218,6 +218,14 @@ export class StockService extends GenericService<Stock> {
 
 @Injectable({ providedIn: 'root' })
 export class ConsumerService extends GenericService<Consumer> {
+  constructor(private http: HttpClient) {
+    super(http, 'consumers');
+    this.setApiUrl(this.orgApiUrl + this.moduleUrl);
+  }
+}
+
+@Injectable({ providedIn: 'root' })
+export class YearService extends GenericService<Consumer> {
   constructor(private http: HttpClient) {
     super(http, 'consumers');
     this.setApiUrl(this.orgApiUrl + this.moduleUrl);

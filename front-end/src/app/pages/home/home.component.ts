@@ -238,12 +238,12 @@ export class HomeComponent implements OnInit {
     });
     this.auth.getOrganization().subscribe({
       next: (value) => {
-        if (value?._id) this.selectedOrganization = value;
+        if (value?.companyId) this.selectedOrganization = value;
       },
     });
     this.auth.getYear().subscribe({
       next: (value) => {
-        if (value?._id) this.selectedYear = value;
+        if (value?.yearId) this.selectedYear = value;
       },
     });
     this.getOrganization();
@@ -304,7 +304,7 @@ export class HomeComponent implements OnInit {
   }
 
   switchOrganization(value: any): void {
-    const organization = this.organizations.find((x) => x._id === value);
+    const organization = this.organizations.find((x) => x.companyId === value);
     sessionStorage.setItem('organization', JSON.stringify(organization));
     this.auth.setOrganization(organization!);
     window.location.reload();
@@ -312,7 +312,7 @@ export class HomeComponent implements OnInit {
 
   switchYear(value: any): void {
     const selectedOrganizationYear = this.selectedOrganization.years.find(
-      (x) => x._id === value
+      (x) => x.companyId === value
     );
     this.auth.setYear(selectedOrganizationYear!);
     window.location.reload();

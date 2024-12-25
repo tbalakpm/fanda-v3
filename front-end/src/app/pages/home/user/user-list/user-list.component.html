@@ -1,6 +1,7 @@
 <page-header title="Users" [breadcrumbs]="['People', 'Users']"></page-header>
 
 <user-add [id]="editId" (formSubmit)="fetchUsers()"></user-add>
+
 <nz-table
   nz-table
   class="mt-4"
@@ -10,10 +11,7 @@
   nzSize="middle"
   [nzFrontPagination]="false"
   [nzTotal]="total"
-  [nzPageIndex]="pageIndex"
-  [nzPageSize]="pageSize"
   nzShowSizeChanger
-  (nzQueryParams)="onQueryParamsChange($event)"
 >
   <thead>
     <tr>
@@ -30,17 +28,15 @@
     <tr *ngFor="let user of userTable.data">
       <td>{{ user.username }}</td>
       <td>{{ user.firstName }} {{ user.lastName }}</td>
-      <td>{{ user.mobile }}</td>
+      <td>{{ user.phone }}</td>
       <td>{{ user.email }}</td>
       <td>
-        <nz-tag *ngIf="user.roles.includes('ADMIN')" nzColor="magenta"
+        <nz-tag *ngIf="user.role == 'admin'" nzColor="magenta"
           >Administrator</nz-tag
         >
-        <nz-tag *ngIf="user.roles.includes('USER')" nzColor="blue">User</nz-tag>
-        <nz-tag *ngIf="user.roles.includes('MANAGER')" nzColor="green"
-          >Manager</nz-tag
-        >
-        <nz-tag *ngIf="user.roles.includes('SALESPERSON')" nzColor="cyan"
+        <nz-tag *ngIf="user.role == 'user'" nzColor="blue">User</nz-tag>
+        <nz-tag *ngIf="user.role == 'manager'" nzColor="green">Manager</nz-tag>
+        <nz-tag *ngIf="user.role == 'salesperson'" nzColor="cyan"
           >Sales Person</nz-tag
         >
       </td>
@@ -50,13 +46,13 @@
       </td>
       <td>
         <div class="space-x-2">
-          <button nz-tooltip="Edit" (click)="editId = user._id">
+          <button nz-tooltip="Edit" (click)="editId = user.userId">
             <i nz-icon nzType="edit"></i>
           </button>
           <button
             nz-tooltip="Delete"
             nz-popconfirm="Are you sure to delete?"
-            (nzOnConfirm)="deleteUser(user._id)"
+            (nzOnConfirm)="deleteUser(user.userId)"
           >
             <i nz-icon nzType="delete"></i>
           </button>
@@ -64,7 +60,7 @@
             nz-tooltip="Activate/Deactivate"
             nzSize="small"
             [ngModel]="user.isActive"
-            (ngModelChange)="toggleActive(user._id!, $event)"
+            (ngModelChange)="toggleActive(user.userId!, $event)"
           ></nz-switch>
         </div>
       </td>

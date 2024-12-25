@@ -20,6 +20,7 @@ import { InfoDrawerComponent } from '../../../../components/info-drawer/info-dra
 import { PageHeaderComponent } from '../../../../components/page-header/page-header.component';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { FormsModule } from '@angular/forms';
+import { orgColumns } from './org-list';
 
 @Component({
   selector: 'organization-list',
@@ -47,24 +48,32 @@ import { FormsModule } from '@angular/forms';
 export class OrganizationListComponent implements OnInit {
   isInfoDrawerVisible = false;
 
-  organizations: Organization[] = [];
+  private _organizations: Organization[] = [];
+  searchedOrg: Organization[] = [];
   selectedInfoOrganization: Organization = {} as Organization;
 
   selectedOrganization: Organization = {} as Organization;
 
   total: number;
-  pageIndex = 1;
-  pageSize = 10;
-  sort = 'code';
-  order = 'asc';
-  _searchValue = '';
+  orgColumns = orgColumns;
 
-  get searchValue() {
-    return this._searchValue;
+  get organizations() {
+    return this._organizations;
   }
-  set searchValue(value: string) {
-    this._searchValue = value;
-    this.fetchOrganizations();
+  set organizations(value: Organization[]) {
+    this._organizations = value;
+    this.searchedData = '';
+  }
+
+  set searchedData(value: string) {
+    this.searchedOrg = [
+      ...this.organizations.filter(
+        (org) =>
+          org.name.toLowerCase().includes(value.toLowerCase()) ||
+          org.code.toLowerCase().includes(value.toLowerCase()) ||
+          org.description?.toLowerCase().includes(value.toLowerCase())
+      ),
+    ];
   }
 
   constructor(
@@ -77,45 +86,21 @@ export class OrganizationListComponent implements OnInit {
     this._authService.getOrganization().subscribe((org) => {
       this.selectedOrganization = org;
     });
+    this.fetchOrganizations();
   }
 
   fetchOrganizations() {
-    this._orgService
-      .getPaged({
-        page: this.pageIndex,
-        limit: this.pageSize,
-        value: this.searchValue,
-        sort: this.sort,
-        order: this.order,
-      })
-      .subscribe({
-        next: (orgs) => {
-          this.total = orgs.total;
-          this.organizations = orgs.items;
-        },
-      });
-  }
-
-  onQueryParamsChange(qp: NzTableQueryParams) {
-    this.pageIndex = qp.pageIndex;
-    this.pageSize = qp.pageSize;
-    for (let i in qp.sort) {
-      const sort = qp.sort[i];
-      if (sort.value) {
-        this.sort = sort.key;
-        this.order = sort.value === 'ascend' ? 'asc' : 'desc';
-        break;
-      } else {
-        this.sort = 'code';
-        this.order = 'asc';
-      }
-    }
-    this.fetchOrganizations();
+    this._orgService.getAll().subscribe({
+      next: (orgs) => {
+        this.total = orgs.total;
+        this.organizations = [...orgs.data];
+      },
+    });
   }
 
   openInfoDrawer(id: string) {
     this.selectedInfoOrganization = this.organizations.find(
-      (org) => org._id === id
+      (org) => org.companyId === id
     )!;
     this.isInfoDrawerVisible = true;
   }
@@ -123,7 +108,9 @@ export class OrganizationListComponent implements OnInit {
   deleteOrganization(id: string) {
     this._orgService.delete(id).subscribe({
       next: () => {
-        this.organizations = this.organizations.filter((org) => org._id !== id);
+        this.organizations = this.organizations.filter(
+          (org) => org.companyId !== id
+        );
         this._authService.isOrgChanged.emit();
       },
     });
@@ -132,12 +119,12 @@ export class OrganizationListComponent implements OnInit {
   toggleActive(id: string, active: boolean) {
     if (active)
       this._orgService.activate(id).subscribe(() => {
-        this.organizations.find((o) => o._id === id)!.isActive = true;
+        this.organizations.find((o) => o.companyId === id)!.isActive = true;
         this._authService.isOrgChanged.emit();
       });
     else
       this._orgService.deactivate(id).subscribe(() => {
-        this.organizations.find((o) => o._id === id)!.isActive = false;
+        this.organizations.find((o) => o.companyId === id)!.isActive = false;
         this._authService.isOrgChanged.emit();
       });
   }
