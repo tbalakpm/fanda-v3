@@ -1,0 +1,121 @@
+:root {
+  --bg: hsl(221, 37%, 10%);
+  --button-text: white;
+}
+
+.glassy-button {
+  --_padding: 1rem 1.5rem;
+  --_border-radius: 1rem;
+  --_transition-speed: 200ms;
+  --_hover-opacity: 0.4;
+  --_pressed-opacity: 0.15;
+  --_hover-blurriness: 5px;
+  --_pressed-blurriness: 10px;
+  --_frostiness: 0.3;
+  --_hover-offset: 0.5rem;
+  --_pressed-offset: 0.25rem;
+  --_motion-factor: 0.2; /* 0 -> 1 */
+  --_surface: rgb(8 98 176);
+
+  outline: 0;
+  cursor: pointer;
+  font: inherit;
+  color: var(--button-text);
+  font-weight: 600;
+  padding: 0;
+  border: 0;
+  border-radius: var(--_border-radius);
+  background-color: transparent;
+  position: relative;
+  transition: color var(--_transition-speed);
+
+  span {
+    display: block;
+    overflow: hidden;
+    padding: var(--_padding);
+    border-radius: inherit;
+    background-color: hsl(0 0% 100% / 0);
+    backdrop-filter: blur(0px);
+    transition: background-color var(--_transition-speed),
+      backdrop-filter var(--_transition-speed),
+      translate var(--_transition-speed);
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background-image: url("data:image/svg+xml, %3C!-- svg: first layer --%3E%3Csvg viewBox='0 0 171 171' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='3.74' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0;
+      transition: opacity var(--_transition-speed);
+    }
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    border-radius: inherit;
+    background-color: var(--_surface);
+    transition: scale var(--_transition-speed),
+      translate var(--_transition-speed);
+    animation: exit forwards var(--_transition-speed);
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: black;
+    span {
+      outline: 1px solid hsl(0 0% 100% / 0.7);
+      background-color: hsl(0 0% 100% / var(--_hover-opacity));
+      backdrop-filter: blur(var(--_hover-blurriness));
+      translate: 0 calc(var(--_hover-offset) * -1);
+
+      &::before {
+        opacity: var(--_frostiness);
+      }
+    }
+    &::after {
+      scale: 0.9;
+      translate: 0 0.125rem;
+      animation: enter forwards var(--_transition-speed);
+    }
+  }
+
+  &:active {
+    span {
+      backdrop-filter: blur(var(--_pressed-blurriness));
+      background-color: hsl(0 0% 100% / var(--_pressed-opacity));
+      translate: 0 calc(var(--_pressed-offset) * -1);
+    }
+    &::after {
+      scale: 0.875;
+      translate: 0 0.25rem;
+    }
+  }
+}
+
+@keyframes enter {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(
+      calc(var(--_x-motion) * var(--_motion-factor) * -1),
+      calc(var(--_y-motion) * var(--_motion-factor) * -1)
+    );
+  }
+}
+
+@keyframes exit {
+  from {
+    transform: translate(
+      calc(var(--_x-motion) * var(--_motion-factor) * -1),
+      calc(var(--_y-motion) * var(--_motion-factor) * -1)
+    );
+  }
+  to {
+    transform: translate(0, 0);
+  }
+}

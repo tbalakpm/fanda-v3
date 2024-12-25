@@ -1,0 +1,76 @@
+<page-header
+  [title]="isCustomer ? 'Customers' : 'Suppliers'"
+  [breadcrumbs]="isCustomer ? ['People', 'Customers'] : ['People', 'Suppliers']"
+  [extra]="{
+    route: 'add',
+    text: 'Add ' + (isCustomer ? 'Customer' : 'Supplier')
+  }"
+  [showSearch]="true"
+  (onSearch)="searchValue = $event"
+></page-header>
+
+<nz-table
+  #editRowTable
+  nzSize="middle"
+  [nzData]="parties"
+  [nzLoading]="_loaderService.isLoadingActive() | async"
+  nzSize="middle"
+  [nzFrontPagination]="false"
+  [nzTotal]="total"
+  [nzPageIndex]="pageIndex"
+  [nzPageSize]="pageSize"
+  nzShowSizeChanger
+  (nzQueryParams)="onQueryParamsChange($event)"
+>
+  <thead>
+    <tr>
+      <th nzColumnKey="code" nzSortOrder="ascend" [nzSortFn]="true">Code</th>
+      <th nzColumnKey="name" [nzSortFn]="true">Name</th>
+      <th>GSTIN</th>
+      <th nzColumnKey="isActive" [nzSortFn]="true">Status</th>
+      <th nzWidth="150px">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let party of editRowTable.data" class="editable-row">
+      <td>{{ party.code }}</td>
+      <td>{{ party.name }}</td>
+      <td>{{ party.gstin }}</td>
+      <td>
+        <nz-tag *ngIf="party.isActive" nzColor="green">Active</nz-tag>
+        <nz-tag *ngIf="!party.isActive" nzColor="red">Inactive</nz-tag>
+      </td>
+      <td>
+        <div class="space-x-2">
+          <!-- <button nz-tooltip="Info" (click)="openInfoDrawer(item._id!)">
+            <i nz-icon nzType="info-circle"></i>
+          </button> -->
+          <button
+            nz-tooltip="Edit"
+            [routerLink]="
+              '/home/party/' +
+              (isCustomer ? 'customer' : 'supplier') +
+              '/edit/' +
+              party._id
+            "
+          >
+            <i nz-icon nzType="edit"></i>
+          </button>
+          <button
+            nz-tooltip="Delete"
+            nz-popconfirm="Are you sure to delete?"
+            (nzOnConfirm)="deleteParty(party._id)"
+          >
+            <i nz-icon nzType="delete"></i>
+          </button>
+          <nz-switch
+            nz-tooltip="Activate/Deactivate"
+            nzSize="small"
+            [ngModel]="party.isActive"
+            (ngModelChange)="toggleActive(party._id!, $event)"
+          ></nz-switch>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

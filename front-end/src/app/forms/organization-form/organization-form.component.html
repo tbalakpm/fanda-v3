@@ -1,0 +1,73 @@
+<h1 class="mb-8 text-lg font-medium">Please enter organization details:</h1>
+<form
+  nz-form
+  nzLayout="vertical"
+  [formGroup]="organizationForm"
+  class="grid grid-cols-3 gap-4"
+>
+  <nz-form-item>
+    <nz-form-label nzRequired>Code</nz-form-label>
+    <nz-form-control nzErrorTip="Please enter Code!">
+      <input
+        nz-input
+        formControlName="code"
+        oninput="this.value = this.value.toUpperCase()"
+        placeholder="Enter Code"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label nzRequired>Organization Name</nz-form-label>
+    <nz-form-control nzErrorTip="Please enter Organization Name!">
+      <input
+        nz-input
+        formControlName="name"
+        placeholder="Enter Organization Name"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>Description</nz-form-label>
+    <nz-form-control>
+      <input
+        nz-input
+        formControlName="description"
+        placeholder="Enter Description"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>Registration Number</nz-form-label>
+    <nz-form-control>
+      <input
+        nz-input
+        formControlName="regdNum"
+        placeholder="Enter Registration Number"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>PAN</nz-form-label>
+    <nz-form-control>
+      <input nz-input formControlName="pan" placeholder="Enter PAN" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>TAN</nz-form-label>
+    <nz-form-control>
+      <input nz-input formControlName="tan" placeholder="Enter TAN" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>GSTIN</nz-form-label>
+    <nz-form-control>
+      <input nz-input formControlName="gstin" placeholder="Enter GSTIN" />
+    </nz-form-control>
+  </nz-form-item>
+</form>

@@ -1,0 +1,95 @@
+<h1 class="mb-8 text-lg font-medium">
+  Please enter organization address details:
+</h1>
+<form
+  nz-form
+  nzLayout="vertical"
+  [formGroup]="orgAddressForm"
+  class="grid grid-cols-3 gap-4"
+>
+  <nz-form-item>
+    <nz-form-label>Attention</nz-form-label>
+    <nz-form-control>
+      <input
+        nz-input
+        formControlName="attention"
+        placeholder="Enter Attention"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>Address Line 1</nz-form-label>
+    <nz-form-control>
+      <input
+        nz-input
+        formControlName="line1"
+        placeholder="Enter Address Line 1"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>Address Line 2</nz-form-label>
+    <nz-form-control>
+      <input
+        nz-input
+        formControlName="line2"
+        placeholder="Enter Address Line 2"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>City</nz-form-label>
+    <nz-form-control>
+      <input nz-input formControlName="city" placeholder="Enter City" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>State</nz-form-label>
+    <nz-form-control>
+      <input nz-input formControlName="state" placeholder="Enter State" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>Postal Code</nz-form-label>
+    <nz-form-control>
+      <input
+        nz-input
+        formControlName="postalCode"
+        placeholder="Enter Postal Code"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>Phone</nz-form-label>
+    <nz-form-control>
+      <input nz-input formControlName="phone" placeholder="Enter Phone" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>Fax</nz-form-label>
+    <nz-form-control>
+      <input nz-input formControlName="fax" placeholder="Enter Fax" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>Email</nz-form-label>
+    <nz-form-control>
+      <input nz-input formControlName="email" placeholder="Enter Email" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>Website</nz-form-label>
+    <nz-form-control>
+      <input nz-input formControlName="website" placeholder="Enter Website" />
+    </nz-form-control>
+  </nz-form-item>
+</form>

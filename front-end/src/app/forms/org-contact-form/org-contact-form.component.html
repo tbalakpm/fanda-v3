@@ -1,0 +1,78 @@
+<h1 class="mb-8 text-lg font-medium">
+  Please enter organization contact details:
+</h1>
+<form
+  nz-form
+  nzLayout="vertical"
+  [formGroup]="orgContactForm"
+  class="grid grid-cols-3 gap-4"
+>
+  <nz-form-item>
+    <nz-form-label>Salutation</nz-form-label>
+    <nz-form-control>
+      <input
+        nz-input
+        formControlName="salutation"
+        placeholder="Enter Salutation"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>First Name</nz-form-label>
+    <nz-form-control>
+      <input
+        nz-input
+        formControlName="firstName"
+        placeholder="Enter First Name"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>Last Name</nz-form-label>
+    <nz-form-control>
+      <input
+        nz-input
+        formControlName="lastName"
+        placeholder="Enter Last Name"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>Title</nz-form-label>
+    <nz-form-control>
+      <input nz-input formControlName="title" placeholder="Enter Title" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>Mobile</nz-form-label>
+    <nz-form-control>
+      <input
+        nz-input
+        formControlName="mobile"
+        placeholder="Enter Mobile Number"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>Email</nz-form-label>
+    <nz-form-control>
+      <input nz-input formControlName="email" placeholder="Enter Email" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>Work Phone</nz-form-label>
+    <nz-form-control>
+      <input
+        nz-input
+        formControlName="workPhone"
+        placeholder="Enter Work Phone Number"
+      />
+    </nz-form-control>
+  </nz-form-item>
+</form>

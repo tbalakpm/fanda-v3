@@ -1,0 +1,30 @@
+<div class="p-10 h-screen w-screen bg-primary bg-opacity-10 relative" @fade>
+  <img
+    alt="logo"
+    class="w-[200px] cursor-pointer"
+    src="assets/FullLogo.svg"
+    routerLink="/"
+  />
+  <div class="flex justify-between">
+    <div
+      #intro
+      class="lg:flex hidden flex-col items-center justify-center p-10 flex-grow transition-all duration-300 ease-in-out"
+      [ngClass]="{ 'translate-x-[90%]': isRegisterPage() }"
+    >
+      <div class="flex flex-col gap-2">
+        <h4 class="text-primary tracking-wider text-sm font-bold">
+          Inventory - Accounting - Finance
+        </h4>
+        <h1 class="text-5xl font-bold">Management Solution</h1>
+        <span class="font-medium">Invoice, Bills, Reports and more...</span>
+      </div>
+      <lottie class="w-[600px] aspect-square" [options]="options" />
+    </div>
+    <div
+      class="flex flex-col gap-5 items-center bg-white dark:bg-zinc-800 rounded-md border dark:border-zinc-700 shadow-lg p-10 relative flex-grow transition-all duration-300 ease-in-out max-h-max overflow-y-scroll"
+      [ngClass]="{ move: isRegisterPage() }"
+    >
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+<h1 class="mb-8 text-lg font-medium">
+  Please enter organization user details:
+</h1>
+<form
+  nz-form
+  nzLayout="vertical"
+  [formGroup]="orgUserForm"
+  class="grid grid-cols-3 gap-4"
+>
+  <nz-form-item>
+    <nz-form-label nzRequired>Email</nz-form-label>
+    <nz-form-control nzErrorTip="Please enter Email!">
+      <input nz-input formControlName="email" placeholder="Enter email" />
+    </nz-form-control>
+  </nz-form-item>
+</form>

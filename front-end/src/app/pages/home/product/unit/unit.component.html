@@ -1,0 +1,160 @@
+<nz-page-header nzTitle="Units" nzBackIcon class="p-0 pb-2">
+  <nz-breadcrumb nz-page-header-breadcrumb>
+    <nz-breadcrumb-item>Inventory</nz-breadcrumb-item>
+    <nz-breadcrumb-item>Units</nz-breadcrumb-item>
+  </nz-breadcrumb>
+  <nz-page-header-extra>
+    <nz-input-group [nzSuffix]="suffixIconSearch">
+      <input
+        type="text"
+        nz-input
+        placeholder="Input search text"
+        class="w-60"
+        [(ngModel)]="searchValue"
+        (ngModelChange)="onSearchChange($event)"
+      />
+    </nz-input-group>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="addNewUnit()"
+      [disabled]="editId == 'new'"
+    >
+      <span nz-icon nzType="plus"></span>
+      Add Unit
+    </button>
+  </nz-page-header-extra>
+</nz-page-header>
+
+<ng-template #suffixIconSearch>
+  <span nz-icon nzType="search"></span>
+</ng-template>
+
+<nz-table
+  class="mt-4"
+  #editRowTable
+  [nzData]="units"
+  [nzLoading]="_loaderService.isLoadingActive() | async"
+  nzSize="middle"
+  [nzFrontPagination]="false"
+  [nzTotal]="total"
+  [nzPageIndex]="pageIndex"
+  [nzPageSize]="pageSize"
+  nzShowSizeChanger
+  (nzQueryParams)="onQueryParamsChange($event)"
+>
+  <thead>
+    <tr>
+      <th nzColumnKey="code" nzSortOrder="ascend" [nzSortFn]="true">Code</th>
+      <th nzColumnKey="name" [nzSortFn]="true">Unit Name</th>
+      <th>Description</th>
+      <th nzColumnKey="isActive" [nzSortFn]="true" nzWidth="10%">Status</th>
+      <th nzWidth="150px">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr
+      *ngFor="let unit of editRowTable.data"
+      class="editable-row"
+      [ngClass]="{
+        'bg-stone-200 !bg-opacity-50 dark:bg-dark-sec dark:!bg-opacity-100':
+          unit._id == editId
+      }"
+    >
+      <td>
+        <div
+          [hidden]="editId === unit._id"
+          class="px-3 py-[5px]"
+          [ngClass]="{ 'editable-cell': editId === null }"
+          (click)="editId === null && startEdit(unit._id!, 'code')"
+        >
+          {{ unit.code }}
+        </div>
+        <input
+          [hidden]="editId !== unit._id"
+          type="text"
+          nz-input
+          [(ngModel)]="editData.code"
+          [id]="'code' + unit._id"
+        />
+      </td>
+      <td>
+        <div
+          [hidden]="editId === unit._id"
+          class="px-3 py-[5px]"
+          [ngClass]="{ 'editable-cell': editId === null }"
+          (click)="editId === null && startEdit(unit._id!, 'name')"
+        >
+          {{ unit.name }}
+        </div>
+        <input
+          [hidden]="editId !== unit._id"
+          type="text"
+          nz-input
+          [(ngModel)]="editData.name"
+          [id]="'name' + unit._id"
+        />
+      </td>
+      <td>
+        <div [hidden]="editId === unit._id">
+          {{ unit.description }}
+        </div>
+        <input
+          [hidden]="editId !== unit._id"
+          type="text"
+          nz-input
+          [(ngModel)]="editData.description"
+          [id]="'description' + unit._id"
+        />
+      </td>
+      <td>
+        <nz-tag *ngIf="unit.isActive" nzColor="green">Active</nz-tag>
+        <nz-tag *ngIf="!unit.isActive" nzColor="red">Inactive</nz-tag>
+      </td>
+      <td>
+        <div class="space-x-2">
+          <span
+            [hidden]="editId === unit._id"
+            nz-icon
+            nzType="edit"
+            nz-tooltip="Edit"
+            (click)="editId === null && startEdit(unit._id!, 'shortName')"
+            [ngClass]="{ '!text-gray-500': editId !== null }"
+          ></span>
+          <span
+            [hidden]="editId === unit._id"
+            nz-icon
+            nzType="delete"
+            nz-tooltip="Delete"
+            nz-popconfirm
+            nzPopconfirmTitle="Sure to delete?"
+            (nzOnConfirm)="deleteUnit(unit._id!)"
+          ></span>
+          <nz-switch
+            nz-tooltip="Activate/Deactivate"
+            [hidden]="editId === unit._id"
+            nzSize="small"
+            [ngModel]="unit.isActive"
+            (ngModelChange)="toggleActive(unit._id!, $event)"
+          ></nz-switch>
+          <span
+            [hidden]="editId !== unit._id"
+            nz-icon
+            nzType="check"
+            nz-tooltip="Save"
+            (click)="editId === 'new' ? saveNewUnit() : saveEdit()"
+          ></span>
+          <span
+            [hidden]="editId !== unit._id"
+            nz-icon
+            nzType="close"
+            nz-tooltip="Cancel"
+            nz-popconfirm
+            nzPopconfirmTitle="Are you sure?"
+            (nzOnConfirm)="cancelEdit()"
+          ></span>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

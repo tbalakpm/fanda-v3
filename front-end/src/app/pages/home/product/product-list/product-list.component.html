@@ -1,0 +1,74 @@
+<page-header
+  title="Products"
+  [breadcrumbs]="['Inventory', 'Products']"
+  [extra]="{ route: 'add', text: 'Add Product' }"
+  [showSearch]="true"
+  (onSearch)="searchValue = $event"
+></page-header>
+
+<nz-table
+  class="mt-4"
+  #productTable
+  [nzData]="products"
+  [nzLoading]="_loaderService.isLoadingActive() | async"
+  nzSize="middle"
+  [nzFrontPagination]="false"
+  [nzTotal]="total"
+  [nzPageIndex]="pageIndex"
+  [nzPageSize]="pageSize"
+  nzShowSizeChanger
+  (nzQueryParams)="onQueryParamsChange($event)"
+>
+  <thead>
+    <tr>
+      <th nzColumnKey="code" nzSortOrder="ascend" [nzSortFn]="true">Code</th>
+      <th nzColumnKey="name" [nzSortFn]="true">Name</th>
+      <th>Category - Unit</th>
+      <th>Buying Price</th>
+      <th>Margin %</th>
+      <th>Selling Price</th>
+      <th>Tax Preference - % - Code</th>
+      <th nzColumnKey="isActive" [nzSortFn]="true">Active</th>
+      <th nzWidth="150px">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let product of productTable.data">
+      <td>{{ product.code }}</td>
+      <td>{{ product.name }}</td>
+      <td>{{ product.category?.name }} - {{ product.unit?.name }}</td>
+      <td>{{ product.buyingPrice }}</td>
+      <td>{{ product.marginPct }}%</td>
+      <td>{{ product.sellingPrice }}</td>
+      <td>
+        {{ taxTypes[product.taxPreference] }} - {{ product.taxPct }}
+        {{ product.taxCode ? "- " + product.taxCode : "" }}
+      </td>
+      <td>
+        <nz-tag *ngIf="product.isActive" nzColor="green">Active</nz-tag>
+        <nz-tag *ngIf="!product.isActive" nzColor="red">Inactive</nz-tag>
+      </td>
+      <td>
+        <div class="space-x-2">
+          <button nz-tooltip="Edit" [routerLink]="['edit', product._id]">
+            <!-- routerLink="/home/product/edit/{{ product._id }}" -->
+            <i nz-icon nzType="edit"></i>
+          </button>
+          <button
+            nz-tooltip="Delete"
+            nz-popconfirm="Are you sure delete this Product?"
+            (nzOnConfirm)="deleteProduct(product._id!)"
+          >
+            <i nz-icon nzType="delete"></i>
+          </button>
+          <nz-switch
+            nz-tooltip="Activate/Deactivate"
+            nzSize="small"
+            [ngModel]="product.isActive"
+            (ngModelChange)="toggleActive(product._id!, $event)"
+          ></nz-switch>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

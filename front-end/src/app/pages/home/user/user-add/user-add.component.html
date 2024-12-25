@@ -1,0 +1,93 @@
+<form
+  class="grid grid-cols-3 gap-x-4 form-content"
+  [formGroup]="userForm"
+  (ngSubmit)="submitForm()"
+  nz-form
+  nzLayout="vertical"
+>
+  <nz-form-item>
+    <nz-form-label for="userName" nzRequired>User Name</nz-form-label>
+    <nz-form-control [nzErrorTip]="getErrorMessage('username')">
+      <input
+        id="username"
+        nz-input
+        formControlName="username"
+        placeholder="Input your username"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label for="firstName">First Name</nz-form-label>
+    <nz-form-control>
+      <input
+        id="firstName"
+        nz-input
+        formControlName="firstName"
+        placeholder="Input your first name"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label for="lastName">Last Name</nz-form-label>
+    <nz-form-control>
+      <input
+        id="lastName"
+        nz-input
+        formControlName="lastName"
+        placeholder="Input your last name"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label for="email">Email</nz-form-label>
+    <nz-form-control>
+      <input
+        id="email"
+        nz-input
+        formControlName="email"
+        placeholder="Input your email"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label for="mobile">Mobile</nz-form-label>
+    <nz-form-control>
+      <input
+        id="mobile"
+        nz-input
+        formControlName="mobile"
+        placeholder="Input your mobile number"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label for="role" nzRequired>Role</nz-form-label>
+    <nz-form-control [nzErrorTip]="getErrorMessage('roles')">
+      <nz-select
+        [nzMaxTagCount]="3"
+        [nzMaxTagPlaceholder]="tagPlaceHolder"
+        nzMode="multiple"
+        id="role"
+        formControlName="roles"
+        nzPlaceHolder="Select user role"
+      >
+        <nz-option nzLabel="Administrator" nzValue="ADMIN"></nz-option>
+        <nz-option nzLabel="Manager" nzValue="MANAGER"></nz-option>
+        <nz-option nzLabel="User" nzValue="USER"></nz-option>
+        <nz-option nzLabel="Sales Person" nzValue="SALESPERSON"></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+
+  <div class="col-start-3">
+    <button nz-button nzType="primary" class="float-right">Submit</button>
+  </div>
+</form>
+<ng-template #tagPlaceHolder let-selectedList
+  >and {{ selectedList.length }} more selected</ng-template
+>

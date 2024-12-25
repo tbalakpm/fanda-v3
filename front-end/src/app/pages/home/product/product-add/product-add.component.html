@@ -1,0 +1,95 @@
+<page-header
+  title="{{ isEdit ? 'Edit' : 'Add' }} Product"
+  [breadcrumbs]="isEdit ? ['Products', 'Edit'] : ['Products', 'Add']"
+></page-header>
+
+<product-form
+  [categories]="categories"
+  [units]="units"
+  [productForm]="productForm"
+  (formSubmit)="save()"
+></product-form>
+
+<nz-modal
+  [(nzVisible)]="isCategoryModelVisible"
+  nzTitle="Create New Product Category"
+  [nzClosable]="false"
+  [nzFooter]="null"
+>
+  <ng-container *nzModalContent>
+    <form nz-form nzLayout="vertical" [formGroup]="productCategoryForm">
+      <nz-form-item>
+        <nz-form-label nzRequired>Code</nz-form-label>
+        <nz-form-control nzErrorTip="Please Enter Code">
+          <input nz-input formControlName="code" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired>Category Name</nz-form-label>
+        <nz-form-control nzErrorTip="Please Enter Category Name">
+          <input nz-input formControlName="name" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>Description</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="description"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <div class="grid grid-cols-2 gap-4">
+        <button nz-button nzType="primary" (click)="saveCategory()">
+          Save
+        </button>
+        <button
+          class="!m-0"
+          nz-button
+          nzType="default"
+          (click)="closeCategoryModel()"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="isUnitModelVisible"
+  nzTitle="Create New Unit"
+  [nzClosable]="false"
+  [nzFooter]="null"
+>
+  <ng-container *nzModalContent>
+    <form nz-form nzLayout="vertical" [formGroup]="unitForm">
+      <nz-form-item>
+        <nz-form-label nzRequired>Code</nz-form-label>
+        <nz-form-control nzErrorTip="Please Enter Code">
+          <input nz-input formControlName="code" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired>Unit Name</nz-form-label>
+        <nz-form-control nzErrorTip="Please Enter Unit Name">
+          <input nz-input formControlName="name" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>Description</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="description"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <div class="grid grid-cols-2 gap-4">
+        <button nz-button nzType="primary" (click)="saveUnit()">Save</button>
+        <button
+          class="!m-0"
+          nz-button
+          nzType="default"
+          (click)="closeUnitModel()"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>
