@@ -1,0 +1,73 @@
+<page-header title="Users" [breadcrumbs]="['People', 'Users']"></page-header>
+
+<user-add [id]="editId" (formSubmit)="fetchUsers()"></user-add>
+<nz-table
+  nz-table
+  class="mt-4"
+  #userTable
+  [nzData]="users"
+  [nzLoading]="_loaderService.isLoadingActive() | async"
+  nzSize="middle"
+  [nzFrontPagination]="false"
+  [nzTotal]="total"
+  [nzPageIndex]="pageIndex"
+  [nzPageSize]="pageSize"
+  nzShowSizeChanger
+  (nzQueryParams)="onQueryParamsChange($event)"
+>
+  <thead>
+    <tr>
+      <th nzColumnKey="username" [nzSortFn]="true">Username</th>
+      <th nzColumnKey="name" nzSortOrder="ascend" [nzSortFn]="true">Name</th>
+      <th>Phone</th>
+      <th>Email</th>
+      <th>Role</th>
+      <th nzColumnKey="isActive" [nzSortFn]="true">Status</th>
+      <th nzWidth="150px">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of userTable.data">
+      <td>{{ user.username }}</td>
+      <td>{{ user.firstName }} {{ user.lastName }}</td>
+      <td>{{ user.mobile }}</td>
+      <td>{{ user.email }}</td>
+      <td>
+        <nz-tag *ngIf="user.roles.includes('ADMIN')" nzColor="magenta"
+          >Administrator</nz-tag
+        >
+        <nz-tag *ngIf="user.roles.includes('USER')" nzColor="blue">User</nz-tag>
+        <nz-tag *ngIf="user.roles.includes('MANAGER')" nzColor="green"
+          >Manager</nz-tag
+        >
+        <nz-tag *ngIf="user.roles.includes('SALESPERSON')" nzColor="cyan"
+          >Sales Person</nz-tag
+        >
+      </td>
+      <td>
+        <nz-tag *ngIf="user.isActive" nzColor="green">Active</nz-tag>
+        <nz-tag *ngIf="!user.isActive" nzColor="red">Inactive</nz-tag>
+      </td>
+      <td>
+        <div class="space-x-2">
+          <button nz-tooltip="Edit" (click)="editId = user._id">
+            <i nz-icon nzType="edit"></i>
+          </button>
+          <button
+            nz-tooltip="Delete"
+            nz-popconfirm="Are you sure to delete?"
+            (nzOnConfirm)="deleteUser(user._id)"
+          >
+            <i nz-icon nzType="delete"></i>
+          </button>
+          <nz-switch
+            nz-tooltip="Activate/Deactivate"
+            nzSize="small"
+            [ngModel]="user.isActive"
+            (ngModelChange)="toggleActive(user._id!, $event)"
+          ></nz-switch>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

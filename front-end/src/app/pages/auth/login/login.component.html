@@ -1,0 +1,52 @@
+<form
+  class="w-[500px]"
+  [formGroup]="validateForm"
+  (ngSubmit)="submitForm()"
+  nz-form
+  nzLayout="vertical"
+  autocomplete="off"
+>
+  <h1 class="text-xl font-medium mt-16 sanchez-regular">Fanda Commerce</h1>
+  <div class="space-y-3 my-8">
+    <h1 class="text-4xl font-semibold text-primary">Welcome Back!</h1>
+    <p class="text-gray-500">Please sign in to your account</p>
+  </div>
+  <nz-form-item>
+    <nz-form-label>User Name</nz-form-label>
+    <nz-form-control nzErrorTip="Please input your username!">
+      <nz-input-group nzPrefixIcon="user" nzSize="large">
+        <input
+          type="text"
+          nz-input
+          formControlName="username"
+          placeholder="Enter your Username"
+          autocomplete="off"
+        />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label>Password</nz-form-label>
+    <nz-form-control nzErrorTip="Please input your Password!">
+      <nz-input-group nzPrefixIcon="lock" nzSize="large">
+        <input
+          type="password"
+          nz-input
+          formControlName="password"
+          placeholder="Enter your password"
+        />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+  <!-- <div class="flex items-center justify-between mb-4">
+    <label nz-checkbox formControlName="remember">
+      <span>Remember me</span>
+    </label>
+    <a class="text-primary">Forgot password?</a>
+  </div> -->
+  <button nz-button nzBlock nzType="primary" nzSize="large">Log in</button>
+  <p class="text-gray-500 text-right mt-4">
+    New to our platform?
+    <a class="text-primary" routerLink="/auth/register">Create an account</a>
+  </p>
+</form>

@@ -1,0 +1,49 @@
+<nz-table
+  class="mt-4"
+  #productTable
+  [nzData]="purchases"
+  [nzLoading]="_loaderService.isLoadingActive() | async"
+  nzSize="middle"
+  [nzFrontPagination]="false"
+  [nzTotal]="total"
+  [nzPageIndex]="pageIndex"
+  [nzPageSize]="pageSize"
+  nzShowSizeChanger
+  (nzQueryParams)="onQueryParamsChange($event)"
+  [nzShowTotal]="rangeTemplate"
+>
+  <thead>
+    <tr>
+      <th>Invoice Number</th>
+      <th>Invoice Date</th>
+      <th>Supplier</th>
+      <th>Invoice Type</th>
+      <!-- <th>Year ID</th> -->
+      <th nzWidth="150px">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let sales of productTable.data">
+      <td>{{ sales.invoiceNumber }}</td>
+      <td>{{ sales.invoiceDate | date : "dd-MM-yyyy" }}</td>
+      <td>{{ sales.customer.name }}</td>
+      <td>{{ invoiceTypes[sales.invoiceType] }}</td>
+      <!-- <td>{{ product.yearId }}</td> -->
+      <td class="space-x-2 align-middle">
+        <!-- <button nz-tooltip="Edit" [routerLink]="['edit', purchase._id]">
+          <i nz-icon nzType="edit"></i>
+        </button> -->
+        <button nz-tooltip="Delete" (click)="deleteInvoice(sales._id!)">
+          <i nz-icon nzType="delete"></i>
+        </button>
+        <button nz-tooltip="Print" (click)="printInvoice(sales._id!)">
+          <i nz-icon nzType="printer"></i>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<ng-template #rangeTemplate let-range="range" let-total>
+  Displaying {{ range[0] }} to {{ range[1] }} of {{ total }}
+</ng-template>

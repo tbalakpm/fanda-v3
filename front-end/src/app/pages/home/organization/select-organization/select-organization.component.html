@@ -1,0 +1,56 @@
+<div class="h-screen w-screen">
+  <div
+    class="flex items-center justify-between px-6 bg-slate-100 dark:bg-dark shadow-md"
+  >
+    <a class="sidebar-logo !p-0" routerLink="/">
+      <img src="assets/Logo.svg" alt="logo" />
+      <h1 class="sanchez-regular !text-black dark:!text-white">FandaTech</h1>
+    </a>
+    <div
+      nz-dropdown
+      [nzDropdownMenu]="menu"
+      nzPlacement="bottomRight"
+      class="aspect-square h-[32px] rounded-full flex items-center justify-center text-base font-medium group-hover:scale-125 transition-all bg-primary text-white border-2 border-[#032a4c] cursor-pointer"
+    >
+      {{
+        user.firstName ? user.firstName[0] + user.lastName[0] : user.username[0]
+      }}
+    </div>
+  </div>
+  <div class="flex flex-col items-center gap-5" style="margin-top: 10%">
+    <h1 class="text-5xl font-semibold">Select an organization</h1>
+    <div class="flex flex-wrap items-center justify-center gap-20">
+      <div
+        (click)="auth.setOrganization(organization)"
+        *ngFor="let organization of organizations; let i = index"
+        class="group flex flex-col justify-center items-center gap-4 p-4 cursor-pointer"
+      >
+        <div
+          class="aspect-square h-[100px] rounded-full flex items-center justify-center text-xl font-medium group-hover:scale-125 transition-all"
+          [ngStyle]="colorStyles[i]"
+        >
+          {{ organization.code }}
+        </div>
+        <h3 class="text-xl font-medium">{{ organization.name }}</h3>
+      </div>
+    </div>
+  </div>
+  <div class="absolute bottom-4 w-screen">
+    <p class="text-center text-sm text-gray-500">
+      &copy; 2021 FandaTech. All rights reserved.
+    </p>
+  </div>
+</div>
+
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <ul nz-menu>
+    <li nz-menu-item>
+      <span nz-icon nzType="setting"></span>
+      <span class="ml-2">Settings</span>
+    </li>
+    <li nz-menu-item (click)="auth.logout()">
+      <span nz-icon nzType="logout"></span>
+      <span class="ml-2">Logout</span>
+    </li>
+  </ul>
+</nz-dropdown-menu>

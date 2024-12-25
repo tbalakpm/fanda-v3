@@ -1,0 +1,51 @@
+<h1 class="mb-8 text-lg font-medium">
+  Please enter {{ isCustomer ? "customer" : "supplier" }} details:
+</h1>
+<form
+  nz-form
+  nzLayout="vertical"
+  [formGroup]="partyForm"
+  class="grid grid-cols-4 gap-4"
+>
+  <nz-form-item>
+    <nz-form-label nzRequired>Code</nz-form-label>
+    <nz-form-control nzErrorTip="Please enter Code!">
+      <input
+        nz-input
+        formControlName="code"
+        oninput="this.value = this.value.toUpperCase()"
+        placeholder="Enter Code"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label nzRequired>Name</nz-form-label>
+    <nz-form-control nzErrorTip="Please enter Name!">
+      <input nz-input formControlName="name" placeholder="Enter Name" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>GSTIN</nz-form-label>
+    <nz-form-control>
+      <input nz-input formControlName="gstin" placeholder="Enter GSTIN" />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label nzFor="gstTreatment" nzRequired>GST Treatment</nz-form-label>
+    <nz-form-control nzErrorTip="Please select a GST treatment">
+      <nz-select
+        formControlName="gstTreatment"
+        id="gstTreatment"
+        nzPlaceHolder="Please select a GST Treatment"
+      >
+        <nz-option
+          *ngFor="let treatment of gstTreatments"
+          [nzValue]="treatment.value"
+          [nzLabel]="treatment.label"
+        ></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+</form>

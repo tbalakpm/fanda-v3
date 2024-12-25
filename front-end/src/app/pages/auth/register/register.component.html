@@ -1,0 +1,93 @@
+<form
+  class="w-[500px]"
+  [formGroup]="validateForm"
+  (ngSubmit)="submitForm()"
+  nz-form
+  nzLayout="vertical"
+>
+  <h1 class="sanchez-regular mt-16 text-xl font-medium">Fanda Commerce.</h1>
+  <div class="my-8 space-y-3">
+    <h1 class="text-4xl font-semibold text-primary">Create an account!</h1>
+    <p class="text-gray-500">Enter your details to create your account.</p>
+  </div>
+  <div class="grid grid-cols-2 gap-4">
+    <nz-form-item>
+      <nz-form-label for="firstName" nzRequired>First Name</nz-form-label>
+      <nz-form-control [nzErrorTip]="getErrorMessage('firstName')">
+        <input
+          id="firstName"
+          nz-input
+          formControlName="firstName"
+          placeholder="Input your first name"
+        />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label for="lastName" nzRequired>Last Name</nz-form-label>
+      <nz-form-control [nzErrorTip]="getErrorMessage('lastName')">
+        <input
+          id="lastName"
+          nz-input
+          formControlName="lastName"
+          placeholder="Input your last name"
+        />
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+
+  <nz-form-item>
+    <nz-form-label for="userName" nzRequired>Username</nz-form-label>
+    <nz-form-control [nzErrorTip]="getErrorMessage('userName')">
+      <input
+        id="userName"
+        nz-input
+        formControlName="userName"
+        placeholder="Input your username"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label for="phone" nzRequired>Phone</nz-form-label>
+    <nz-form-control [nzErrorTip]="getErrorMessage('phone')">
+      <input
+        id="phone"
+        nz-input
+        formControlName="phone"
+        placeholder="Input your phone number"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label for="email" nzRequired>Email</nz-form-label>
+    <nz-form-control [nzErrorTip]="getErrorMessage('email')">
+      <input
+        id="email"
+        nz-input
+        formControlName="email"
+        placeholder="Input your email"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label for="password" nzRequired>Password</nz-form-label>
+    <nz-form-control [nzErrorTip]="getErrorMessage('password')">
+      <input
+        id="password"
+        type="password"
+        nz-input
+        formControlName="password"
+        placeholder="Input your password"
+      />
+    </nz-form-control>
+  </nz-form-item>
+  <div class="space-y-4">
+    <button nz-button nzBlock nzType="primary" nzSize="large">Create</button>
+    <p class="text-right text-gray-500">
+      Been here before?
+      <a class="text-primary" routerLink="/auth/login">Login</a>
+    </p>
+  </div>
+</form>

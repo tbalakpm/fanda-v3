@@ -1,0 +1,72 @@
+<!-- @for (style of styles; track $index) {
+<span
+  class="pointer-events-none absolute left-1/2 top-[150px] h-0.5 w-0.5 rotate-[215deg] animate-meteor rounded-[9999px] bg-slate-500 shadow-[0_0_0_1px_#ffffff10] opacity-0"
+  [style]="style"
+>
+  <div
+    class="pointer-events-none absolute top-1/2 -z-10 h-[1px] w-[50px] -translate-y-1/2 bg-gradient-to-r from-slate-500 to-transparent"
+  ></div>
+</span>
+} -->
+<div class="w-screen py-5 h-screen overflow-hidden">
+  <div class="container">
+    <div
+      class="flex justify-between items-center mb-10 backdrop-blur-md sticky top-0"
+    >
+      <div class="flex justify-between items-center gap-[80px]">
+        <img alt="logo" class="w-[50px]" src="assets/Logo.svg" />
+        <div class="flex justify-between items-center gap-[50px]">
+          <a class="text-primary text-lg font-semibold" href="#">Home</a>
+          <a class="text-primary text-lg font-semibold" href="#">About</a>
+          <a class="text-primary text-lg font-semibold" href="#">Services</a>
+          <a class="text-primary text-lg font-semibold" href="#">Contact</a>
+        </div>
+      </div>
+      <div class="flex gap-[24px]">
+        <button
+          routerLink="/auth/login"
+          nz-button
+          nzType="default"
+          nzSize="large"
+        >
+          Login
+        </button>
+        <button
+          routerLink="/auth/register"
+          class="glassy-button text-white"
+          style="--_padding: 0.6rem 1rem; --_border-radius: 0.5rem"
+        >
+          <span>Register</span>
+        </button>
+      </div>
+    </div>
+    <div class="relative">
+      <!-- <div class="box">
+        <div class="wave -one"></div>
+        <div class="wave -two"></div>
+      </div> -->
+      <div
+        class="flex items-center justify-between"
+        style="height: calc(100vh - 400px)"
+      >
+        <div class="space-y-5">
+          <h1 class="text-[40px] font-semibold flex flex-col w-[700px]">
+            An Inventory Management Software That Makes Your Business Easier
+          </h1>
+          <p class="text-[16px] max-w-[700px] font-medium">
+            Empower your business with Fanda Commerce, the all-in-one solution
+            for managing your customers, sales, and inventory. Take control of
+            your operations, streamline workflows, and grow your business with
+            ease.
+          </p>
+          <button
+            class="glassy-button text-white flex items-center justify-center"
+          >
+            <span>Get started</span>
+          </button>
+        </div>
+        <lottie class="w-[600px] aspect-square" [options]="options" />
+      </div>
+    </div>
+  </div>
+</div>

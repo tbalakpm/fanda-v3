@@ -1,0 +1,87 @@
+<h1 class="mb-8 text-lg font-medium">
+  Please enter organization {{ isCustomer ? "customer" : "supplier" }} details:
+</h1>
+<form
+  nz-form
+  nzLayout="vertical"
+  [formGroup]="partyAddressForm"
+  class="grid grid-cols-3 gap-4"
+>
+  <nz-form-item>
+    <nz-form-label>Address Line 1</nz-form-label>
+    <nz-form-control nzErrorTip="Please enter Address Line 1!">
+      <input
+        nz-input
+        formControlName="line1"
+        placeholder="Enter Address Line 1"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>Address Line 2</nz-form-label>
+    <nz-form-control>
+      <input
+        nz-input
+        formControlName="line2"
+        placeholder="Enter Address Line 2"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>Area</nz-form-label>
+    <nz-form-control nzErrorTip="Please enter Area!">
+      <input nz-input formControlName="area" placeholder="Enter Area" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>Postal Code</nz-form-label>
+    <nz-form-control nzErrorTip="Please enter Postal Code!">
+      <input
+        nz-input
+        formControlName="postalCode"
+        placeholder="Enter Postal Code"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>State</nz-form-label>
+    <nz-form-control nzErrorTip="Please enter State!">
+      <!-- <input nz-input formControlName="state" placeholder="Enter State" /> -->
+      <nz-select
+        formControlName="state"
+        nzShowSearch
+        (nzOnSearch)="onStateSearch($event)"
+        nzPlaceHolder="Select State"
+      >
+        <nz-option
+          *ngFor="let state of states"
+          [nzLabel]="state"
+          [nzValue]="state"
+        ></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>City</nz-form-label>
+    <nz-form-control nzErrorTip="Please enter City!">
+      <!-- <input nz-input formControlName="city" placeholder="Enter City" /> -->
+      <nz-select
+        formControlName="city"
+        nzShowSearch
+        (nzOnSearch)="onCitySearch($event)"
+        nzPlaceHolder="Select City"
+      >
+        <nz-option
+          *ngFor="let city of cities"
+          [nzLabel]="city"
+          [nzValue]="city"
+        ></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+</form>

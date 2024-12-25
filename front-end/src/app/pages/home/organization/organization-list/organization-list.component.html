@@ -1,0 +1,79 @@
+<page-header
+  [title]="'Organizations'"
+  [breadcrumbs]="['Organization', 'List']"
+  [extra]="{
+    route: '/home/organization/add',
+    text: 'Add Organization'
+  }"
+  [showSearch]="true"
+  (onSearch)="searchValue = $event"
+></page-header>
+
+<nz-table
+  #orgTable
+  [nzData]="organizations"
+  [nzLoading]="_loaderService.isLoadingActive() | async"
+  nzSize="middle"
+  [nzFrontPagination]="false"
+  [nzTotal]="total"
+  [nzPageIndex]="pageIndex"
+  [nzPageSize]="pageSize"
+  nzShowSizeChanger
+  (nzQueryParams)="onQueryParamsChange($event)"
+>
+  <thead>
+    <tr>
+      <th nzColumnKey="code" nzSortOrder="ascend" [nzSortFn]="true">Code</th>
+      <th nzColumnKey="name" [nzSortFn]="true">Name</th>
+      <th>Description</th>
+      <th nzColumnKey="isActive" [nzSortFn]="true">Status</th>
+      <th nzWidth="150px">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let org of orgTable.data">
+      <td>{{ org.code }}</td>
+      <td>{{ org.name }}</td>
+      <td>{{ org.description ? org.description : "-" }}</td>
+      <td>
+        <nz-tag *ngIf="org.isActive" nzColor="green">Active</nz-tag>
+        <nz-tag *ngIf="!org.isActive" nzColor="red">Inactive</nz-tag>
+      </td>
+      <td>
+        <div class="space-x-2">
+          <button nz-tooltip="Info" (click)="openInfoDrawer(org._id!)">
+            <i nz-icon nzType="info-circle"></i>
+          </button>
+          <button
+            nz-tooltip="Edit"
+            routerLink="/home/organization/edit/{{ org._id }}"
+          >
+            <i nz-icon nzType="edit"></i>
+          </button>
+          <button
+            [disabled]="org._id === selectedOrganization._id"
+            nz-tooltip="Delete"
+            nz-popconfirm="Are you sure to delete?"
+            (nzOnConfirm)="deleteOrganization(org._id!)"
+          >
+            <i nz-icon nzType="delete"></i>
+          </button>
+          <nz-switch
+            nz-tooltip="Activate/Deactivate"
+            nzSize="small"
+            [nzDisabled]="org._id === selectedOrganization._id"
+            [ngModel]="org.isActive"
+            (ngModelChange)="toggleActive(org._id!, $event)"
+          ></nz-switch>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<info-drawer
+  [isVisible]="isInfoDrawerVisible"
+  [title]="selectedInfoOrganization.name + '\'s Information'"
+  [data]="selectedInfoOrganization"
+  (onClose)="isInfoDrawerVisible = false"
+></info-drawer>

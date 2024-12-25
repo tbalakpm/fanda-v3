@@ -1,0 +1,60 @@
+<h1 class="mb-8 text-lg font-medium">
+  Please enter {{ isCustomer ? "customer" : "supplier" }} contact details:
+</h1>
+<form
+  nz-form
+  nzLayout="vertical"
+  [formGroup]="partyContactForm"
+  class="grid grid-cols-3 gap-4"
+>
+  <nz-form-item>
+    <nz-form-label>Salutation</nz-form-label>
+    <nz-form-control nzErrorTip="Please enter Salutation!">
+      <input
+        nz-input
+        formControlName="salutation"
+        placeholder="Enter Salutation"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>First Name</nz-form-label>
+    <nz-form-control nzErrorTip="Please enter First Name!">
+      <input
+        nz-input
+        formControlName="firstName"
+        placeholder="Enter First Name"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>Last Name</nz-form-label>
+    <nz-form-control nzErrorTip="Please enter Last Name!">
+      <input
+        nz-input
+        formControlName="lastName"
+        placeholder="Enter Last Name"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>Mobile</nz-form-label>
+    <nz-form-control nzErrorTip="Please enter Mobile!">
+      <input
+        nz-input
+        formControlName="mobile"
+        placeholder="Enter Mobile Number"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>Email</nz-form-label>
+    <nz-form-control nzErrorTip="Please enter Email!">
+      <input nz-input formControlName="email" placeholder="Enter Email" />
+    </nz-form-control>
+  </nz-form-item>
+</form>

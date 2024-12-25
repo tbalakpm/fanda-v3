@@ -1,0 +1,174 @@
+<div class="form-content flex flex-col items-end">
+  <form
+    nz-form
+    nzLayout="vertical"
+    [formGroup]="productForm"
+    class="grid grid-cols-4 gap-4 w-full"
+  >
+    <nz-form-item>
+      <nz-form-label nzRequired>Code</nz-form-label>
+      <nz-form-control nzErrorTip="Please enter code">
+        <input nz-input formControlName="code" placeholder="Enter Code" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label nzRequired>Name</nz-form-label>
+      <nz-form-control nzErrorTip="Please enter name">
+        <input nz-input formControlName="name" placeholder="Enter Name" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label nzRequired>Type</nz-form-label>
+      <nz-form-control nzErrorTip="Please select type">
+        <nz-select
+          nzShowSearch
+          formControlName="type"
+          nzPlaceHolder="Select product type"
+        >
+          <nz-option nzValue="goods" nzLabel="Goods"></nz-option>
+          <nz-option nzValue="services" nzLabel="Services"></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label nzRequired>Category</nz-form-label>
+      <nz-form-control nzErrorTip="Please select category">
+        <nz-select
+          nzShowSearch
+          formControlName="categoryId"
+          nzPlaceHolder="Select Category"
+        >
+          <nz-option [nzValue]="'new'" nzLabel="+ Add New"></nz-option>
+          <nz-option
+            *ngFor="let category of categories"
+            [nzValue]="category._id"
+            [nzLabel]="category.name"
+          ></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label nzRequired>Unit</nz-form-label>
+      <nz-form-control nzErrorTip="Please select unit">
+        <nz-select
+          nzShowSearch
+          formControlName="unitId"
+          nzPlaceHolder="Select Unit"
+        >
+          <nz-option [nzValue]="'new'" nzLabel="+ Add New"></nz-option>
+          <nz-option
+            *ngFor="let unit of units"
+            [nzValue]="unit._id"
+            [nzLabel]="unit.name"
+          ></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Description</nz-form-label>
+      <nz-form-control>
+        <input
+          nz-input
+          formControlName="description"
+          placeholder="Enter description"
+        />
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- <div class="grid grid-flow-col gap-4 col-span-3"> -->
+    <nz-form-item>
+      <nz-form-label>Buying Price</nz-form-label>
+      <nz-form-control>
+        <nz-input-number
+          [nzMin]="1"
+          nz-input
+          type="number"
+          formControlName="buyingPrice"
+          [nzFormatter]="currencyFormatter"
+        ></nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Margin %</nz-form-label>
+      <nz-form-control>
+        <nz-input-group [nzAddOnAfter]="addOnAfterTemplate">
+          <nz-input-number
+            [nzMin]="1"
+            nz-input
+            type="number"
+            formControlName="margin"
+            class="border-r-0 rounded-r-none"
+          ></nz-input-number>
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+
+    <ng-template #addOnAfterTemplate>
+      <nz-select formControlName="marginPctOrAmt" class="m-0">
+        <nz-option nzLabel="%" nzValue="pct"></nz-option>
+        <nz-option nzLabel="₹" nzValue="amt"></nz-option>
+      </nz-select>
+    </ng-template>
+
+    <nz-form-item>
+      <nz-form-label>Selling Price</nz-form-label>
+      <nz-form-control>
+        <nz-input-number
+          [nzMin]="1"
+          nz-input
+          type="number"
+          formControlName="sellingPrice"
+          [nzFormatter]="currencyFormatter"
+        ></nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label nzRequired>Tax Preference</nz-form-label>
+      <nz-form-control nzErrorTip="Please select tax preference">
+        <nz-select
+          nzShowSearch
+          formControlName="taxPreference"
+          nzPlaceHolder="Select Tax Preference"
+        >
+          <nz-option nzValue="taxable" nzLabel="Taxable"></nz-option>
+          <nz-option nzValue="nontaxable" nzLabel="Non-taxable"></nz-option>
+          <nz-option nzValue="exempt" nzLabel="Exempt"></nz-option>
+          <nz-option nzValue="noexempt" nzLabel="No Exempt"></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Tax Code</nz-form-label>
+      <nz-form-control nzErrorTip="Please enter tax code">
+        <input
+          nz-input
+          formControlName="taxCode"
+          placeholder="Enter Tax Code"
+        />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label nzRequired>Tax %</nz-form-label>
+      <nz-form-control nzErrorTip="Please enter tax %">
+        <nz-input-number
+          [nzMin]="1"
+          nz-input
+          type="number"
+          formControlName="taxPct"
+          nzPlaceHolder="Enter tax %"
+        ></nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- </div> -->
+  </form>
+  <button nz-button nzType="primary" (click)="formSubmit.emit()">Submit</button>
+</div>

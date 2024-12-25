@@ -1,0 +1,21 @@
+.menu-sidebar {
+  @apply relative z-10 min-h-screen shadow-lg;
+}
+
+.inner-content {
+  @apply relative px-4 bg-white h-full rounded-md max-h-[calc(100vh-100px)] overflow-y-auto dark:bg-dark;
+}
+
+nz-header {
+  @apply w-full z-[2] bg-white shadow-md px-6 flex justify-end items-center gap-7 dark:bg-dark;
+}
+
+nz-content {
+  @apply m-6;
+}
+
+::ng-deep {
+  .ant-menu-title-content {
+    @apply flex items-center;
+  }
+}

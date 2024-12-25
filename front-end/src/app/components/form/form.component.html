@@ -1,0 +1,186 @@
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+  <ng-container *ngFor="let field of form">
+    <ng-container [ngSwitch]="field.controlType">
+      <nz-form-item *ngSwitchCase="'text'">
+        <nz-form-label [nzFor]="field.formControlName">{{
+          field.fieldName
+        }}</nz-form-label>
+        <nz-form-control>
+          <input
+            nz-input
+            [formControlName]="field.formControlName"
+            [id]="field.formControlName"
+            [placeholder]="field.fieldName"
+          />
+          <div
+            *ngIf="
+              formGroup.get(field.formControlName)?.invalid &&
+              (formGroup.get(field.formControlName)?.dirty ||
+                formGroup.get(field.formControlName)?.touched)
+            "
+          >
+            <div
+              *ngIf="formGroup.get(field.formControlName)?.hasError('required')"
+            >
+              {{ field.fieldName }} is required.
+            </div>
+            <div
+              *ngIf="
+                formGroup.get(field.formControlName)?.hasError('minlength')
+              "
+            >
+              {{ field.fieldName }} must be at least
+              {{ field.config.minLength }} characters long.
+            </div>
+            <div
+              *ngIf="formGroup.get(field.formControlName)?.hasError('email')"
+            >
+              Please enter a valid email address.
+            </div>
+            <!-- Add more validation messages as needed -->
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item *ngSwitchCase="'password'">
+        <nz-form-label [nzFor]="field.formControlName">{{
+          field.fieldName
+        }}</nz-form-label>
+        <nz-form-control>
+          <input
+            nz-input
+            type="password"
+            [formControlName]="field.formControlName"
+            [id]="field.formControlName"
+            [placeholder]="field.fieldName"
+          />
+          <div
+            *ngIf="
+              formGroup.get(field.formControlName)?.invalid &&
+              (formGroup.get(field.formControlName)?.dirty ||
+                formGroup.get(field.formControlName)?.touched)
+            "
+          >
+            <div
+              *ngIf="formGroup.get(field.formControlName)?.hasError('required')"
+            >
+              {{ field.fieldName }} is required.
+            </div>
+            <div
+              *ngIf="
+                formGroup.get(field.formControlName)?.hasError('minlength')
+              "
+            >
+              {{ field.fieldName }} must be at least
+              {{ field.config.minLength }} characters long.
+            </div>
+            <!-- Add more validation messages as needed -->
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item *ngSwitchCase="'textarea'">
+        <nz-form-label [nzFor]="field.formControlName">{{
+          field.fieldName
+        }}</nz-form-label>
+        <nz-form-control>
+          <textarea
+            nz-input
+            [formControlName]="field.formControlName"
+            [id]="field.formControlName"
+            [placeholder]="field.fieldName"
+          ></textarea>
+          <div
+            *ngIf="
+              formGroup.get(field.formControlName)?.invalid &&
+              (formGroup.get(field.formControlName)?.dirty ||
+                formGroup.get(field.formControlName)?.touched)
+            "
+          >
+            <div
+              *ngIf="formGroup.get(field.formControlName)?.hasError('required')"
+            >
+              {{ field.fieldName }} is required.
+            </div>
+            <div
+              *ngIf="
+                formGroup.get(field.formControlName)?.hasError('minlength')
+              "
+            >
+              {{ field.fieldName }} must be at least
+              {{ field.config.minLength }} characters long.
+            </div>
+            <!-- Add more validation messages as needed -->
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+      <!-- Repeat similar structure for other control types -->
+      <nz-form-item *ngSwitchCase="'number'">
+        <nz-form-label [nzFor]="field.formControlName">{{
+          field.fieldName
+        }}</nz-form-label>
+        <nz-form-control>
+          <input
+            nz-input
+            type="number"
+            [formControlName]="field.formControlName"
+            [id]="field.formControlName"
+            [placeholder]="field.fieldName"
+          />
+          <div
+            *ngIf="
+              formGroup.get(field.formControlName)?.invalid &&
+              (formGroup.get(field.formControlName)?.dirty ||
+                formGroup.get(field.formControlName)?.touched)
+            "
+          >
+            <div
+              *ngIf="formGroup.get(field.formControlName)?.hasError('required')"
+            >
+              {{ field.fieldName }} is required.
+            </div>
+            <div *ngIf="formGroup.get(field.formControlName)?.hasError('min')">
+              {{ field.fieldName }} must be at least {{ field.config.min }}.
+            </div>
+            <div *ngIf="formGroup.get(field.formControlName)?.hasError('max')">
+              {{ field.fieldName }} must be at most {{ field.config.max }}.
+            </div>
+            <!-- Add more validation messages as needed -->
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item *ngSwitchCase="'select'">
+        <nz-form-label [nzFor]="field.formControlName">{{
+          field.fieldName
+        }}</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            [formControlName]="field.formControlName"
+            [id]="field.formControlName"
+            [nzPlaceHolder]="field.fieldName"
+          >
+            <nz-option
+              *ngFor="let option of field.options"
+              [nzLabel]="option.label"
+              [nzValue]="option.value"
+            ></nz-option>
+          </nz-select>
+          <div
+            *ngIf="
+              formGroup.get(field.formControlName)?.invalid &&
+              (formGroup.get(field.formControlName)?.dirty ||
+                formGroup.get(field.formControlName)?.touched)
+            "
+          >
+            <div
+              *ngIf="formGroup.get(field.formControlName)?.hasError('required')"
+            >
+              {{ field.fieldName }} is required.
+            </div>
+            <!-- Add more validation messages as needed -->
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+      <!-- Additional form control types go here -->
+    </ng-container>
+  </ng-container>
+  <button nz-button nzType="primary" type="submit">Submit</button>
+</form>

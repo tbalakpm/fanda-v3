@@ -1,0 +1,300 @@
+<page-header
+  title="Stock"
+  [breadcrumbs]="['Transactions', 'Stock', 'Add']"
+></page-header>
+
+<form nz-form [formGroup]="stockForm" nzLayout="vertical" class="pb-10">
+  <div class="grid grid-cols-4 gap-x-4">
+    <nz-form-item>
+      <nz-form-label>Invoice Number</nz-form-label>
+      <nz-form-control>
+        <input nz-input disabled value="TBD" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label nzFor="invoiceDate" nzRequired>Invoice Date</nz-form-label>
+      <nz-form-control nzErrorTip="Please select a valid date">
+        <nz-date-picker
+          formControlName="invoiceDate"
+          id="invoiceDate"
+        ></nz-date-picker>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label nzFor="referenceNumber">Reference Number</nz-form-label>
+      <nz-form-control>
+        <input
+          placeholder="Please enter Reference Number"
+          nz-input
+          formControlName="referenceNumber"
+          id="referenceNumber"
+        />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label nzFor="referenceDate">Reference Date</nz-form-label>
+      <nz-form-control>
+        <nz-date-picker
+          formControlName="referenceDate"
+          id="referenceDate"
+        ></nz-date-picker>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+
+  <div>
+    <div class="mb-4">
+      <!-- Line Items -->
+      <nz-table
+        style="width: calc(100% - 30px)"
+        [nzTitle]="tableHeader"
+        nzTemplateMode
+        [nzBordered]="true"
+        [nzSize]="'small'"
+        [nzShowPagination]="false"
+        [nzShowSizeChanger]="false"
+        [nzShowQuickJumper]="false"
+      >
+        <thead>
+          <tr>
+            <th nzWidth="250px">Tag No.</th>
+            <th nzWidth="250px">Product / HSN</th>
+            <th nzWidth="150px">Qty / Unit</th>
+            <th nzWidth="150px">Buying Price</th>
+            <th nzWidth="150px">Price</th>
+            <th nzWidth="150px" *ngIf="config.profitMgn">Profit Margin</th>
+            <th nzWidth="150px" class="flex gap-2">
+              <span>Selling Price</span>
+              <span
+                nz-icon
+                nzType="info-circle"
+                nzTheme="outline"
+                class="!text-black"
+                nz-tooltip="For Single Unit"
+              ></span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container formArrayName="lineItems">
+            <tr
+              *ngFor="let item of lineItems.controls; let i = index"
+              [formGroupName]="i"
+            >
+              <td>
+                <input
+                  nz-input
+                  type="text"
+                  formControlName="gtn"
+                  (blur)="getGtnDetails(item.value.gtn, item)"
+                  placeholder="Please enter Tag No."
+                />
+              </td>
+              <td>
+                <div class="flex gap-2 items-center">
+                  <nz-form-item class="flex-grow">
+                    <nz-form-control>
+                      <nz-select
+                        nzPlaceHolder="Please select product"
+                        formControlName="productId"
+                        class="rounded-md"
+                        id="productId"
+                        nzShowSearch
+                      >
+                        <nz-option
+                          nzValue="new"
+                          nzLabel="+ Add New"
+                        ></nz-option>
+                        <nz-option
+                          [nzValue]="p._id"
+                          [nzLabel]="p.name"
+                          *ngFor="let p of products"
+                        ></nz-option>
+                      </nz-select>
+                    </nz-form-control>
+                  </nz-form-item>
+                  {{ getProductHSN(item.value.productId) }}
+                </div>
+              </td>
+              <td>
+                <div class="flex items-center">
+                  <nz-input-number
+                    type="number"
+                    formControlName="qty"
+                    class="border-transparent"
+                  />
+                  <span>{{ getUnit(item.value.productId) }}</span>
+                </div>
+              </td>
+
+              <td>
+                <nz-form-item>
+                  <nz-form-control>
+                    <!-- <nz-input-number-group
+                      nzPrefix="₹"
+                      style="width: 100%"
+                      class="border-transparent"
+                    > -->
+                    <nz-input-number
+                      [nzMin]="0"
+                      formControlName="rate"
+                      [nzFormatter]="removeDecimal"
+                      ><span nzInputPrefix>₹</span></nz-input-number
+                    >
+                    <!-- </nz-input-number-group> -->
+                  </nz-form-control>
+                </nz-form-item>
+              </td>
+
+              <td>{{ item.value.price.toIndianCurrencyFormat() }}</td>
+
+              <td *ngIf="config.profitMgn">
+                <nz-form-item>
+                  <nz-form-control>
+                    <nz-input-group [nzAddOnAfter]="addOnAfterTemplate">
+                      <nz-input-number
+                        [nzMin]="0"
+                        formControlName="margin"
+                        class="border-r-0 rounded-r-none"
+                      />
+                    </nz-input-group>
+                  </nz-form-control>
+                </nz-form-item>
+
+                <ng-template #addOnAfterTemplate>
+                  <nz-select formControlName="marginPctOrAmt" class="m-0">
+                    <nz-option nzLabel="%" nzValue="pct"></nz-option>
+                    <nz-option nzLabel="₹" nzValue="amt"></nz-option>
+                  </nz-select>
+                </ng-template>
+              </td>
+
+              <td>
+                <nz-form-item>
+                  <nz-form-control>
+                    <nz-input-number
+                      [nzMin]="0"
+                      formControlName="sellingPrice"
+                      [nzFormatter]="removeDecimal"
+                      ><span nzInputPrefix>₹</span></nz-input-number
+                    >
+                  </nz-form-control>
+                </nz-form-item>
+                <span
+                  (click)="removeLineItem(i)"
+                  nz-icon
+                  nzType="delete"
+                  class="absolute top-4 -right-6"
+                  *ngIf="lineItems.length > 1"
+                ></span>
+              </td>
+            </tr>
+          </ng-container>
+          <tr class="text-right">
+            <td colspan="2" class="text-right align-table-footer">Total</td>
+            <td class="align-table-footer">{{ info.totalQty }}</td>
+            <td class="align-table-footer">
+              {{ info.totalAmount.toIndianCurrencyFormat() }}
+            </td>
+            <td
+              class="align-table-footer"
+              [colSpan]="config.profitMgn ? 3 : 2"
+            ></td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+
+    <!-- Info -->
+    <!-- <div class="flex justify-between gap-10"> -->
+    <div class="flex-grow flex gap-5 mb-10">
+      <div class="w-full !mb-0 block">
+        <nz-form-label nzFor="notes">Notes</nz-form-label>
+        <nz-form-control>
+          <textarea
+            nz-input
+            formControlName="notes"
+            id="notes"
+            [nzAutosize]="{ minRows: 2, maxRows: 4 }"
+          ></textarea>
+        </nz-form-control>
+      </div>
+    </div>
+    <!-- <div class="bg-[#fafafa] px-4 py-2 rounded-md w-[35%]">
+        <div class="grid grid-flow-col gap-5 h-full">
+          <div class="grid grid-rows-4 gap-5 items-center">
+            <span>Total Quantity</span>
+            <span class="text-base font-semibold">Total Amount</span>
+          </div>
+          <div class="grid grid-rows-4 gap-5 text-right items-center">
+            <span>{{ info.totalQty.toIndianNumberFormat() }}</span>
+            <span class="text-base font-semibold">{{
+              info.totalAmount.toIndianCurrencyFormat()
+            }}</span>
+          </div>
+        </div>
+      </div> -->
+    <!-- </div> -->
+
+    <!-- Table Header -->
+  </div>
+</form>
+
+<ng-template #tableHeader>
+  <div class="flex justify-between">
+    <span class="text-base font-bold">Line Items</span>
+    <div class="space-x-4">
+      <label
+        nz-checkbox
+        [(ngModel)]="config.profitMgn"
+        (ngModelChange)="onProfitMarginChange()"
+        class="text-base font-medium"
+        >Profit Margin</label
+      >
+      <button
+        type="button"
+        nz-button
+        nzType="dashed"
+        nzSize="small"
+        (click)="addLineItem()"
+      >
+        <span nz-icon nzType="plus"></span> Add Line Item
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<div
+  class="sticky bg-white dark:bg-dark -left-4 p-3 -m-4 flex justify-end shadow-top"
+  style="width: calc(100% + 32px)"
+>
+  <button nz-button nzType="primary" (click)="submitForm()">Submit</button>
+</div>
+
+<nz-modal
+  [(nzVisible)]="isAddProductModalVisible"
+  nzTitle="Add New Product"
+  nzOkText="Submit"
+  (nzOnOk)="addProduct()"
+  (nzOnCancel)="isAddProductModalVisible = false"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="productForm">
+      <nz-form-item>
+        <nz-form-label nzFor="code" nzRequired>Code</nz-form-label>
+        <nz-form-control nzErrorTip="Please enter product code">
+          <input nz-input type="text" formControlName="code" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="name" nzRequired>Name</nz-form-label>
+        <nz-form-control nzErrorTip="Please enter product name">
+          <input nz-input type="text" formControlName="name" />
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

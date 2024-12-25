@@ -1,0 +1,26 @@
+<nz-drawer
+  [nzVisible]="isVisible"
+  nzPlacement="right"
+  [nzTitle]="title"
+  (nzOnClose)="onDrawerClose()"
+  nzWidth="450px"
+>
+  <ng-container *nzDrawerContent>
+    <div *ngIf="!isLoading && values.length > 0">
+      <div *ngFor="let key of keys; let section = index">
+        <h1 class="text-lg font-semibold text-primary">{{ key }}:</h1>
+        <div
+          class="grid grid-cols-2 my-2"
+          *ngFor="let item of values[section] | keyvalue"
+        >
+          <div class="flex flex-col gap-2">
+            <span class="font-medium">{{ item.key }}</span>
+          </div>
+          <div class="flex flex-col gap-2">
+            <span>{{ item.value }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</nz-drawer>

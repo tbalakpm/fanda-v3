@@ -1,0 +1,181 @@
+<nz-layout>
+  <nz-sider class="menu-sidebar" [nzCollapsible]="true" nzBreakpoint="md">
+    <div class="sidebar-logo">
+      <a routerLink="/">
+        <img src="assets/Logo.svg" alt="logo" />
+        <h1 class="sanchez-regular">FandaTech</h1>
+      </a>
+    </div>
+    <ul nzTheme="dark" nz-menu nzMode="inline">
+      <!-- <ng-container
+        *ngTemplateOutlet="menuTpl; context: { $implicit: menus }"
+      ></ng-container> -->
+      <ng-container
+        *ngTemplateOutlet="
+          isReportMenu ? reportsMenuTpl : menuTpl;
+          context: { $implicit: isReportMenu ? reportMenu : menus }
+        "
+      ></ng-container>
+      <ng-template #menuTpl let-menus>
+        @for (menu of menus; track menu) { @if (!menu.children) {
+        <li
+          @fade
+          nz-menu-item
+          nzMatchRouter
+          [routerLink]="menu.url"
+          [nzPaddingLeft]="menu.level * 24"
+          [nzDisabled]="menu.disabled"
+          [nzSelected]="menu.selected"
+        >
+          @if (menu.icon) {
+          <span nz-icon [nzType]="menu.icon"></span>
+          }
+          <span>{{ menu.title }}</span>
+        </li>
+        } @else {
+        <li
+          @fade
+          nz-submenu
+          [nzOpen]="menu.open"
+          [nzTitle]="menu.title"
+          [nzIcon]="menu.icon"
+          [nzDisabled]="menu.disabled"
+          (click)="menuClick(menu)"
+        >
+          <ul @fade>
+            <ng-container
+              *ngTemplateOutlet="menuTpl; context: { $implicit: menu.children }"
+            />
+          </ul>
+        </li>
+        } }
+      </ng-template>
+      <ng-template #reportsMenuTpl let-reportsMenu>
+        @for (menu of reportsMenu; track menu) { @if (!menu.children) {
+        <li
+          @fade
+          nz-menu-item
+          nzMatchRouter
+          [routerLink]="menu.url"
+          [nzPaddingLeft]="menu.level * 24"
+          [nzDisabled]="menu.disabled"
+          [nzSelected]="menu.selected"
+        >
+          @if (menu.icon) {
+          <span nz-icon [nzType]="menu.icon"></span>
+          }
+          <span>{{ menu.title }}</span>
+        </li>
+        } @else {
+        <li
+          @fade
+          nz-submenu
+          [nzOpen]="menu.open"
+          [nzTitle]="menu.title"
+          [nzIcon]="menu.icon"
+          [nzDisabled]="menu.disabled"
+          (click)="menuClick(menu)"
+        >
+          <ul @fade>
+            <ng-container
+              *ngTemplateOutlet="
+                reportsMenuTpl;
+                context: { $implicit: menu.children }
+              "
+            />
+          </ul>
+        </li>
+        } }
+      </ng-template>
+      @if (selectedOrganization && selectedYear) {
+      <li
+        @fade
+        nz-menu-item
+        (click)="isReportMenu = true"
+        *ngIf="!isReportMenu"
+      >
+        <span nz-icon nzType="file"></span>
+        <span>Reports</span>
+      </li>
+      <li
+        @fade
+        nz-menu-item
+        (click)="isReportMenu = false"
+        *ngIf="isReportMenu"
+      >
+        <span nz-icon nzType="swap"></span>
+        <span>Master</span>
+      </li>
+      }
+    </ul>
+  </nz-sider>
+  <nz-layout>
+    <nz-header>
+      <div *ngIf="selectedOrganization && selectedYear" class="space-x-2">
+        <nz-select
+          *ngIf="selectedOrganization.years.length > 0"
+          class="w-[250px]"
+          [(ngModel)]="selectedYear._id"
+          (ngModelChange)="switchOrganization($event)"
+        >
+          <nz-option
+            [nzValue]="year._id"
+            [nzLabel]="year.code"
+            *ngFor="let year of selectedOrganization.years"
+          ></nz-option>
+        </nz-select>
+        <nz-select
+          class="w-[250px]"
+          [(ngModel)]="selectedOrganization._id"
+          (ngModelChange)="switchOrganization($event)"
+        >
+          <nz-option
+            [nzValue]="org._id"
+            [nzLabel]="org.name"
+            *ngFor="let org of organizations"
+          ></nz-option>
+        </nz-select>
+      </div>
+      <div
+        nz-dropdown
+        [nzDropdownMenu]="menu"
+        nzPlacement="bottomRight"
+        class="aspect-square h-8 text-base rounded-full flex items-center justify-center font-medium group-hover:scale-125 transition-all bg-primary text-white border-2 border-[#032a4c] cursor-pointer"
+      >
+        {{
+          user.firstName
+            ? user.firstName[0] + user.lastName[0]
+            : user.username[0]
+        }}
+      </div>
+    </nz-header>
+    <nz-content>
+      <div class="inner-content">
+        <span
+          nz-icon
+          nzType="loading"
+          class="absolute right-4 top-2 text-2xl text-primary"
+          *ngIf="isLoading$ | async"
+        ></span>
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+  </nz-layout>
+</nz-layout>
+
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <ul nz-menu>
+    <li nz-menu-item routerLink="select-organization">
+      <span nz-icon nzType="shop"></span>
+      <span class="ml-2">Switch Organization</span>
+    </li>
+    <li nz-menu-item>
+      <span nz-icon nzType="setting"></span>
+      <span class="ml-2">Settings</span>
+    </li>
+    <li nz-menu-item (click)="auth.logout()">
+      <span nz-icon nzType="logout"></span>
+      <span class="ml-2">Logout</span>
+    </li>
+  </ul>
+</nz-dropdown-menu>
