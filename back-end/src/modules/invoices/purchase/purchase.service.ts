@@ -14,15 +14,17 @@ import { SerialNumberHelper } from '../../../helpers/serial-number.helper';
 import logger from '../../../logger';
 import { PurchaseSchema } from './purchase.schema';
 import { PurchaseLineItem } from './purchase-line-item.entity';
+import { GetAllQuery } from '../../../interfaces/get-all-query';
 
 class PurchaseService {
   private readonly purchaseRepository = AppDataSource.getRepository(Purchase);
 
-  async getAllPurchases(companyId: string, yearId: string): Promise<ApiResponse<Purchase[]>> {
+  async getAllPurchases(companyId: string, yearId: string, query: GetAllQuery): Promise<ApiResponse<Purchase[]>> {
     const data = await cache.get<Purchase[]>(`purchases_${companyId}_${yearId}`);
     if (data) {
       return { success: true, message: 'Serving purchases from cache', data, status: ApiStatus.OK };
     }
+
     const invoices = await this.purchaseRepository.find({
       select: {
         invoiceId: true,
@@ -48,8 +50,11 @@ class PurchaseService {
       },
       relations: ['supplier'],
       where: { companyId, yearId },
-      order: { companyId: 'ASC', yearId: 'ASC', invoiceId: 'ASC' }
+      order: { companyId: 'ASC', yearId: 'ASC', invoiceId: 'ASC' },
+      skip: ((query.page || 1) - 1) * (query.limit || 10),
+      take: query.limit
     });
+
     await cache.set(`purchases_${companyId}_${yearId}`, invoices);
     return { success: true, message: 'Serving purchases from database', data: invoices, status: ApiStatus.OK };
   }

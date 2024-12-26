@@ -5,13 +5,15 @@ import { User } from '../../../entities/user.entity';
 import { ApiError } from '../../../responses/api-error';
 import { ApiResponse, ApiStatus } from '../../../responses';
 import { Purchase } from './purchase.entity';
+import { GetAllQuery } from '../../../interfaces/get-all-query';
 
 export class PurchaseController {
   static async getAllPurchases(req: Request, res: Response, next: NextFunction) {
     try {
       const { companyId, yearId } = req.params;
+      const getAllQuery: GetAllQuery = req.query;
       // console.log('companyId', companyId, 'yearId', yearId);
-      const result = await PurchaseService.getAllPurchases(companyId, yearId);
+      const result = await PurchaseService.getAllPurchases(companyId, yearId, getAllQuery);
       res.status(result.status).json(result);
     } catch (error) {
       return next(error);
