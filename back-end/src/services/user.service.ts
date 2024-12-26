@@ -8,6 +8,7 @@ import { ApiStatus } from '../responses/api-status';
 import { ApiResponse } from '../responses/api-response';
 import { UserSchema } from '../schema/user.schema';
 import { encrypt } from '../helpers/encrypt.helper';
+import { UserRoles } from '../entities';
 // import { User } from "../entities";
 // import { UserDto } from "../dto";
 // import { UserSchema } from "../schema";
@@ -29,6 +30,7 @@ export class UserService {
     }
     const users = await this.userRepository.find({
       select: ['userId', 'username', 'email', 'phone', 'firstName', 'lastName', 'role', 'isActive'],
+      where: { role: Not(UserRoles.Admin) },
       order: { userId: 'ASC' }
     });
     await cache.set('users', users);
@@ -92,6 +94,7 @@ export class UserService {
   }
 
   static async createUser(user: User): Promise<ApiResponse<UserDto>> {
+    if (!user.password) user.password = 'Welcome!23';
     const parsedResult = UserSchema.safeParse(user);
     if (!parsedResult.success) {
       return {

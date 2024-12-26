@@ -41,13 +41,15 @@ export class UserAddComponent {
   }
   @Input('id')
   set id(val: string) {
+    console.log(val);
     this._id = val;
     if (val && val !== 'new') {
       this.isEdit = true;
       this.userForm.controls['username'].disable();
       this._userService.getById(val).subscribe({
-        next: (res) => {
-          this.userForm.patchValue(res);
+        next: ({ data }) => {
+          this.userForm.patchValue(data);
+          console.log(data);
         },
       });
     } else this.isEdit = false;
@@ -60,13 +62,13 @@ export class UserAddComponent {
     private _userService: UserService
   ) {
     this.userForm = this.fb.group({
-      _id: [''],
+      userId: [''],
       username: ['', [Validators.required, Validators.minLength(3)]],
       firstName: ['', [Validators.minLength(3)]],
       lastName: ['', [Validators.minLength(3)]],
-      mobile: ['', [Validators.pattern(/^\d{10}$/)]],
+      phone: ['', [Validators.pattern(/^\d{10}$/)]],
       email: ['', [Validators.email]],
-      roles: [null, [Validators.required]],
+      role: [null, [Validators.required]],
     });
   }
 
@@ -106,8 +108,7 @@ export class UserAddComponent {
 
       // this._loaderService.showLoader();
       if (!this.isEdit) {
-        delete user._id;
-        user.roles = user.roles?.filter((r) => r !== '');
+        delete user.userId;
         this._userService.create(user).subscribe({
           next: (res) => {
             console.log(res);
@@ -135,12 +136,6 @@ export class UserAddComponent {
           control.updateValueAndValidity({ onlySelf: true });
         }
       });
-      if (
-        !this.userForm.controls['roles'].value ||
-        this.userForm.controls['roles'].value.length === 0
-      ) {
-        this.userForm.controls['roles'].setErrors({ required: true });
-      }
     }
   }
 }

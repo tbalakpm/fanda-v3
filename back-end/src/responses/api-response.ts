@@ -5,4 +5,5 @@ export class ApiResponse<T> {
   message!: string;
   status!: ApiStatus;
   data?: T;
+  total?: number;
 }

@@ -26,14 +26,14 @@ export class CompanyService {
   static async getAllCompanies(): Promise<ApiResponse<Company[]>> {
     const data = await cache.get<Company[]>('companies');
     if (data) {
-      return { success: true, message: 'Serving companies from cache', data, status: ApiStatus.OK };
+      return { success: true, message: 'Serving companies from cache', data, status: ApiStatus.OK, total: data.length };
     }
     const companies = await this.companyRepository.find({
       select: ['companyId', 'code', 'name', 'description', 'address', 'contact', 'isActive'],
       order: { companyId: 'ASC' }
     });
     await cache.set('companies', companies);
-    return { success: true, message: 'Serving companies from database', data: companies, status: ApiStatus.OK };
+    return { success: true, message: 'Serving companies from database', data: companies, status: ApiStatus.OK, total: companies.length };
   }
 
   static async getCompanyById(companyId: string): Promise<ApiResponse<Company>> {
@@ -80,7 +80,7 @@ export class CompanyService {
       await transactionalEntityManager.save<Supplier>(CompanyDataSeeder.getDefaultCashSupplier(newCompany.companyId, userId));
       await transactionalEntityManager.save<ProductCategory>(CompanyDataSeeder.getDefaultProductCategory(newCompany.companyId, userId));
       await transactionalEntityManager.save<Unit>(CompanyDataSeeder.getDefaultUnit(newCompany.companyId, userId));
-      this.invalidateCache();
+      await this.invalidateCache();
       return { success: true, message: 'Company created successfully', data: newCompany, status: ApiStatus.CREATED };
     }).catch((error) => {
       return { success: false, message: error.message, status: ApiStatus.INTERNAL_SERVER_ERROR };
@@ -129,7 +129,7 @@ export class CompanyService {
     }
     const parsedCompany = parsedResult.data as Company;
     const updatedCompany = await this.companyRepository.save(parsedCompany);
-    this.invalidateCache(companyId);
+    await this.invalidateCache(companyId);
     return { success: true, message: 'Company updated successfully', data: updatedCompany, status: ApiStatus.OK };
   }
 
@@ -139,7 +139,7 @@ export class CompanyService {
       return { success: false, message: `Company with id '${companyId}' not found`, status: ApiStatus.NOT_FOUND };
     }
     await this.companyRepository.remove(company);
-    this.invalidateCache(companyId);
+    await this.invalidateCache(companyId);
     return { success: true, message: 'Company deleted successfully', data: company, status: ApiStatus.OK };
   }
 

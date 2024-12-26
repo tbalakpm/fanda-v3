@@ -20,6 +20,7 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { Router, RouterModule } from '@angular/router';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { PageHeaderComponent } from '../../../../components/page-header/page-header.component';
+import { partyColumns } from './party-list';
 
 @Component({
   selector: 'party',
@@ -47,22 +48,31 @@ import { PageHeaderComponent } from '../../../../components/page-header/page-hea
   styleUrl: './party-list.component.scss',
 })
 export class PartyListComponent {
-  parties: Party[] = [];
   isCustomer: boolean;
 
-  total: number;
-  pageIndex = 1;
-  pageSize = 10;
-  sort = 'code';
-  order = 'asc';
-  _searchValue = '';
+  private _parties: Party[] = [];
+  searchedParty: Party[] = [];
 
-  get searchValue() {
-    return this._searchValue;
+  total: number;
+  partyColumns = partyColumns;
+
+  get parties() {
+    return this._parties;
   }
-  set searchValue(value: string) {
-    this._searchValue = value;
-    this.getOrgParty();
+  set parties(value: Party[]) {
+    this._parties = value;
+    this.searchedData = '';
+  }
+
+  set searchedData(value: string) {
+    this.searchedParty = [
+      ...this.parties.filter(
+        (party) =>
+          party.name.toLowerCase().includes(value.toLowerCase()) ||
+          party.code.toLowerCase().includes(value.toLowerCase()) ||
+          party.gstin?.toLowerCase().includes(value.toLowerCase())
+      ),
+    ];
   }
 
   constructor(
@@ -72,45 +82,20 @@ export class PartyListComponent {
     private _supplierService: SupplierService
   ) {
     this.isCustomer = this.router.url.includes('customer');
+    this.getOrgParty();
   }
 
   getOrgParty(): void {
-    // this._loaderService.showLoader();
-    let options: QueryOptions = {
-      page: this.pageIndex,
-      limit: this.pageSize,
-      sort: this.sort,
-      order: this.order,
-      value: this.searchValue,
-    };
     let request = this.isCustomer
-      ? this._customerService.getPaged(options)
-      : this._supplierService.getPaged(options);
+      ? this._customerService.getAll()
+      : this._supplierService.getAll();
 
     request.subscribe({
-      next: (data) => {
-        console.log(data.items);
-        this.parties = [...data.items];
-        this.total = data.total;
+      next: (res) => {
+        this.total = res.total;
+        this.parties = [...res.data];
       },
     });
-  }
-
-  onQueryParamsChange(qp: NzTableQueryParams) {
-    this.pageIndex = qp.pageIndex;
-    this.pageSize = qp.pageSize;
-    for (let i in qp.sort) {
-      const sort = qp.sort[i];
-      if (sort.value) {
-        this.sort = sort.key;
-        this.order = sort.value === 'ascend' ? 'asc' : 'desc';
-        break;
-      } else {
-        this.sort = 'code';
-        this.order = 'asc';
-      }
-    }
-    this.getOrgParty();
   }
 
   deleteParty(id: string) {

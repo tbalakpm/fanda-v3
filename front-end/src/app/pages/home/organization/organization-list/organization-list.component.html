@@ -6,32 +6,40 @@
     text: 'Add Organization'
   }"
   [showSearch]="true"
-  (onSearch)="searchValue = $event"
+  (onSearch)="searchedData = $event"
+  [searchDebounce]="0"
 ></page-header>
 
 <nz-table
   #orgTable
-  [nzData]="organizations"
-  [nzLoading]="_loaderService.isLoadingActive() | async"
+  [nzData]="searchedOrg"
   nzSize="middle"
-  [nzFrontPagination]="false"
-  [nzTotal]="total"
-  [nzPageIndex]="pageIndex"
-  [nzPageSize]="pageSize"
   nzShowSizeChanger
-  (nzQueryParams)="onQueryParamsChange($event)"
+  [nzLoading]="_loaderService.isLoadingActive() | async"
+  [nzShowTotal]="rangeTemplate"
 >
   <thead>
     <tr>
-      <th nzColumnKey="code" nzSortOrder="ascend" [nzSortFn]="true">Code</th>
-      <th nzColumnKey="name" [nzSortFn]="true">Name</th>
-      <th>Description</th>
-      <th nzColumnKey="isActive" [nzSortFn]="true">Status</th>
+      @for (column of orgColumns; track column) {
+      <th
+        [nzSortOrder]="column.sortOrder"
+        [nzSortFn]="column.sortFn"
+        [nzSortDirections]="column.sortDirections"
+        [nzFilterMultiple]="column.filterMultiple"
+        [nzFilters]="column.listOfFilter"
+        [nzFilterFn]="column.filterFn"
+        [nzShowFilter]="column.filterFn"
+        [nzShowSort]="column.sortFn"
+      >
+        {{ column.name }}
+      </th>
+      }
       <th nzWidth="150px">Action</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let org of orgTable.data">
+    @for (org of orgTable.data; track org) {
+    <tr>
       <td>{{ org.code }}</td>
       <td>{{ org.name }}</td>
       <td>{{ org.description ? org.description : "-" }}</td>
@@ -41,33 +49,34 @@
       </td>
       <td>
         <div class="space-x-2">
-          <button nz-tooltip="Info" (click)="openInfoDrawer(org._id!)">
+          <button nz-tooltip="Info" (click)="openInfoDrawer(org.companyId!)">
             <i nz-icon nzType="info-circle"></i>
           </button>
           <button
             nz-tooltip="Edit"
-            routerLink="/home/organization/edit/{{ org._id }}"
+            routerLink="/home/organization/edit/{{ org.companyId }}"
           >
             <i nz-icon nzType="edit"></i>
           </button>
           <button
-            [disabled]="org._id === selectedOrganization._id"
+            [disabled]="org.companyId === selectedOrganization.companyId"
             nz-tooltip="Delete"
             nz-popconfirm="Are you sure to delete?"
-            (nzOnConfirm)="deleteOrganization(org._id!)"
+            (nzOnConfirm)="deleteOrganization(org.companyId!)"
           >
             <i nz-icon nzType="delete"></i>
           </button>
           <nz-switch
             nz-tooltip="Activate/Deactivate"
             nzSize="small"
-            [nzDisabled]="org._id === selectedOrganization._id"
+            [nzDisabled]="org.companyId === selectedOrganization.companyId"
             [ngModel]="org.isActive"
-            (ngModelChange)="toggleActive(org._id!, $event)"
+            (ngModelChange)="toggleActive(org.companyId!, $event)"
           ></nz-switch>
         </div>
       </td>
     </tr>
+    }
   </tbody>
 </nz-table>
 
@@ -77,3 +86,7 @@
   [data]="selectedInfoOrganization"
   (onClose)="isInfoDrawerVisible = false"
 ></info-drawer>
+
+<ng-template #rangeTemplate let-range="range" let-total>
+  {{ range[0] }}-{{ range[1] }} of {{ total }} items
+</ng-template>

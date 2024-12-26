@@ -1,11 +1,11 @@
 export interface User {
-  _id: string;
+  userId: string;
   username: string;
   firstName: string;
   lastName: string;
-  mobile: string;
+  phone: string;
   email: string;
-  roles: string[];
+  role: string;
   imageUrl: string;
   isActive: boolean;
 }
