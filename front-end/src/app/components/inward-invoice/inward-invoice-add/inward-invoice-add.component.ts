@@ -1,5 +1,5 @@
-import { Component, HostListener, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, HostListener, Input } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -9,36 +9,37 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzSelectModule } from 'ng-zorro-antd/select';
-import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzStepsModule } from 'ng-zorro-antd/steps';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
+import { forkJoin } from 'rxjs';
+
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
-import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
-import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
-import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzStepsModule } from 'ng-zorro-antd/steps';
+import { NzTableModule } from 'ng-zorro-antd/table';
 
+import { PageHeaderComponent } from '@components';
+import { INVOICE_TYPES, INVOICE_TYPES_DICT } from '@constants';
+import { LineItem, Party, Product } from '@models';
 import {
   InventoryService,
   InwardInvoiceService,
   ProductService,
   SupplierService,
-} from '../../../services';
-import { LineItem, Party, Product } from '../../../models';
-import { INVOICE_TYPES, INVOICE_TYPES_DICT } from '../../../constants';
-import { ActivatedRoute } from '@angular/router';
-import { forkJoin } from 'rxjs';
-import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
-import { watchObject } from '../../../utils';
-import { PageHeaderComponent } from '../../page-header/page-header.component';
-import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+} from '@services';
+import { watchObject } from '@utils';
 
 @Component({
   selector: 'inward-invoice-add',
@@ -360,7 +361,7 @@ export class InwardInvoiceAddComponent {
       )
         product = this.gtnProducts.find((p) => p.gtn === productGtn);
 
-      form.controls.unitId.setValue(product.unit!._id!);
+      form.controls.unitId.setValue(product.unit!.unitId!);
 
       form.controls.marginPctOrAmt.setValue('pct');
       form.controls.margin.setValue(product.marginPct ?? 0);
@@ -562,7 +563,7 @@ export class InwardInvoiceAddComponent {
           );
           this.products.push(data);
           if (selectedLineItem)
-            selectedLineItem.controls.productId.setValue(data._id);
+            selectedLineItem.controls.productId.setValue(data.productId);
           this.isAddProductModalVisible = false;
           this.productForm.reset();
         });

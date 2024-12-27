@@ -1,7 +1,8 @@
-import { Routes } from '@angular/router';
-import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 import { inject } from '@angular/core';
-import { AuthService } from './services/auth.service';
+import { Routes } from '@angular/router';
+
+import { AuthService } from '@services';
+import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 
 export const routes: Routes = [
   {

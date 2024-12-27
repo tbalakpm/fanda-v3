@@ -1,4 +1,4 @@
-import { LineItem } from './inwardInvoice';
+import { LineItem } from './';
 
 export interface Stock {
   _id: string;

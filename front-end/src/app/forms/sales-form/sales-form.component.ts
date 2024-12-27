@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { OutwardInvoiceAddComponent } from '../../components/outward-invoice/outward-invoice-add/outward-invoice-add.component';
+import { OutwardInvoiceAddComponent } from '@components';
 
 @Component({
   selector: 'sales-form',

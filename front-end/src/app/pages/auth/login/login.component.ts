@@ -6,16 +6,14 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzInputModule } from 'ng-zorro-antd/input';
+import { Router, RouterModule } from '@angular/router';
+
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
-import { Router, RouterModule } from '@angular/router';
-import {
-  AuthService,
-  Login,
-  LoginResponseData,
-} from '../../../services/auth.service';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzInputModule } from 'ng-zorro-antd/input';
+
+import { AuthService, Login } from '@services';
 
 @Component({
   selector: 'app-login',

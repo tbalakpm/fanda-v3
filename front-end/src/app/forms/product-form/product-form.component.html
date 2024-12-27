@@ -24,7 +24,7 @@
       <nz-form-control nzErrorTip="Please select type">
         <nz-select
           nzShowSearch
-          formControlName="type"
+          formControlName="productType"
           nzPlaceHolder="Select product type"
         >
           <nz-option nzValue="goods" nzLabel="Goods"></nz-option>
@@ -44,7 +44,7 @@
           <nz-option [nzValue]="'new'" nzLabel="+ Add New"></nz-option>
           <nz-option
             *ngFor="let category of categories"
-            [nzValue]="category._id"
+            [nzValue]="category.categoryId"
             [nzLabel]="category.name"
           ></nz-option>
         </nz-select>
@@ -56,13 +56,13 @@
       <nz-form-control nzErrorTip="Please select unit">
         <nz-select
           nzShowSearch
-          formControlName="unitId"
+          formControlName="baseUnitId"
           nzPlaceHolder="Select Unit"
         >
           <nz-option [nzValue]="'new'" nzLabel="+ Add New"></nz-option>
           <nz-option
             *ngFor="let unit of units"
-            [nzValue]="unit._id"
+            [nzValue]="unit.unitId"
             [nzLabel]="unit.name"
           ></nz-option>
         </nz-select>

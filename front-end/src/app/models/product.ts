@@ -1,5 +1,5 @@
 export interface Product {
-  _id?: string;
+  productId?: string;
   isActive: boolean;
   code: string;
   name: string;
@@ -21,7 +21,7 @@ export interface Product {
 }
 
 export interface ProductCategory {
-  _id?: string;
+  categoryId?: string;
   code: string;
   name: string;
   description?: string;
@@ -29,7 +29,7 @@ export interface ProductCategory {
 }
 
 export interface Unit {
-  _id?: string;
+  unitId?: string;
   code: string;
   name: string;
   description?: string;

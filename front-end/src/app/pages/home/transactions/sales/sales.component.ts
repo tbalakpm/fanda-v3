@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { OutwardInvoiceListComponent } from '../../../../components/outward-invoice/outward-invoice-list/outward-invoice-list.component';
-import { PageHeaderComponent } from '../../../../components/page-header/page-header.component';
+
+import { OutwardInvoiceListComponent, PageHeaderComponent } from '@components';
 
 @Component({
   selector: 'sales',

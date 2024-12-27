@@ -10,6 +10,7 @@ import { Product } from './product.entity';
 import { ProductSchema } from './product.schema';
 import { ApiResponse } from '../../responses/api-response';
 import { ApiStatus } from '../../responses/api-status';
+import { GtnGeneration } from './gtn-generation.enum';
 
 export class ProductService {
   private static productRepository = AppDataSource.getRepository(Product);
@@ -103,6 +104,7 @@ export class ProductService {
   }
 
   static async createProduct(companyId: string, product: Product, userId: string): Promise<ApiResponse<Product>> {
+    if (!product.gtnGeneration) product.gtnGeneration = GtnGeneration.Tag;
     const parsedResult = ProductSchema.safeParse(product);
     if (!parsedResult.success) {
       return {

@@ -1,26 +1,21 @@
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzStepsModule } from 'ng-zorro-antd/steps';
 
+import { fadeInAnimation } from '@animations';
+import { PageHeaderComponent } from '@components';
 import {
-  CustomerService,
-  LoaderService,
-  SupplierService,
-} from '../../../../services';
-
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { Party } from '../../../../models';
-import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
-import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
-import { PartyAddressFormComponent } from '../../../../forms/party-address-form/party-address-form.component';
-import { PartyContactFormComponent } from '../../../../forms/party-contact-form/party-contact-form.component';
-import { PartyFormComponent } from '../../../../forms/party-form/party-form.component';
-import { fadeInAnimation } from '../../../../animations';
-import { PageHeaderComponent } from '../../../../components/page-header/page-header.component';
+  PartyAddressFormComponent,
+  PartyContactFormComponent,
+  PartyFormComponent,
+} from '@forms';
+import { Party } from '@models';
+import { CustomerService, LoaderService, SupplierService } from '@services';
 
 @Component({
   selector: 'organization-add',

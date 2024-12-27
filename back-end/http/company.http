@@ -1,5 +1,5 @@
 @baseUrl=http://localhost:4000
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTkyZmM1ZS0wMDkzLTdjY2MtYTIwYS1kYzg0NGE1YmFkMWMiLCJpYXQiOjE3MzA4MTI0MjQsImV4cCI6NDg4NDQxMjQyNH0.kpqWbQXwp9GsKhB-Yd1eGPdq8NHw5mj_9xpRT5Ggmkw
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTkzMmIwOS1lMzU3LTc5OTgtOWE1Mi01MTNkNzNhZWY0YmIiLCJpYXQiOjE3MzUxMjYwNTUsImV4cCI6MTczNTIxMjQ1NX0.O9MhOB5CjeSthk4I4BO_QnqBEIz3tOoqqnKxjNRpKS8
 
 ### Get all companies
 GET {{baseUrl}}/api/companies
@@ -18,6 +18,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
+  "companyId":null,
   "code": "FANDA",
   "name": "FandaTech",
   "description": "Fintech company",
@@ -31,7 +32,7 @@ Authorization: Bearer {{token}}
   },
   "contact": {
     "phone": "+919840000000",
-    "email": "adin@fandatech.net",
+    # "email": "adin@fandatech.net",
     "test":"Testing"
   }
 }

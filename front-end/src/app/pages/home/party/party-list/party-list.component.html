@@ -6,13 +6,13 @@
     text: 'Add ' + (isCustomer ? 'Customer' : 'Supplier')
   }"
   [showSearch]="true"
-  (onSearch)="searchedData = $event"
+  (onSearch)="searchValue = $event"
   [searchDebounce]="0"
 ></page-header>
 
 <nz-table
   #partyTable
-  [nzData]="searchedParty"
+  [nzData]="parties"
   nzSize="middle"
   nzShowSizeChanger
   [nzLoading]="_loaderService.isLoadingActive() | async"

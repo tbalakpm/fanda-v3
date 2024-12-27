@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { InwardInvoiceAddComponent } from '../../components/inward-invoice/inward-invoice-add/inward-invoice-add.component';
+
+import { InwardInvoiceAddComponent } from '@components';
 
 @Component({
   selector: 'purchase-form',

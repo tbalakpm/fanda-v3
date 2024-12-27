@@ -1,2 +1,2 @@
-export * from './string.extension';
 export * from './number.extension';
+export * from './string.extension';

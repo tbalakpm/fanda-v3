@@ -1,13 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
+
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { InwardInvoice } from '../../../models';
-import { InwardInvoiceService, LoaderService } from '../../../services';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
 import { NzTagModule } from 'ng-zorro-antd/tag';
-import { GST_TREATMENTS_IN_DICT, INVOICE_TYPES_DICT } from '../../../constants';
-import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+
+import { GST_TREATMENTS_IN_DICT, INVOICE_TYPES_DICT } from '@constants';
+import { InwardInvoice } from '@models';
+import { InwardInvoiceService, LoaderService } from '@services';
 
 @Component({
   selector: 'inward-invoice-list',

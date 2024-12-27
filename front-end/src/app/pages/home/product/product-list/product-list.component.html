@@ -7,29 +7,28 @@
 ></page-header>
 
 <nz-table
-  class="mt-4"
   #productTable
   [nzData]="products"
   [nzLoading]="_loaderService.isLoadingActive() | async"
   nzSize="middle"
-  [nzFrontPagination]="false"
   [nzTotal]="total"
-  [nzPageIndex]="pageIndex"
-  [nzPageSize]="pageSize"
   nzShowSizeChanger
-  (nzQueryParams)="onQueryParamsChange($event)"
 >
   <thead>
     <tr>
-      <th nzColumnKey="code" nzSortOrder="ascend" [nzSortFn]="true">Code</th>
-      <th nzColumnKey="name" [nzSortFn]="true">Name</th>
-      <th>Category - Unit</th>
-      <th>Buying Price</th>
-      <th>Margin %</th>
-      <th>Selling Price</th>
-      <th>Tax Preference - % - Code</th>
-      <th nzColumnKey="isActive" [nzSortFn]="true">Active</th>
-      <th nzWidth="150px">Action</th>
+      <th
+        *ngFor="let column of productColumns"
+        [nzSortOrder]="column.sortOrder"
+        [nzSortFn]="column.sortFn"
+        [nzSortDirections]="column.sortDirections"
+        [nzFilterMultiple]="column.filterMultiple"
+        [nzFilters]="column.listOfFilter"
+        [nzFilterFn]="column.filterFn"
+        [nzShowFilter]="column.filterFn"
+        [nzShowSort]="column.sortFn"
+      >
+        {{ column.name }}
+      </th>
     </tr>
   </thead>
   <tbody>
@@ -50,14 +49,14 @@
       </td>
       <td>
         <div class="space-x-2">
-          <button nz-tooltip="Edit" [routerLink]="['edit', product._id]">
-            <!-- routerLink="/home/product/edit/{{ product._id }}" -->
+          <button nz-tooltip="Edit" [routerLink]="['edit', product.productId]">
+            <!-- routerLink="/home/product/edit/{{ product.productId }}" -->
             <i nz-icon nzType="edit"></i>
           </button>
           <button
             nz-tooltip="Delete"
             nz-popconfirm="Are you sure delete this Product?"
-            (nzOnConfirm)="deleteProduct(product._id!)"
+            (nzOnConfirm)="deleteProduct(product.productId!)"
           >
             <i nz-icon nzType="delete"></i>
           </button>
@@ -65,7 +64,7 @@
             nz-tooltip="Activate/Deactivate"
             nzSize="small"
             [ngModel]="product.isActive"
-            (ngModelChange)="toggleActive(product._id!, $event)"
+            (ngModelChange)="toggleActive(product.productId!, $event)"
           ></nz-switch>
         </div>
       </td>

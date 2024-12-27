@@ -1,11 +1,13 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import { GST_TREATMENTS_IN, GST_TREATMENTS_OUT } from '../../constants';
-import { CommonModule } from '@angular/common';
+
+import { GST_TREATMENTS_IN, GST_TREATMENTS_OUT } from '@constants';
 
 @Component({
   selector: 'party-form',

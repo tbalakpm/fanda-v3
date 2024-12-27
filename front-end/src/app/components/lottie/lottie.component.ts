@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { AnimationItem } from 'lottie-web';
 import { LottieComponent, AnimationOptions } from 'ngx-lottie';
 
 @Component({

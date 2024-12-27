@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, Input } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -8,39 +8,40 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzSelectModule } from 'ng-zorro-antd/select';
-import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzStepsModule } from 'ng-zorro-antd/steps';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
+import { forkJoin } from 'rxjs';
+
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
-import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
-import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzStepsModule } from 'ng-zorro-antd/steps';
+import { NzTableModule } from 'ng-zorro-antd/table';
 
-import {
-  OutwardInvoiceService,
-  CustomerService,
-  InventoryService,
-} from '../../../services';
-import { LineItem, Party, Product } from '../../../models';
+import { PageHeaderComponent } from '@components';
 import {
   GST_TREATMENTS_OUT,
   INVOICE_TYPES,
   INVOICE_TYPES_DICT,
-} from '../../../constants';
-import { ActivatedRoute } from '@angular/router';
-import { forkJoin } from 'rxjs';
-import { PageHeaderComponent } from '../../page-header/page-header.component';
-import { watchObject } from '../../../utils';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalModule } from 'ng-zorro-antd/modal';
-import { NzDividerModule } from 'ng-zorro-antd/divider';
+} from '@constants';
+import { LineItem, Party, Product } from '@models';
+import {
+  CustomerService,
+  InventoryService,
+  OutwardInvoiceService,
+} from '@services';
+import { watchObject } from '@utils';
 
 @Component({
   selector: 'outward-invoice-add',

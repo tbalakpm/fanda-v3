@@ -1,11 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { GetCities, STATES } from '../../constants';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import { CommonModule } from '@angular/common';
+
+import { GetCities, STATES } from '@constants';
 
 @Component({
   selector: 'party-address-form',

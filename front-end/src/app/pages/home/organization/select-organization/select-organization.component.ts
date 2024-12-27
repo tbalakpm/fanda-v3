@@ -1,16 +1,13 @@
-import { Component } from '@angular/core';
-import { OrganizationService } from '../../../../services';
-import { Organization } from '../../../../models';
 import { CommonModule } from '@angular/common';
-import {
-  AuthService,
-  LoginResponseData,
-} from '../../../../services/auth.service';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
+import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { Router } from '@angular/router';
+
+import { Organization } from '@models';
+import { AuthService, LoginResponseData, OrganizationService } from '@services';
 
 @Component({
   selector: 'app-select-organization',

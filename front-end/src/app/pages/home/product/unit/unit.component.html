@@ -1,19 +1,9 @@
-<nz-page-header nzTitle="Units" nzBackIcon class="p-0 pb-2">
+<nz-page-header nzTitle="Units" nzBackIcon class="!p-0 !py-3">
   <nz-breadcrumb nz-page-header-breadcrumb>
     <nz-breadcrumb-item>Inventory</nz-breadcrumb-item>
     <nz-breadcrumb-item>Units</nz-breadcrumb-item>
   </nz-breadcrumb>
   <nz-page-header-extra>
-    <nz-input-group [nzSuffix]="suffixIconSearch">
-      <input
-        type="text"
-        nz-input
-        placeholder="Input search text"
-        class="w-60"
-        [(ngModel)]="searchValue"
-        (ngModelChange)="onSearchChange($event)"
-      />
-    </nz-input-group>
     <button
       nz-button
       nzType="primary"
@@ -26,85 +16,78 @@
   </nz-page-header-extra>
 </nz-page-header>
 
-<ng-template #suffixIconSearch>
-  <span nz-icon nzType="search"></span>
-</ng-template>
-
 <nz-table
-  class="mt-4"
-  #editRowTable
+  #unitTable
   [nzData]="units"
-  [nzLoading]="_loaderService.isLoadingActive() | async"
   nzSize="middle"
-  [nzFrontPagination]="false"
-  [nzTotal]="total"
-  [nzPageIndex]="pageIndex"
-  [nzPageSize]="pageSize"
   nzShowSizeChanger
-  (nzQueryParams)="onQueryParamsChange($event)"
+  [nzLoading]="_loaderService.isLoadingActive() | async"
+  [nzShowTotal]="rangeTemplate"
+  [nzTotal]="total"
+  [nzPageSizeOptions]="[1, 10, 20, 50]"
 >
   <thead>
     <tr>
-      <th nzColumnKey="code" nzSortOrder="ascend" [nzSortFn]="true">Code</th>
-      <th nzColumnKey="name" [nzSortFn]="true">Unit Name</th>
+      <th>Code</th>
+      <th>Name</th>
       <th>Description</th>
-      <th nzColumnKey="isActive" [nzSortFn]="true" nzWidth="10%">Status</th>
+      <th nzWidth="10%">Status</th>
       <th nzWidth="150px">Action</th>
     </tr>
   </thead>
   <tbody>
+    @for (unit of unitTable.data; track unit) {
     <tr
-      *ngFor="let unit of editRowTable.data"
       class="editable-row"
       [ngClass]="{
         'bg-stone-200 !bg-opacity-50 dark:bg-dark-sec dark:!bg-opacity-100':
-          unit._id == editId
+          unit.unitId == editId
       }"
     >
       <td>
         <div
-          [hidden]="editId === unit._id"
+          [hidden]="editId === unit.unitId"
           class="px-3 py-[5px]"
           [ngClass]="{ 'editable-cell': editId === null }"
-          (click)="editId === null && startEdit(unit._id!, 'code')"
+          (click)="editId === null && startEdit(unit.unitId!, 'code')"
         >
           {{ unit.code }}
         </div>
         <input
-          [hidden]="editId !== unit._id"
+          [hidden]="editId !== unit.unitId"
           type="text"
           nz-input
           [(ngModel)]="editData.code"
-          [id]="'code' + unit._id"
+          [id]="'code' + unit.unitId"
         />
       </td>
       <td>
         <div
-          [hidden]="editId === unit._id"
+          [hidden]="editId === unit.unitId"
           class="px-3 py-[5px]"
           [ngClass]="{ 'editable-cell': editId === null }"
-          (click)="editId === null && startEdit(unit._id!, 'name')"
+          (click)="editId === null && startEdit(unit.unitId!, 'name')"
         >
           {{ unit.name }}
         </div>
         <input
-          [hidden]="editId !== unit._id"
+          [hidden]="editId !== unit.unitId"
           type="text"
           nz-input
           [(ngModel)]="editData.name"
-          [id]="'name' + unit._id"
+          [id]="'name' + unit.unitId"
         />
       </td>
       <td>
-        <div [hidden]="editId === unit._id">
+        <div [hidden]="editId === unit.unitId">
           {{ unit.description }}
         </div>
         <input
-          [hidden]="editId !== unit._id"
+          [hidden]="editId !== unit.unitId"
           type="text"
           nz-input
           [(ngModel)]="editData.description"
-          [id]="'description' + unit._id"
+          [id]="'description' + unit.unitId"
         />
       </td>
       <td>
@@ -114,38 +97,38 @@
       <td>
         <div class="space-x-2">
           <span
-            [hidden]="editId === unit._id"
+            [hidden]="editId === unit.unitId"
             nz-icon
             nzType="edit"
             nz-tooltip="Edit"
-            (click)="editId === null && startEdit(unit._id!, 'shortName')"
+            (click)="editId === null && startEdit(unit.unitId!, 'shortName')"
             [ngClass]="{ '!text-gray-500': editId !== null }"
           ></span>
           <span
-            [hidden]="editId === unit._id"
+            [hidden]="editId === unit.unitId"
             nz-icon
             nzType="delete"
             nz-tooltip="Delete"
             nz-popconfirm
             nzPopconfirmTitle="Sure to delete?"
-            (nzOnConfirm)="deleteUnit(unit._id!)"
+            (nzOnConfirm)="deleteUnit(unit.unitId!)"
           ></span>
           <nz-switch
             nz-tooltip="Activate/Deactivate"
-            [hidden]="editId === unit._id"
+            [hidden]="editId === unit.unitId"
             nzSize="small"
             [ngModel]="unit.isActive"
-            (ngModelChange)="toggleActive(unit._id!, $event)"
+            (ngModelChange)="toggleActive(unit.unitId!, $event)"
           ></nz-switch>
           <span
-            [hidden]="editId !== unit._id"
+            [hidden]="editId !== unit.unitId"
             nz-icon
             nzType="check"
             nz-tooltip="Save"
             (click)="editId === 'new' ? saveNewUnit() : saveEdit()"
           ></span>
           <span
-            [hidden]="editId !== unit._id"
+            [hidden]="editId !== unit.unitId"
             nz-icon
             nzType="close"
             nz-tooltip="Cancel"
@@ -156,5 +139,9 @@
         </div>
       </td>
     </tr>
+    }
   </tbody>
 </nz-table>
+<ng-template #rangeTemplate let-range="range" let-total>
+  {{ range[0] }}-{{ range[1] }} of {{ total }} items
+</ng-template>

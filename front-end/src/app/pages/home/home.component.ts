@@ -1,22 +1,22 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
-import { fadeInAnimation } from '../../animations';
-import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 
+import { fadeInAnimation } from '@animations';
+import { OrgYear, Organization } from '@models';
 import {
-  LoaderService,
-  OrganizationService,
   AuthService,
+  LoaderService,
   LoginResponseData,
-} from '../../services';
-import { OrgYear, Organization } from '../../models';
+  OrganizationService,
+} from '@services';
 
 @Component({
   selector: 'app-home',
