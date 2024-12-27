@@ -33,7 +33,7 @@
         >
           <nz-option
             *ngFor="let s of suppliers"
-            [nzValue]="s._id"
+            [nzValue]="s.id"
             [nzLabel]="
               s.name + (s.address?.city ? ' - ' + s.address?.city : '')
             "

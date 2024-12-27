@@ -177,7 +177,7 @@ export class OutwardInvoiceAddComponent {
     this.outwardInvoiceForm.controls['customer'].valueChanges.subscribe(
       (value: string) => {
         if (
-          this.customers.find((c) => c._id === value)?.name.toLowerCase() ===
+          this.customers.find((c) => c.id === value)?.name.toLowerCase() ===
           'cash'
         ) {
           this.isCashCustomer = true;

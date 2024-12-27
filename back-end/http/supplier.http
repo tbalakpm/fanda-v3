@@ -1,0 +1,91 @@
+@baseUrl=http://localhost:4000
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTkyZmM1ZS0wMDkzLTdjY2MtYTIwYS1kYzg0NGE1YmFkMWMiLCJpYXQiOjE3MzA4MTI0MjQsImV4cCI6NDg4NDQxMjQyNH0.kpqWbQXwp9GsKhB-Yd1eGPdq8NHw5mj_9xpRT5Ggmkw
+@companyId=0193ea0e-12b0-704e-b888-cf085466b612
+@unitId=0193ea0e-12ca-71ad-a5fd-ec3aa58be8d3
+@categoryId=0193ea0e-12c7-7620-8f5e-0aa5fdeb613a
+@productId=0193f233-fc38-7360-8bb1-b317340fee32
+@productId2=0193f233-fc38-7360-8bb1-b317340fee33
+
+### Get all products
+GET {{baseUrl}}/api/companies/{{companyId}}/suppliers
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Get product by id
+GET {{baseUrl}}/api/companies/{{companyId}}/suppliers/{{productId}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+### Create first product
+POST {{baseUrl}}/api/companies/{{companyId}}/suppliers
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "productId": "{{productId}}",
+  "code": "MONITOR",
+  "name": "Monitor",
+  "description": "Monitors",
+  "productType": "goods",
+  "categoryId": "{{categoryId}}",
+  "baseUnitId": "{{unitId}}",
+  "buyingPrice": 20000,
+  "marginAmt": 5000,
+  "sellingPrice": 15000,
+  "taxCode": "G-C00001",
+  "taxPct": 18,
+  "taxPreference": "taxable",
+  "isPriceInclusiveTax": true,
+  "gtnGeneration": "tag"
+}
+
+### Create second product
+POST {{baseUrl}}/api/companies/{{companyId}}/suppliers
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "productId": "{{productId2}}",
+  "code": "CPU",
+  "name": "CPU",
+  "description": "Central processign units",
+  "productType": "goods",
+  "categoryId": "{{categoryId}}",
+  "baseUnitId": "{{unitId}}",
+  "buyingPrice": 25000,
+  "marginAmt": 5000,
+  "sellingPrice": 30000,
+  "taxCode": "G-C00002",
+  "taxPct": 18,
+  "taxPreference": "taxable",
+  "isPriceInclusiveTax": false,
+  "gtnGeneration": "batch"
+}
+
+### Update product
+PUT {{baseUrl}}/api/companies/{{companyId}}/suppliers/{{productId}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "productId": "{{productId}}",
+  "code": "MONITORS",
+  "name": "Monits",
+  "description": "Display monitors",
+  "type": "goods",
+  "baseUnitId": "{{unitId}}",
+  "buyingPrice": 20000,
+  "marginPct": 0,
+  "marginAmt": 5000,
+  "sellingPrice": 25000,
+  "taxCode": "G-M00001",
+  "taxPct": 18,
+  "taxPreference": "taxable",
+  "isPriceInclusiveTax": true
+}
+
+### Delete product
+DELETE {{baseUrl}}/api/companies/{{companyId}}/suppliers/{{productId}}
+Content-Type: application/json
+Authorization: Bearer {{token}}

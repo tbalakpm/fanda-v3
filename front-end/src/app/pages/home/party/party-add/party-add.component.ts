@@ -13,14 +13,12 @@ import {
 } from '../../../../services';
 
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { Party } from '../../../../models';
-import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
-import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { PartyAddressFormComponent } from '../../../../forms/party-address-form/party-address-form.component';
 import { PartyContactFormComponent } from '../../../../forms/party-contact-form/party-contact-form.component';
 import { PartyFormComponent } from '../../../../forms/party-form/party-form.component';
 import { fadeInAnimation } from '../../../../animations';
 import { PageHeaderComponent } from '../../../../components/page-header/page-header.component';
+import { Party } from '../../../../models';
 
 @Component({
   selector: 'organization-add',
@@ -30,10 +28,8 @@ import { PageHeaderComponent } from '../../../../components/page-header/page-hea
     PartyFormComponent,
     PartyAddressFormComponent,
     PartyContactFormComponent,
-
     CommonModule,
     RouterModule,
-
     NzButtonModule,
     NzStepsModule,
     NzIconModule,
@@ -69,13 +65,11 @@ export class PartyAddComponent {
       gstTreatment: ['', [Validators.required]],
       gstin: [''],
     });
-    if (this.isCustomer)
+    if (this.isCustomer) {
       this.partyForm.addControl('customerId', this.fb.control(null));
-    else this.partyForm.addControl('supplierId', this.fb.control(null));
-    // this.orgUserForm = this.fb.group({
-    //   email: ['', [Validators.required, Validators.email]],
-    //   password: 'F2Gn9LxI5JU0eJZ@123',
-    // });
+    } else {
+      this.partyForm.addControl('supplierId', this.fb.control(null));
+    }
     this.partyAddressForm = this.fb.group({
       line1: [''],
       line2: [''],
@@ -102,8 +96,8 @@ export class PartyAddComponent {
       request.subscribe(({ data }) => {
         this.partyForm.patchValue(data);
         if (data.address) this.partyAddressForm.patchValue(data.address);
-        if (data.billingAddress)
-          this.partyAddressForm.patchValue(data.billingAddress);
+        // if (data.billingAddress)
+        //   this.partyAddressForm.patchValue(data.billingAddress);
         if (data.contact) this.partyContactForm.patchValue(data.contact);
         this.partyForm.controls['code'].disable();
       });

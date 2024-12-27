@@ -5,7 +5,6 @@ import { Injectable, inject } from '@angular/core';
 
 import { AuthService } from './auth.service';
 import {
-  Party,
   ProductCategory,
   Product,
   Unit,
@@ -15,6 +14,7 @@ import {
   OutwardInvoice,
   Consumer,
   Response,
+  Party,
 } from '../models';
 import { Stock } from '../models/stock';
 

@@ -8,12 +8,6 @@ import { ApiStatus } from '../responses/api-status';
 import { ApiResponse } from '../responses/api-response';
 import { UserSchema } from '../schema/user.schema';
 import { encrypt } from '../helpers/encrypt.helper';
-import { UserRoles } from '../entities';
-// import { User } from "../entities";
-// import { UserDto } from "../dto";
-// import { UserSchema } from "../schema";
-// import { cache, encrypt } from "../helpers";
-// import { ApiResponse, ApiStatus } from "../responses";
 
 export class UserService {
   private static userRepository = AppDataSource.getRepository(User);
@@ -30,7 +24,7 @@ export class UserService {
     }
     const users = await this.userRepository.find({
       select: ['userId', 'username', 'email', 'phone', 'firstName', 'lastName', 'role', 'isActive'],
-      where: { role: Not(UserRoles.Admin) },
+      where: { username: Not('admin') },
       order: { userId: 'ASC' }
     });
     await cache.set('users', users);

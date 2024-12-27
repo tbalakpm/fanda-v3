@@ -1,12 +1,13 @@
 export interface Party {
-  _id: string;
+  id: string;
   code: string;
   name: string;
+  description?: string;
   gstin: string;
   contact: Contact;
   address?: Address;
-  billingAddress?: Address;
-  shippingAddress?: Address;
+  // billingAddress?: Address;
+  //shippingAddress?: Address;
   isActive: boolean;
 }
 
