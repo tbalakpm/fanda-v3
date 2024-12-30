@@ -57,16 +57,17 @@ export class PartyAddComponent {
   ) {
     this.isCustomer = this.router.url.includes('customer');
     this.partyForm = this.fb.group({
+      id: [null],
       code: ['', [Validators.required]],
       name: ['', [Validators.required]],
       gstTreatment: ['', [Validators.required]],
       gstin: [''],
     });
-    if (this.isCustomer) {
-      this.partyForm.addControl('customerId', this.fb.control(null));
-    } else {
-      this.partyForm.addControl('supplierId', this.fb.control(null));
-    }
+    // if (this.isCustomer) {
+    //   this.partyForm.addControl('customerId', this.fb.control(null));
+    // } else {
+    //   this.partyForm.addControl('supplierId', this.fb.control(null));
+    // }
     this.partyAddressForm = this.fb.group({
       line1: [''],
       line2: [''],
@@ -83,7 +84,7 @@ export class PartyAddComponent {
     });
 
     this.id = this.route.snapshot.params['id'];
-    if (!!this.id) {
+    if (this.id) {
       this.isEdit = true;
       // this._loaderService.showLoader();
       let request = this.isCustomer

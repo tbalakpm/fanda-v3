@@ -6,6 +6,8 @@ import { Company } from '../../entities/company.entity';
 import { Address } from '../../entities/address.entity';
 import { Contact } from '../../entities/contact.entity';
 import 'dotenv/config';
+import { enumDataType } from '../../helpers/dataType.helper';
+import { GSTTreatment } from '../party/gst-treatment.enum';
 
 @Entity({ name: 'customers' })
 @Index(['companyId', 'customerId'], { unique: true })
@@ -34,6 +36,12 @@ export class Customer {
 
   @Column({ type: process.env.DB_TYPE === 'postgres' ? 'jsonb' : 'simple-json', default: process.env.DB_TYPE === 'postgres' ? {} : '{}' })
   contact?: Contact;
+
+  @Column({ name: 'gstin', length: 15, nullable: true })
+  gstin?: string;
+
+  @Column({ type: enumDataType(), enum: GSTTreatment, default: GSTTreatment.none }) // enum: TaxPreferences,
+  gstTreatment!: GSTTreatment;
 
   @Column('uuid')
   companyId!: string;

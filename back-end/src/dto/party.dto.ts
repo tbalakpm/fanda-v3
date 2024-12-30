@@ -1,3 +1,4 @@
+import { GSTTreatment } from '../modules/party/gst-treatment.enum';
 import { AddressType, ContactType } from '../schema';
 
 export class PartyDto {
@@ -7,6 +8,8 @@ export class PartyDto {
   description?: string;
   address?: AddressType;
   contact?: ContactType;
+  gstin?: string;
+  gstTreatment!: GSTTreatment;
   isActive!: boolean;
 
   constructor(partial: Partial<PartyDto>) {
