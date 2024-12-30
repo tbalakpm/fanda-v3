@@ -20,6 +20,7 @@ import { consumerRoutes } from './modules/consumer/consumer.route';
 import { stockInvoiceRoutes } from './modules/invoices/stock-invoice/stock-invoice.route';
 import { purchaseRoutes } from './modules/invoices/purchase/purchase.route';
 import { rateLimiter } from './middleware/rate-limiter.middleware';
+import { actionHeader } from './middleware/custom-header.middleware';
 
 const app = express();
 
@@ -52,7 +53,8 @@ app.use(
       'X-User-Id',
       'X-Forwarded-For',
       'X-Forwarded-Host',
-      'X-Forwarded-Proto'
+      'X-Forwarded-Proto',
+      'X-Action'
     ],
     methods: ['OPTIONS', 'GET', 'POST', 'PUT', 'DELETE', 'PATCH']
   })
@@ -67,6 +69,7 @@ const yearRouter = financialYearRoutes();
 // auth routes
 app.use('/api/auth', authRoutes());
 app.use(authentication);
+app.use(actionHeader);
 
 // root routes
 app.use('/api/users', userRoutes());

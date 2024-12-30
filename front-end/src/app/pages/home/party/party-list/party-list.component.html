@@ -55,7 +55,7 @@
               '/home/party/' +
               (isCustomer ? 'customer' : 'supplier') +
               '/edit/' +
-              party._id
+              party.id
             "
           >
             <i nz-icon nzType="edit"></i>
@@ -63,7 +63,7 @@
           <button
             nz-tooltip="Delete"
             nz-popconfirm="Are you sure to delete?"
-            (nzOnConfirm)="deleteParty(party._id)"
+            (nzOnConfirm)="deleteParty(party.id)"
           >
             <i nz-icon nzType="delete"></i>
           </button>
@@ -71,7 +71,7 @@
             nz-tooltip="Activate/Deactivate"
             nzSize="small"
             [ngModel]="party.isActive"
-            (ngModelChange)="toggleActive(party._id!, $event)"
+            (ngModelChange)="toggleActive(party.id!, $event)"
           ></nz-switch>
         </div>
       </td>
