@@ -1,30 +1,30 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+
 import { Observable, forkJoin } from 'rxjs';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
-import { ProductFormComponent } from '../../../../forms/product-form/product-form.component';
+import { fadeInAnimation } from '@animations';
+import { PageHeaderComponent } from '@components';
+import { ProductFormComponent } from '@forms';
+import { Product, ProductCategory, Response, Unit } from '@models';
 import {
   LoaderService,
   ProductCategoryService,
   ProductService,
   UnitService,
-} from '../../../../services';
-
-import { Product, ProductCategory, Unit, Response } from '../../../../models';
-import { fadeInAnimation } from '../../../../animations';
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { ActivatedRoute, Router } from '@angular/router';
-import { PageHeaderComponent } from '../../../../components/page-header/page-header.component';
+} from '@services';
 
 @Component({
   selector: 'product-add',
@@ -66,13 +66,12 @@ export class ProductAddComponent {
     if (val && val !== 'new') {
       this.isEdit = true;
       this._productService.getById(val).subscribe({
-        next: (res) => {
-          this.productForm.patchValue(res);
+        next: ({ data }) => {
+          this.productForm.patchValue(data);
           this.productForm.controls['categoryId'].setValue(
-            res.data.category?._id
+            data.category?.categoryId
           );
-          this.productForm.controls['unitId'].setValue(res.data.unit?._id);
-          console.log(this.productForm.value);
+          this.productForm.controls['baseUnitId'].setValue(data.unit?.unitId);
         },
       });
     } else this.isEdit = false;
@@ -88,21 +87,21 @@ export class ProductAddComponent {
     private _unitService: UnitService
   ) {
     this.productForm = this.fb.group({
-      _id: [null],
+      productId: [null],
       isActive: [true],
       code: ['', [Validators.required]],
       name: ['', [Validators.required]],
-      type: ['goods', [Validators.required]],
+      productType: ['goods', [Validators.required]],
       buyingPrice: 0,
       marginPctOrAmt: 'pct',
       margin: 0,
       sellingPrice: 0,
       taxPreference: [null, [Validators.required]],
-      taxCode: [null],
+      taxCode: [''],
       taxPct: [0, [Validators.required, Validators.min(1)]],
       description: [''],
       categoryId: [null, [Validators.required]],
-      unitId: [null, [Validators.required]],
+      baseUnitId: [null, [Validators.required]],
     });
 
     this.productCategoryForm = this.fb.group({
@@ -137,10 +136,10 @@ export class ProductAddComponent {
       }
     });
 
-    this.productForm.controls['unitId'].valueChanges.subscribe((val) => {
+    this.productForm.controls['baseUnitId'].valueChanges.subscribe((val) => {
       if (val === 'new') {
         this.isUnitModelVisible = true;
-        this.productForm.controls['unitId'].reset();
+        this.productForm.controls['baseUnitId'].reset();
       }
     });
 
@@ -183,16 +182,16 @@ export class ProductAddComponent {
     }
 
     if (!this.isEdit) {
-      delete product._id;
+      delete product.productId;
       this._productService.create(product).subscribe({
         next: (res) => {
-          this.router.navigate(['/home/product']);
+          this.router.navigate(['/home/products']);
         },
       });
     } else
       this._productService.update(this.id!, product).subscribe({
         next: (res) => {
-          this.router.navigate(['/home/product']);
+          this.router.navigate(['/home/products']);
         },
       });
   }
@@ -204,7 +203,6 @@ export class ProductAddComponent {
     }
 
     let category: ProductCategory = this.productCategoryForm.value;
-    // this._loaderService.showLoader();
 
     this._categoryService.create(category).subscribe({
       next: (res) => {
@@ -212,7 +210,7 @@ export class ProductAddComponent {
         this._loaderService.hideLoader();
         this.categories.push(res.data);
         this.isCategoryModelVisible = false;
-        this.productForm.controls['categoryId'].setValue(res.data._id);
+        this.productForm.controls['categoryId'].setValue(res.data.categoryId);
       },
     });
   }
@@ -237,7 +235,7 @@ export class ProductAddComponent {
         this._loaderService.hideLoader();
         this.units.push(res.data);
         this.isUnitModelVisible = false;
-        this.productForm.controls['unitId'].setValue(res.data._id);
+        this.productForm.controls['unitId'].setValue(res.data.unitId);
       },
     });
   }

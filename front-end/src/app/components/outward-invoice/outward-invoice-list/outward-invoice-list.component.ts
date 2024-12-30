@@ -1,18 +1,17 @@
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { OutwardInvoice } from '../../../models';
-import { OutwardInvoiceService, LoaderService } from '../../../services';
 import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
 import { NzTagModule } from 'ng-zorro-antd/tag';
-import {
-  GST_TREATMENTS_OUT_DICT,
-  INVOICE_TYPES_DICT,
-} from '../../../constants';
-import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+
+import { GST_TREATMENTS_OUT_DICT, INVOICE_TYPES_DICT } from '@constants';
+import { OutwardInvoice } from '@models';
+import { LoaderService, OutwardInvoiceService } from '@services';
 
 @Component({
   selector: 'outward-invoice-list',

@@ -1,27 +1,28 @@
-import { NzSwitchModule } from 'ng-zorro-antd/switch';
-import { ProductService } from './../../../../services/api.service';
-import { Component } from '@angular/core';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { Product } from '../../../../models';
 import { CommonModule } from '@angular/common';
-import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
-import { NzTagModule } from 'ng-zorro-antd/tag';
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
+
 import { RouterModule } from '@angular/router';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
-import { LoaderService } from '../../../../services';
-// import { ProductAddComponent } from '../product-add/product-add.component';
-import { TAX_TYPES_DICT } from '../../../../constants';
-import { PageHeaderComponent } from '../../../../components/page-header/page-header.component';
-import { FormsModule } from '@angular/forms';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+
+import { PageHeaderComponent } from '@components';
+import { TAX_TYPES_DICT } from '@constants';
+import { Product } from '@models';
+import { LoaderService, ProductService } from '@services';
+
+import { productColumns } from './product-list';
 
 @Component({
   selector: 'product-list',
   standalone: true,
   imports: [
     PageHeaderComponent,
-    // ProductAddComponent,
 
     CommonModule,
     RouterModule,
@@ -39,17 +40,29 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
   styleUrl: './product-list.component.scss',
 })
 export class ProductListComponent {
-  products: Product[] = [];
+  private _products: Product[] = [];
+  get products(): Product[] {
+    return this._products.filter(
+      (p) =>
+        p.name.toLowerCase().includes(this.searchValue.toLowerCase()) ||
+        p.code.toLowerCase().includes(this.searchValue.toLowerCase()) ||
+        p.category?.name
+          .toLowerCase()
+          .includes(this.searchValue.toLowerCase()) ||
+        p.unit?.name.toLowerCase().includes(this.searchValue.toLowerCase()) ||
+        p.buyingPrice.toString().includes(this.searchValue.toLowerCase()) ||
+        p.sellingPrice.toString().includes(this.searchValue.toLowerCase())
+    );
+  }
+  set products(value: Product[]) {
+    this._products = value;
+  }
+
   taxTypes = TAX_TYPES_DICT;
 
-  editId: string = 'new';
-
   total: number;
-  pageIndex = 1;
-  pageSize = 10;
-  sort = 'code';
-  order = 'asc';
   _searchValue = '';
+  productColumns = productColumns;
 
   get searchValue() {
     return this._searchValue;
@@ -62,41 +75,15 @@ export class ProductListComponent {
   constructor(
     public _loaderService: LoaderService,
     private _productService: ProductService
-  ) {}
-
-  fetchProducts() {
-    this.editId = 'new';
-    // this._loaderService.showLoader();
-    this._productService
-      .getPaged({
-        page: this.pageIndex,
-        limit: this.pageSize,
-        sort: this.sort,
-        order: this.order,
-        value: this.searchValue,
-      })
-      .subscribe((products) => {
-        this.products = [...products.items];
-        this.total = products.total;
-        this._loaderService.hideLoader();
-      });
+  ) {
+    this.fetchProducts();
   }
 
-  onQueryParamsChange(qp: NzTableQueryParams) {
-    this.pageIndex = qp.pageIndex;
-    this.pageSize = qp.pageSize;
-    for (let i in qp.sort) {
-      const sort = qp.sort[i];
-      if (sort.value) {
-        this.sort = sort.key;
-        this.order = sort.value === 'ascend' ? 'asc' : 'desc';
-        break;
-      } else {
-        this.sort = 'code';
-        this.order = 'asc';
-      }
-    }
-    this.fetchProducts();
+  fetchProducts() {
+    this._productService.getAll().subscribe(({ data, total }) => {
+      this.products = [...data];
+      this.total = total;
+    });
   }
 
   deleteProduct(id: string) {
@@ -108,11 +95,11 @@ export class ProductListComponent {
   toggleActive(id: string, active: boolean) {
     if (active)
       this._productService.activate(id).subscribe(() => {
-        this.products.find((p) => p._id === id)!.isActive = true;
+        this.products.find((p) => p.productId === id)!.isActive = true;
       });
     else
       this._productService.deactivate(id).subscribe(() => {
-        this.products.find((p) => p._id === id)!.isActive = false;
+        this.products.find((p) => p.productId === id)!.isActive = false;
       });
   }
 }

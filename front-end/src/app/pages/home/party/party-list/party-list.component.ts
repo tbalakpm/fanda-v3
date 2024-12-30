@@ -10,14 +10,15 @@ import {
   CustomerService,
   SupplierService,
 } from '../../../../services';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
-import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
-import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
-import { NzTagModule } from 'ng-zorro-antd/tag';
 import { Router, RouterModule } from '@angular/router';
+import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
-import { PageHeaderComponent } from '../../../../components/page-header/page-header.component';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { PageHeaderComponent } from '@components';
 import { partyColumns } from './party-list';
 import { Party } from '../../../../models';
 
@@ -47,29 +48,21 @@ import { Party } from '../../../../models';
 export class PartyListComponent {
   isCustomer: boolean;
 
-  private _parties: Party[] = [];
-  searchedParty: Party[] = [];
-
-  total: number;
   partyColumns = partyColumns;
+  total: number;
+  searchValue = '';
 
+  private _parties: Party[] = [];
   get parties() {
-    return this._parties;
+    return this._parties.filter(
+      (party) =>
+        party.name.toLowerCase().includes(this.searchValue.toLowerCase()) ||
+        party.code.toLowerCase().includes(this.searchValue.toLowerCase()) ||
+        party.gstin?.toLowerCase().includes(this.searchValue.toLowerCase())
+    );
   }
   set parties(value: Party[]) {
     this._parties = value;
-    this.searchedData = '';
-  }
-
-  set searchedData(value: string) {
-    this.searchedParty = [
-      ...this.parties.filter(
-        (party) =>
-          party.name.toLowerCase().includes(value.toLowerCase()) ||
-          party.code.toLowerCase().includes(value.toLowerCase()) ||
-          party.gstin?.toLowerCase().includes(value.toLowerCase())
-      ),
-    ];
   }
 
   constructor(
@@ -96,7 +89,6 @@ export class PartyListComponent {
   }
 
   deleteParty(id: string) {
-    // this._loaderService.showLoader();
     let request = this.isCustomer
       ? this._customerService.delete(id)
       : this._supplierService.delete(id);

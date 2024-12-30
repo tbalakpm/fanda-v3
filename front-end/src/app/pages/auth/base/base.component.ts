@@ -1,9 +1,11 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { LottieAnimationComponent } from '../../../components/lottie/lottie.component';
+
 import { AnimationOptions } from 'ngx-lottie';
-import { fadeInAnimation } from '../../../animations';
+
+import { fadeInAnimation } from '@animations';
+import { LottieAnimationComponent } from '@components';
 
 @Component({
   selector: 'app-base',

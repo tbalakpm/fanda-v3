@@ -1,11 +1,14 @@
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzStepsModule } from 'ng-zorro-antd/steps';
 
+import { fadeInAnimation } from '@animations';
+import { PageHeaderComponent } from '@components';
 import {
   CustomerService,
   LoaderService,

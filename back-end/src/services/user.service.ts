@@ -19,7 +19,8 @@ export class UserService {
         success: true,
         message: 'Serving users from cache',
         data,
-        status: ApiStatus.OK
+        status: ApiStatus.OK,
+        total: data.length
       };
     }
     const users = await this.userRepository.find({
@@ -32,7 +33,8 @@ export class UserService {
       success: true,
       message: 'Serving users from database',
       data: users,
-      status: ApiStatus.OK
+      status: ApiStatus.OK,
+      total: users.length
     };
   }
 

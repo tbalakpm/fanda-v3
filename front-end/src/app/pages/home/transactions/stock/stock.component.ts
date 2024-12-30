@@ -1,13 +1,15 @@
-import { Component } from '@angular/core';
-import { PageHeaderComponent } from '../../../../components/page-header/page-header.component';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
+
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
 import { NzTagModule } from 'ng-zorro-antd/tag';
-import { Stock } from '../../../../models/stock';
-import { LoaderService, StockService } from '../../../../services';
+
+import { PageHeaderComponent } from '@components';
+import { Stock } from '@models';
+import { LoaderService, StockService } from '@services';
 
 @Component({
   selector: 'app-stock',

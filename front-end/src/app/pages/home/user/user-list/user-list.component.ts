@@ -1,17 +1,19 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+
+import { PageHeaderComponent } from '@components';
+import { User } from '@models';
+import { AuthService, LoaderService, UserService } from '@services';
 
 import { UserAddComponent } from '../user-add/user-add.component';
-import { User } from '../../../../models';
-import { NzTableModule } from 'ng-zorro-antd/table';
-import { AuthService, LoaderService, UserService } from '../../../../services';
-import { CommonModule } from '@angular/common';
-import { NzTagModule } from 'ng-zorro-antd/tag';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
-import { PageHeaderComponent } from '../../../../components/page-header/page-header.component';
-import { FormsModule } from '@angular/forms';
-import { NzSwitchModule } from 'ng-zorro-antd/switch';
-import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
 @Component({
   selector: 'app-user-list',

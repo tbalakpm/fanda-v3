@@ -82,11 +82,11 @@ export class Product {
   user!: AuditUsers;
 
   // Related Entities
-  @ManyToOne(() => ProductCategory, { nullable: true, onUpdate: 'CASCADE', onDelete: 'RESTRICT' })
+  @ManyToOne(() => ProductCategory, { nullable: true, onUpdate: 'CASCADE', onDelete: 'RESTRICT', eager: true })
   @JoinColumn({ name: 'category_id' })
   category?: ProductCategory;
 
-  @ManyToOne(() => Unit, { nullable: true, onUpdate: 'CASCADE', onDelete: 'RESTRICT' })
+  @ManyToOne(() => Unit, { nullable: true, onUpdate: 'CASCADE', onDelete: 'RESTRICT', eager: true })
   @JoinColumn({ name: 'base_unit_id' })
   unit?: Unit;
 

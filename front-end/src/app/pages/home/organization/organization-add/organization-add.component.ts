@@ -1,26 +1,23 @@
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzStepsModule } from 'ng-zorro-antd/steps';
 
-import { OrganizationFormComponent } from '../../../../forms/organization-form/organization-form.component';
-import { OrgAddressFormComponent } from '../../../../forms/org-address-form/org-address-form.component';
-import { OrgContactFormComponent } from '../../../../forms/org-contact-form/org-contact-form.component';
-// import { OrgUserFormComponent } from '../../../../forms/org-user-form/org-user-form.component';
-
 import {
-  AuthService,
-  LoaderService,
-  OrganizationService,
-} from '../../../../services';
+  OrgAddressFormComponent,
+  OrganizationFormComponent,
+  OrgContactFormComponent,
+} from '@forms';
 
-import { fadeInAnimation } from '../../../../animations';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { Organization } from '../../../../models';
-import { PageHeaderComponent } from '../../../../components/page-header/page-header.component';
+import { AuthService, LoaderService, OrganizationService } from '@services';
+
+import { fadeInAnimation } from '@animations';
+import { PageHeaderComponent } from '@components';
+import { Organization } from '@models';
 
 @Component({
   selector: 'organization-add',

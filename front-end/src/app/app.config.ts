@@ -1,19 +1,19 @@
+import { registerLocaleData } from '@angular/common';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import en from '@angular/common/locales/en';
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter } from '@angular/router';
+
+import { en_US, provideNzI18n } from 'ng-zorro-antd/i18n';
+import { provideLottieOptions } from 'ngx-lottie';
+
+import { AuthInterceptor, ErrorInterceptor } from '@interceptors';
+import { ThemeService } from '@services';
 
 import { routes } from './app.routes';
 import { provideNzIcons } from './icons-provider';
-import { en_US, provideNzI18n } from 'ng-zorro-antd/i18n';
-import { registerLocaleData } from '@angular/common';
-import en from '@angular/common/locales/en';
-import { FormsModule } from '@angular/forms';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
-
-import { provideLottieOptions } from 'ngx-lottie';
-import { ErrorInterceptor } from './interceptors/error.interceptor';
-import { AuthInterceptor } from './interceptors/auth.interceptor';
-import { ThemeService } from './services';
 
 registerLocaleData(en);
 

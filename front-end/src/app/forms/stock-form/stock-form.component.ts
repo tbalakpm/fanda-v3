@@ -8,8 +8,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-
-import { PageHeaderComponent } from '../../components/page-header/page-header.component';
+import { ActivatedRoute } from '@angular/router';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
@@ -23,11 +22,12 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzStepsModule } from 'ng-zorro-antd/steps';
 import { NzTableModule } from 'ng-zorro-antd/table';
-import { InventoryService, ProductService, StockService } from '../../services';
-import { LineItem, Product } from '../../models';
-import { ActivatedRoute } from '@angular/router';
-import { watchObject } from '../../utils';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+
+import { LineItem } from '@models';
+import { InventoryService, ProductService, StockService } from '@services';
+import { watchObject } from '@utils';
+import { PageHeaderComponent } from '@components';
 
 @Component({
   selector: 'app-stock-form',
@@ -339,7 +339,7 @@ export class StockFormComponent {
           );
           this.products.push(data);
           if (selectedLineItem)
-            selectedLineItem.controls.productId.setValue(data._id);
+            selectedLineItem.controls.productId.setValue(data.productId);
           this.isAddProductModalVisible = false;
           this.productForm.reset();
         });

@@ -1,13 +1,15 @@
+import { FocusMonitor } from '@angular/cdk/a11y';
+import { CommonModule } from '@angular/common';
 import {
   Component,
+  ElementRef,
+  EventEmitter,
+  inject,
   Input,
   OnInit,
   Output,
-  EventEmitter,
-  ViewChildren,
   QueryList,
-  ElementRef,
-  inject,
+  ViewChildren,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -16,14 +18,13 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Form, Option } from '../../models';
 
-import { FocusMonitor } from '@angular/cdk/a11y';
-import { CommonModule } from '@angular/common';
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+
+import { Form, Option } from '@models';
 
 @Component({
   selector: 'f-form',

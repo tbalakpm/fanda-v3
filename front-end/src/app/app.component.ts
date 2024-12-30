@@ -1,11 +1,13 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
-import { fadeInAnimation } from './animations';
-import { ThemeService, ThemeType } from './services';
+
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
-import { FormsModule } from '@angular/forms';
+
+import { fadeInAnimation } from '@animations';
+import { ThemeService, ThemeType } from '@services';
 
 @Component({
   selector: 'app-root',

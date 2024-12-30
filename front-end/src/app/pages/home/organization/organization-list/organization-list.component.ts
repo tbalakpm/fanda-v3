@@ -1,25 +1,21 @@
-import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { Organization } from '../../../../models';
-import {
-  AuthService,
-  LoaderService,
-  OrganizationService,
-} from '../../../../services';
-
-import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
-import { NzTagModule } from 'ng-zorro-antd/tag';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
-import { NzDrawerModule } from 'ng-zorro-antd/drawer';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { InfoDrawerComponent } from '../../../../components/info-drawer/info-drawer.component';
-import { PageHeaderComponent } from '../../../../components/page-header/page-header.component';
-import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { FormsModule } from '@angular/forms';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+
+import { InfoDrawerComponent, PageHeaderComponent } from '@components';
+import { Organization } from '@models';
+import { AuthService, LoaderService, OrganizationService } from '@services';
+
 import { orgColumns } from './org-list';
 
 @Component({
@@ -49,31 +45,24 @@ export class OrganizationListComponent implements OnInit {
   isInfoDrawerVisible = false;
 
   private _organizations: Organization[] = [];
-  searchedOrg: Organization[] = [];
   selectedInfoOrganization: Organization = {} as Organization;
 
   selectedOrganization: Organization = {} as Organization;
 
-  total: number;
   orgColumns = orgColumns;
+  total: number;
+  searchValue = '';
 
   get organizations() {
-    return this._organizations;
+    return this._organizations.filter(
+      (org) =>
+        org.name.toLowerCase().includes(this.searchValue.toLowerCase()) ||
+        org.code.toLowerCase().includes(this.searchValue.toLowerCase()) ||
+        org.description?.toLowerCase().includes(this.searchValue.toLowerCase())
+    );
   }
   set organizations(value: Organization[]) {
     this._organizations = value;
-    this.searchedData = '';
-  }
-
-  set searchedData(value: string) {
-    this.searchedOrg = [
-      ...this.organizations.filter(
-        (org) =>
-          org.name.toLowerCase().includes(value.toLowerCase()) ||
-          org.code.toLowerCase().includes(value.toLowerCase()) ||
-          org.description?.toLowerCase().includes(value.toLowerCase())
-      ),
-    ];
   }
 
   constructor(

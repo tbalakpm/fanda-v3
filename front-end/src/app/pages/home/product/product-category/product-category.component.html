@@ -1,19 +1,9 @@
-<nz-page-header nzTitle="Product Categories" nzBackIcon class="p-0 pb-2">
+<nz-page-header nzTitle="Product Categories" nzBackIcon class="!p-0 !py-3">
   <nz-breadcrumb nz-page-header-breadcrumb>
     <nz-breadcrumb-item>Inventory</nz-breadcrumb-item>
     <nz-breadcrumb-item>Product Categories</nz-breadcrumb-item>
   </nz-breadcrumb>
   <nz-page-header-extra>
-    <nz-input-group [nzSuffix]="suffixIconSearch">
-      <input
-        type="text"
-        nz-input
-        placeholder="Input search text"
-        class="w-60"
-        [(ngModel)]="searchValue"
-        (ngModelChange)="onSearchChange($event)"
-      />
-    </nz-input-group>
     <button
       nz-button
       nzType="primary"
@@ -26,29 +16,21 @@
   </nz-page-header-extra>
 </nz-page-header>
 
-<ng-template #suffixIconSearch>
-  <span nz-icon nzType="search"></span>
-</ng-template>
-
 <nz-table
-  class="mt-4"
   #editRowTable
   [nzData]="productCategories"
-  [nzLoading]="_loaderService.isLoadingActive() | async"
   nzSize="middle"
-  [nzFrontPagination]="false"
-  [nzTotal]="total"
-  [nzPageIndex]="pageIndex"
-  [nzPageSize]="pageSize"
   nzShowSizeChanger
-  (nzQueryParams)="onQueryParamsChange($event)"
+  [nzLoading]="_loaderService.isLoadingActive() | async"
+  [nzShowTotal]="rangeTemplate"
+  [nzTotal]="total"
 >
   <thead>
     <tr>
-      <th nzColumnKey="code" nzSortOrder="ascend" [nzSortFn]="true">Code</th>
-      <th nzColumnKey="name" [nzSortFn]="true">Category Name</th>
+      <th>Code</th>
+      <th>Category Name</th>
       <th>Description</th>
-      <th nzColumnKey="isActive" [nzSortFn]="true" nzWidth="10%">Status</th>
+      <th nzWidth="10%">Status</th>
       <th nzWidth="150px">Action</th>
     </tr>
   </thead>
@@ -58,53 +40,53 @@
       class="editable-row"
       [ngClass]="{
         'bg-stone-200 !bg-opacity-50 dark:bg-dark-sec dark:!bg-opacity-100':
-          category._id == editId
+          category.categoryId == editId
       }"
     >
       <td>
         <div
-          [hidden]="editId === category._id"
+          [hidden]="editId === category.categoryId"
           class="px-3 py-[5px]"
           [ngClass]="{ 'editable-cell': editId === null }"
-          (click)="editId === null && startEdit(category._id!, 'code')"
+          (click)="editId === null && startEdit(category.categoryId!, 'code')"
         >
           {{ category.code }}
         </div>
         <input
-          [hidden]="editId !== category._id"
+          [hidden]="editId !== category.categoryId"
           type="text"
           nz-input
           [(ngModel)]="editData.code"
-          [id]="'code' + category._id"
+          [id]="'code' + category.categoryId"
         />
       </td>
       <td>
         <div
-          [hidden]="editId === category._id"
+          [hidden]="editId === category.categoryId"
           class="px-3 py-[5px]"
           [ngClass]="{ 'editable-cell': editId === null }"
-          (click)="editId === null && startEdit(category._id!, 'name')"
+          (click)="editId === null && startEdit(category.categoryId!, 'name')"
         >
           {{ category.name }}
         </div>
         <input
-          [hidden]="editId !== category._id"
+          [hidden]="editId !== category.categoryId"
           type="text"
           nz-input
           [(ngModel)]="editData.name"
-          [id]="'name' + category._id"
+          [id]="'name' + category.categoryId"
         />
       </td>
       <td>
-        <div [hidden]="editId === category._id" class="px-3 py-[5px]">
+        <div [hidden]="editId === category.categoryId" class="px-3 py-[5px]">
           {{ category.description }}
         </div>
         <input
-          [hidden]="editId !== category._id"
+          [hidden]="editId !== category.categoryId"
           type="text"
           nz-input
           [(ngModel)]="editData.description"
-          [id]="'description' + category._id"
+          [id]="'description' + category.categoryId"
         />
       </td>
       <td>
@@ -114,38 +96,40 @@
       <td>
         <div class="space-x-2">
           <span
-            [hidden]="editId === category._id"
+            [hidden]="editId === category.categoryId"
             nz-icon
             nzType="edit"
             nz-tooltip="Edit"
-            (click)="editId === null && startEdit(category._id!, 'shortName')"
+            (click)="
+              editId === null && startEdit(category.categoryId!, 'shortName')
+            "
             [ngClass]="{ '!text-gray-500': editId !== null }"
           ></span>
           <span
-            [hidden]="editId === category._id"
+            [hidden]="editId === category.categoryId"
             nz-icon
             nzType="delete"
             nz-tooltip="Delete"
             nz-popconfirm
             nzPopconfirmTitle="Sure to delete?"
-            (nzOnConfirm)="deleteCategory(category._id!)"
+            (nzOnConfirm)="deleteCategory(category.categoryId!)"
           ></span>
           <nz-switch
             nz-tooltip="Activate/Deactivate"
-            [hidden]="editId === category._id"
+            [hidden]="editId === category.categoryId"
             nzSize="small"
             [ngModel]="category.isActive"
-            (ngModelChange)="toggleActive(category._id!, $event)"
+            (ngModelChange)="toggleActive(category.categoryId!, $event)"
           ></nz-switch>
           <span
-            [hidden]="editId !== category._id"
+            [hidden]="editId !== category.categoryId"
             nz-icon
             nzType="check"
             nz-tooltip="Save"
             (click)="editId === 'new' ? saveNewCategory() : saveEdit()"
           ></span>
           <span
-            [hidden]="editId !== category._id"
+            [hidden]="editId !== category.categoryId"
             nz-icon
             nzType="close"
             nz-tooltip="Cancel"
@@ -158,3 +142,6 @@
     </tr>
   </tbody>
 </nz-table>
+<ng-template #rangeTemplate let-range="range" let-total>
+  {{ range[0] }}-{{ range[1] }} of {{ total }} items
+</ng-template>

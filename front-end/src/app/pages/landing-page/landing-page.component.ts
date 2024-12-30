@@ -1,11 +1,12 @@
 import { AfterViewInit, Component } from '@angular/core';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { LottieAnimationComponent } from '../../components/lottie/lottie.component';
-import { AnimationOptions } from 'ngx-lottie';
 import { RouterModule } from '@angular/router';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { GridPatternComponent } from '../../components/grid-pattern/grid-pattern.component';
 
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { AnimationOptions } from 'ngx-lottie';
+
+import { NzIconModule } from 'ng-zorro-antd/icon';
+
+import { LottieAnimationComponent } from '@components';
 @Component({
   selector: 'app-landing-page',
   standalone: true,

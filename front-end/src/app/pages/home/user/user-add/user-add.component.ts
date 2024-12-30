@@ -5,15 +5,16 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzInputModule } from 'ng-zorro-antd/input';
+import { RouterModule } from '@angular/router';
+
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
-import { RouterModule } from '@angular/router';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 
-import { LoaderService, UserService } from '../../../../services';
-import { User } from '../../../../models';
+import { User } from '@models';
+import { LoaderService, UserService } from '@services';
 
 @Component({
   selector: 'user-add',

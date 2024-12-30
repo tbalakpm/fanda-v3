@@ -1,5 +1,4 @@
-import { LineItem } from './inwardInvoice';
-import { Party } from './party';
+import { LineItem, Party } from './';
 
 export interface OutwardInvoice {
   _id: string;

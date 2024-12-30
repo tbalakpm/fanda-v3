@@ -1,10 +1,10 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
-
-import { AuthService, LoginResponseData } from '../services/auth.service';
-import { throwError } from 'rxjs';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoaderService } from '../services';
+
+import { throwError } from 'rxjs';
+
+import { AuthService, LoaderService, LoginResponseData } from '@services';
 
 export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);

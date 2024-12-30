@@ -1,15 +1,17 @@
-import { inject } from '@angular/core';
 import {
   HttpErrorResponse,
   HttpInterceptorFn,
   HttpResponse,
 } from '@angular/common/http';
+import { inject } from '@angular/core';
+
 import { throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { LoaderService } from '../services';
+
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { AuthService } from '../services';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+
+import { AuthService, LoaderService } from '@services';
 
 const api: any = {
   organizations: 'Organization',
@@ -55,8 +57,8 @@ export const ErrorInterceptor: HttpInterceptorFn = (req, next) => {
 
       _notificationService.error(message, errorMessage);
       _loaderService.hideLoader();
-      if (error.status === 400) {
-        // _authService.logout();
+      if (error.status === 401) {
+        _authService.logout();
       }
       _loaderService.hideLoader();
       return throwError(errorMessage);

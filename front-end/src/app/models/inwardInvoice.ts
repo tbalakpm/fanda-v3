@@ -1,4 +1,4 @@
-import { Party } from './party';
+import { Party } from './';
 
 export interface InwardInvoice {
   _id?: string;
