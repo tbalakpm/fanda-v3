@@ -4,7 +4,7 @@ import { ProductCategory } from '../modules/product-category/product-category.en
 import { Supplier } from '../modules/supplier/supplier.entity';
 import { Unit } from '../modules/unit/unit.entity';
 import { SerialNumber } from '../modules/serial-number/serial-number.entity';
-import { DefaultSerials } from '../helpers/serial-number.helper';
+import { DefaultSerials } from './serials.data-seed';
 
 export class CompanyDataSeeder {
   static getNewYear(companyId: string, adminUserId: string, date: Date = new Date()): FinancialYear {
