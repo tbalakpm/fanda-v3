@@ -2,11 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzStepsModule } from 'ng-zorro-antd/steps';
-
 import { fadeInAnimation } from '@animations';
 import { PageHeaderComponent } from '@components';
 import {
@@ -14,13 +12,9 @@ import {
   LoaderService,
   SupplierService,
 } from '../../../../services';
-
-import { NzIconModule } from 'ng-zorro-antd/icon';
 import { PartyAddressFormComponent } from '../../../../forms/party-address-form/party-address-form.component';
 import { PartyContactFormComponent } from '../../../../forms/party-contact-form/party-contact-form.component';
 import { PartyFormComponent } from '../../../../forms/party-form/party-form.component';
-import { fadeInAnimation } from '../../../../animations';
-import { PageHeaderComponent } from '../../../../components/page-header/page-header.component';
 import { Party } from '../../../../models';
 
 @Component({
