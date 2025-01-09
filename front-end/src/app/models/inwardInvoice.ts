@@ -11,11 +11,14 @@ export interface InwardInvoice {
   lineItems: LineItem[];
   gstTreatment:
     | 'seller'
-    | 'unreg'
-    | 'regd'
+    | 'consumer'
+    | 'unregistered'
+    | 'registered'
     | 'sez'
     | 'composition'
-    | 'overseas';
+    | 'overseas'
+    | 'export'
+    | 'none';
   taxPreference?: string;
   subtotal?: number;
   totalQty?: number;

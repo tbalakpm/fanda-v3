@@ -14,21 +14,38 @@ import { SerialNumberHelper } from '../../../helpers/serial-number.helper';
 import logger from '../../../logger';
 import { StockInvoiceSchema } from './stock-invoice.schema';
 import { StockLineItem } from './stock-line-item.entity';
+import { getFiltering, getPagination, getSorting } from '../../../helpers/get-all-query.helper';
+import { isEmpty } from '../../../helpers/utility.helper';
+import { GetAllQuery } from '../../../interfaces/get-all-query';
 
 class StockInvoiceService {
   private readonly stockInvoiceRepository = AppDataSource.getRepository(StockInvoice);
 
-  async getAllStockInvoices(companyId: string, yearId: string): Promise<ApiResponse<StockInvoice[]>> {
-    const data = await cache.get<StockInvoice[]>(`stockInvoices_${companyId}_${yearId}`);
-    if (data) {
-      return { success: true, message: 'Serving stock invoices from cache', data, status: ApiStatus.OK };
+  async getAllStockInvoices(companyId: string, yearId: string, query: GetAllQuery): Promise<ApiResponse<StockInvoice[]>> {
+    // const data = await cache.get<StockInvoice[]>(`stockInvoices_${companyId}_${yearId}`);
+    // if (data) {
+    //   return { success: true, message: 'Serving stock invoices from cache', data, status: ApiStatus.OK };
+    // }
+
+    const pagination = getPagination(query);
+    const where = getFiltering(query.filter);
+    // mandatory where clauses
+    where.companyId = companyId;
+    where.yearId = yearId;
+    const order = getSorting(query.sort);
+    // default order - by id
+    if (isEmpty(order)) {
+      order.invoiceId = 'desc'; // { invoiceId: 'desc' };
     }
+
     const invoices = await this.stockInvoiceRepository.find({
       select: ['invoiceId', 'invoiceNumber', 'invoiceDate', 'totalQty', 'totalAmount', 'notes'],
-      where: { companyId, yearId },
-      order: { companyId: 'ASC', yearId: 'ASC', invoiceId: 'ASC' }
+      where: where, // { companyId, yearId },
+      order: order, // { companyId: 'ASC', yearId: 'ASC', invoiceId: 'ASC' }
+      skip: pagination.offset,
+      take: pagination.limit
     });
-    await cache.set(`stockInvoices_${companyId}_${yearId}`, invoices);
+    // await cache.set(`stockInvoices_${companyId}_${yearId}`, invoices);
     return { success: true, message: 'Serving stock invoices from database', data: invoices, status: ApiStatus.OK };
   }
 
@@ -236,10 +253,11 @@ class StockInvoiceService {
       await queryRunner.commitTransaction();
       await this.invalidateCache(companyId, yearId, invoiceId);
       return { success: true, message: 'Stock invoice deleted successfully', data: invoice, status: ApiStatus.OK };
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       await queryRunner.rollbackTransaction();
       if (process.env.NODE_ENV === 'development') {
-        console.log(error);
+        logger.error(error.message, error.stack);
       }
       return { success: false, message: 'Failed to delete stock invoice', status: ApiStatus.INTERNAL_SERVER_ERROR };
     } finally {

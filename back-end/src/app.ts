@@ -5,6 +5,8 @@ import { loggerMiddleware } from './middleware/logger.middleware';
 import { authentication } from './middleware/authentication.middleware';
 import { notFound } from './middleware/not-found.middleware';
 import { errorHandler } from './middleware/error.middleware';
+import { rateLimiter } from './middleware/rate-limiter.middleware';
+import { actionHeader } from './middleware/custom-header.middleware';
 
 import { userRoutes } from './routes/user.route';
 import { authRoutes } from './routes/auth.route';
@@ -19,8 +21,8 @@ import { consumerRoutes } from './modules/consumer/consumer.route';
 
 import { stockInvoiceRoutes } from './modules/invoices/stock-invoice/stock-invoice.route';
 import { purchaseRoutes } from './modules/invoices/purchase/purchase.route';
-import { rateLimiter } from './middleware/rate-limiter.middleware';
-import { actionHeader } from './middleware/custom-header.middleware';
+import { salesRoutes } from './modules/invoices/sales/sales.route';
+import { salesReturnRoutes } from './modules/invoices/sales-return/sales-return.route';
 
 const app = express();
 
@@ -85,6 +87,8 @@ companyRouter.use('/:companyId/consumers', consumerRoutes());
 // year routes
 yearRouter.use('/:yearId/stock-invoices', stockInvoiceRoutes());
 yearRouter.use('/:yearId/purchases', purchaseRoutes());
+yearRouter.use('/:yearId/sales', salesRoutes());
+yearRouter.use('/:yearId/sales-returns', salesReturnRoutes());
 
 // ############### routers - end ###############
 

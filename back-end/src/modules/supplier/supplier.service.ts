@@ -7,7 +7,7 @@ import { Supplier } from './supplier.entity';
 import { ApiResponse } from '../../responses/api-response';
 import { ApiStatus } from '../../responses/api-status';
 import { PartyDto } from '../../dto';
-import { PartySchema } from '../../schema/party.schema';
+import { SupplierSchema } from './supplier.schema';
 
 export class SupplierService {
   private static supplierRepository = AppDataSource.getRepository(Supplier);
@@ -18,7 +18,7 @@ export class SupplierService {
       return { success: true, message: 'Serving suppliers from cache', data, status: ApiStatus.OK };
     }
     const suppliers = await this.supplierRepository.find({
-      select: ['supplierId', 'code', 'name', 'description', 'address', 'contact', 'isActive'],
+      select: ['supplierId', 'code', 'name', 'description', 'address', 'contact', 'gstin', 'gstTreatment', 'isActive'],
       where: { companyId },
       order: { companyId: 'ASC', supplierId: 'ASC' }
     });
@@ -31,6 +31,8 @@ export class SupplierService {
           description: supplier.description,
           address: supplier.address,
           contact: supplier.contact,
+          gstin: supplier.gstin,
+          gstTreatment: supplier.gstTreatment,
           isActive: supplier.isActive
         })
     );
@@ -44,7 +46,7 @@ export class SupplierService {
       return { success: true, message: 'Serving a supplier from cache', data, status: ApiStatus.OK };
     }
     const supplier = await this.supplierRepository.findOne({
-      select: ['supplierId', 'code', 'name', 'description', 'address', 'contact', 'isActive'],
+      select: ['supplierId', 'code', 'name', 'description', 'address', 'contact', 'gstin', 'gstTreatment', 'isActive'],
       where: { supplierId }
     });
     if (!supplier) {
@@ -57,6 +59,8 @@ export class SupplierService {
       description: supplier.description,
       address: supplier.address,
       contact: supplier.contact,
+      gstin: supplier.gstin,
+      gstTreatment: supplier.gstTreatment,
       isActive: supplier.isActive
     });
     await cache.set('suppliers:' + supplierId, party);
@@ -64,8 +68,8 @@ export class SupplierService {
   }
 
   static async createSupplier(companyId: string, party: Omit<PartyDto, 'id'>, userId: string): Promise<ApiResponse<PartyDto>> {
-    const supplier = { ...party, isActive: true } as Supplier;
-    const parsedResult = PartySchema.safeParse(supplier);
+    const supplier = { ...party, isActive: true };
+    const parsedResult = SupplierSchema.safeParse(supplier);
     if (!parsedResult.success) {
       return { success: false, message: parseError(parsedResult), status: ApiStatus.BAD_REQUEST };
     }
@@ -101,7 +105,7 @@ export class SupplierService {
     party: Partial<Omit<PartyDto, 'id'>>,
     userId: string
   ): Promise<ApiResponse<PartyDto>> {
-    const supplier = { ...party, supplierId } as Partial<Supplier>;
+    const supplier = { ...party, supplierId };
     const dbSupplier = await this.supplierRepository.findOneBy({ supplierId });
     if (!dbSupplier) {
       return { success: false, message: `Supplier with id '${supplierId}' not found`, status: ApiStatus.NOT_FOUND };
@@ -115,7 +119,7 @@ export class SupplierService {
 
     const auditUsers: AuditUsers = { ...dbSupplier.user, updated: userId };
     const updateSupplier = { ...dbSupplier, ...supplier, user: auditUsers };
-    const parsedResult = PartySchema.safeParse(updateSupplier);
+    const parsedResult = SupplierSchema.safeParse(updateSupplier);
     if (!parsedResult.success) {
       return { success: false, message: parseError(parsedResult), status: ApiStatus.BAD_REQUEST };
     }

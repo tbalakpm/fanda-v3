@@ -9,11 +9,13 @@ export const INVOICE_TYPES = [
 ];
 
 const GST_TREATMENTS = [
-  { label: 'Unregistered', value: 'unreg' },
-  { label: 'Registered', value: 'regd' },
+  { label: 'Unregistered', value: 'unregistered' },
+  { label: 'Registered', value: 'registered' },
   { label: 'SEZ', value: 'sez' },
   { label: 'Composition', value: 'composition' },
   { label: 'Overseas', value: 'overseas' },
+  { label: 'Export', value: 'export' },
+  { label: 'None', value: 'none' },
 ];
 
 export const GST_TREATMENTS_IN = [

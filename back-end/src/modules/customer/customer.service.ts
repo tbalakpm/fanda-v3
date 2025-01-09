@@ -7,7 +7,7 @@ import { Customer } from './customer.entity';
 import { ApiResponse } from '../../responses/api-response';
 import { ApiStatus } from '../../responses/api-status';
 import { PartyDto } from '../../dto';
-import { PartySchema } from '../../schema/party.schema';
+import { CustomerSchema } from '../customer/customer.schema';
 
 export class CustomerService {
   private static customerRepository = AppDataSource.getRepository(Customer);
@@ -18,7 +18,7 @@ export class CustomerService {
       return { success: true, message: 'Serving customers from cache', data, status: ApiStatus.OK };
     }
     const customers = await this.customerRepository.find({
-      select: ['customerId', 'code', 'name', 'description', 'address', 'contact', 'isActive'],
+      select: ['customerId', 'code', 'name', 'description', 'address', 'contact', 'gstin', 'gstTreatment', 'isActive'],
       where: { companyId },
       order: { companyId: 'ASC', customerId: 'ASC' }
     });
@@ -31,6 +31,8 @@ export class CustomerService {
           description: customer.description,
           address: customer.address,
           contact: customer.contact,
+          gstin: customer.gstin,
+          gstTreatment: customer.gstTreatment,
           isActive: customer.isActive
         })
     );
@@ -44,7 +46,7 @@ export class CustomerService {
       return { success: true, message: 'Serving a customer from cache', data, status: ApiStatus.OK };
     }
     const customer = await this.customerRepository.findOne({
-      select: ['customerId', 'code', 'name', 'description', 'address', 'contact', 'isActive'],
+      select: ['customerId', 'code', 'name', 'description', 'address', 'contact', 'gstin', 'gstTreatment', 'isActive'],
       where: { customerId }
     });
     if (!customer) {
@@ -64,8 +66,8 @@ export class CustomerService {
   }
 
   static async createCustomer(companyId: string, party: Omit<PartyDto, 'id'>, userId: string): Promise<ApiResponse<PartyDto>> {
-    const customer = { ...party, isActive: true } as Customer;
-    const parsedResult = PartySchema.safeParse(customer);
+    const customer = { ...party, isActive: true };
+    const parsedResult = CustomerSchema.safeParse(customer);
     if (!parsedResult.success) {
       return { success: false, message: parseError(parsedResult), status: ApiStatus.BAD_REQUEST };
     }
@@ -89,6 +91,8 @@ export class CustomerService {
       description: newCustomer.description,
       address: newCustomer.address,
       contact: newCustomer.contact,
+      gstin: newCustomer.gstin,
+      gstTreatment: newCustomer.gstTreatment,
       isActive: newCustomer.isActive
     });
     this.invalidateCache(companyId);
@@ -101,7 +105,7 @@ export class CustomerService {
     party: Partial<Omit<PartyDto, 'id'>>,
     userId: string
   ): Promise<ApiResponse<PartyDto>> {
-    const customer = { ...party, customerId } as Partial<Customer>;
+    const customer = { ...party, customerId };
 
     const dbCustomer = await this.customerRepository.findOneBy({ customerId });
     if (!dbCustomer) {
@@ -116,7 +120,7 @@ export class CustomerService {
 
     const auditUsers: AuditUsers = { ...dbCustomer.user, updated: userId };
     const updateCustomer = { ...dbCustomer, ...customer, user: auditUsers };
-    const parsedResult = PartySchema.safeParse(updateCustomer);
+    const parsedResult = CustomerSchema.safeParse(updateCustomer);
     if (!parsedResult.success) {
       return { success: false, message: parseError(parsedResult), status: ApiStatus.BAD_REQUEST };
     }

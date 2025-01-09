@@ -5,13 +5,14 @@ import { LoginDto } from '../dto/login.dto';
 import { ApiError } from '../responses/api-error';
 import { AuthService } from '../services/auth.service';
 import { UserService } from '../services/user.service';
+import { ApiStatus } from '../responses';
 
 export class AuthController {
   static async register(req: Request, res: Response, next: NextFunction) {
     try {
       const { username, password } = req.body;
       if (!username || !password) {
-        return next(new ApiError('Username and password are required', 400));
+        return next(new ApiError('Username and password are required', ApiStatus.BAD_REQUEST));
       }
 
       const result = await AuthService.register(req.body);
