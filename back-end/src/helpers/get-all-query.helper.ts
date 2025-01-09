@@ -30,6 +30,11 @@ export const getSorting = (sort?: string) => {
   // check if the valid params sent is an array
   // if (typeof validParams != 'object') throw new BadRequestException('Invalid sort parameter');
 
+  // check if sort is a string
+  if (typeof sort !== 'string') {
+    throw new ApiError('Invalid sort parameter: must be a string', ApiStatus.BAD_REQUEST);
+  }
+
   if (!sort.includes(':')) {
     sort += ':asc';
   }
@@ -50,6 +55,10 @@ export const getFiltering = (filter?: string) => {
 
   // check if the valid params sent is an array
   // if (typeof data != 'object') throw new BadRequestException('Invalid filter parameter');
+  // check if sort is a string
+  if (typeof filter !== 'string') {
+    throw new ApiError('Invalid filter parameter: must be a string', ApiStatus.BAD_REQUEST);
+  }
 
   const filters = filter.split(':');
   if ((filters.length == 2 && !filters[1].match(/^(isnull|isnotnull)$/)) || !filters[1].match(/^(eq|neq|gt|gte|lt|lte|like|nlike|in|nin)$/)) {
