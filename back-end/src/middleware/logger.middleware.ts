@@ -13,10 +13,12 @@ export const loggerMiddleware = (req: Request, res: Response, next: NextFunction
     // res.setHeader("X-Response-Time", `${totalTimeInMs.toFixed(3)}ms`);
     res.timeTakenMs = totalTimeInMs;
     const timeTakenString = `${totalTimeInMs.toFixed(3)} ms`;
-    const responseSizeString = `${res.getHeaders()['content-length']} bytes`;
+    const responseSizeString = `${res.getHeaders()['content-length'] || 0} bytes`;
 
-    if (res.statusCode >= 200 && res.statusCode < 400) {
+    if (res.statusCode >= 200 && res.statusCode < 300) {
       logger.info(`--> ${req.method} ${req.path} - ${res.statusCode} - ${timeTakenString} - ${responseSizeString}`);
+    } else if (res.statusCode >= 300 && res.statusCode < 400) {
+      logger.info(`--> ${req.method} ${req.path} - ${res.statusCode} - ${timeTakenString}`);
     } else if (res.statusCode >= 400 && res.statusCode < 500) {
       logger.warn(`--> ${req.method} ${req.path} - ${res.statusCode} - ${timeTakenString} - ${responseSizeString}`);
     } else if (res.statusCode >= 500) {

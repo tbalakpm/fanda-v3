@@ -19,6 +19,8 @@ import { StockLineItem } from './modules/invoices/stock-invoice/stock-line-item.
 import { ProductSerial } from './modules/product/product-serial.entity';
 import { Purchase } from './modules/invoices/purchase/purchase.entity';
 import { PurchaseLineItem } from './modules/invoices/purchase/purchase-line-item.entity';
+import { Sales } from './modules/invoices/sales/sales.entity';
+import { SalesLineItem } from './modules/invoices/sales/sales-line-item.entity';
 
 const {
   NODE_ENV = 'development',
@@ -106,7 +108,9 @@ export const AppDataSource = new DataSource({
     StockInvoice,
     StockLineItem,
     Purchase,
-    PurchaseLineItem
+    PurchaseLineItem,
+    Sales,
+    SalesLineItem
   ],
   migrations: [__dirname + '/migrations/*.ts'],
   subscribers: [],
