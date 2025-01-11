@@ -2,25 +2,25 @@ import { AppDataSource } from '../../../data-source';
 import { ApiResponse, ApiStatus } from '../../../responses';
 import { cache, parseError } from '../../../helpers';
 
-import { Sales } from './sales.entity';
+import { PurchaseReturn } from './purchase-return.entity';
 import { InvoiceTypes } from '../invoice-type.enum';
 
 import { InventoryService } from '../../inventory/inventory.service';
 import { SerialNumberHelper } from '../../../helpers/serial-number.helper';
 import logger from '../../../logger';
-import { SalesSchema } from './sales.schema';
-import { SalesLineItem } from './sales-line-item.entity';
+import { PurchaseReturnSchema } from './purchase-return.schema';
+import { PurchaseReturnItem } from './purchase-return-item.entity';
 import { GetAllQuery } from '../../../interfaces/get-all-query';
 import { getFiltering, getPagination, getSorting } from '../../../helpers/get-all-query.helper';
 import { isEmpty } from '../../../helpers/utility.helper';
 
-class SalesService {
-  private readonly SalesRepository = AppDataSource.getRepository(Sales);
+class PurchaseReturnService {
+  private readonly PurchaseReturnRepository = AppDataSource.getRepository(PurchaseReturn);
 
-  async getAllSales(companyId: string, yearId: string, query: GetAllQuery): Promise<ApiResponse<Sales[]>> {
-    // const data = await cache.get<Sales[]>(`sales_${companyId}_${yearId}`);
+  async getAllPurchaseReturns(companyId: string, yearId: string, query: GetAllQuery): Promise<ApiResponse<PurchaseReturn[]>> {
+    // const data = await cache.get<PurchaseReturn[]>(`purchase_returns_${companyId}_${yearId}`);
     // if (data) {
-    //   return { success: true, message: 'Serving sales from cache', data, status: ApiStatus.OK };
+    //   return { success: true, message: 'Serving purchase returns from cache', data, status: ApiStatus.OK };
     // }
 
     const pagination = getPagination(query);
@@ -37,16 +37,16 @@ class SalesService {
     console.log('where', where);
     console.log('order', order);
 
-    const invoices = await this.SalesRepository.find({
+    const invoices = await this.PurchaseReturnRepository.find({
       select: {
         invoiceId: true,
         invoiceNumber: true,
         invoiceDate: true,
         refDate: true,
         refNumber: true,
-        customerId: true,
-        customer: {
-          customerId: true,
+        supplierId: true,
+        supplier: {
+          supplierId: true,
           code: true,
           name: true
         },
@@ -55,37 +55,36 @@ class SalesService {
         discountPct: true,
         discountAmt: true,
         totalTaxAmt: true,
-        additionalCharges: true,
         netAmount: true,
         notes: true,
         lineItems: false
       },
-      relations: ['customer'],
+      relations: ['supplier'],
       where: where, // { companyId, yearId },
       order: order, // { companyId: 'ASC', yearId: 'ASC', invoiceId: 'ASC' },
       skip: pagination.offset, // ((query.page || 1) - 1) * (query.size || 10),
       take: pagination.limit
     });
 
-    // await cache.set(`sales_${companyId}_${yearId}`, invoices);
-    return { success: true, message: 'Serving sales from database', data: invoices, status: ApiStatus.OK };
+    // await cache.set(`purchase_returns_${companyId}_${yearId}`, invoices);
+    return { success: true, message: 'Serving purchase returns from database', data: invoices, status: ApiStatus.OK };
   }
 
-  async getSalesById(companyId: string, yearId: string, invoiceId: string): Promise<ApiResponse<Sales>> {
-    const data = await cache.get<Sales>(`sales_${companyId}_${yearId}:${invoiceId}`);
+  async getPurchaseReturnById(companyId: string, yearId: string, invoiceId: string): Promise<ApiResponse<PurchaseReturn>> {
+    const data = await cache.get<PurchaseReturn>(`purchase_returns_${companyId}_${yearId}:${invoiceId}`);
     if (data) {
-      return { success: true, message: 'Serving a sales from cache', data, status: ApiStatus.OK };
+      return { success: true, message: 'Serving a purchase return from cache', data, status: ApiStatus.OK };
     }
-    const invoice = await this.SalesRepository.findOne({
+    const invoice = await this.PurchaseReturnRepository.findOne({
       select: {
         invoiceId: true,
         invoiceNumber: true,
         invoiceDate: true,
         refDate: true,
         refNumber: true,
-        customerId: true,
-        customer: {
-          customerId: true,
+        supplierId: true,
+        supplier: {
+          supplierId: true,
           code: true,
           name: true
         },
@@ -94,32 +93,31 @@ class SalesService {
         discountPct: true,
         discountAmt: true,
         totalTaxAmt: true,
-        additionalCharges: true,
         netAmount: true,
         notes: true,
         lineItems: false
       },
-      relations: ['customer'],
+      relations: ['supplier'],
       relationLoadStrategy: 'query',
       where: { invoiceId }
     });
     if (!invoice) {
-      return { success: false, message: `Sales with id '${invoiceId}' not found`, status: ApiStatus.NOT_FOUND };
+      return { success: false, message: `Purchase Return with id '${invoiceId}' not found`, status: ApiStatus.NOT_FOUND };
     }
-    const lineItems = await AppDataSource.getRepository(SalesLineItem).findBy({ invoiceId });
+    const lineItems = await AppDataSource.getRepository(PurchaseReturnItem).findBy({ invoiceId });
     invoice.lineItems = lineItems;
 
-    await cache.set(`sales_${companyId}_${yearId}:${invoiceId}`, invoice);
-    return { success: true, message: 'Serving a sales from database', data: invoice, status: ApiStatus.OK };
+    await cache.set(`purchase_returns_${companyId}_${yearId}:${invoiceId}`, invoice);
+    return { success: true, message: 'Serving a purchase returns from database', data: invoice, status: ApiStatus.OK };
   }
 
-  async createSales(companyId: string, yearId: string, invoice: Sales, userId: string): Promise<ApiResponse<Sales>> {
-    const parsedResult = SalesSchema.safeParse(invoice);
+  async createPurchaseReturn(companyId: string, yearId: string, invoice: PurchaseReturn, userId: string): Promise<ApiResponse<PurchaseReturn>> {
+    const parsedResult = PurchaseReturnSchema.safeParse(invoice);
     if (!parsedResult.success) {
       return { success: false, message: parseError(parsedResult), status: ApiStatus.BAD_REQUEST };
     }
 
-    const parsedInvoice = parsedResult.data as Sales;
+    const parsedInvoice = parsedResult.data as PurchaseReturn;
     parsedInvoice.companyId = companyId;
     parsedInvoice.yearId = yearId;
     parsedInvoice.user = { created: userId, updated: userId };
@@ -129,8 +127,8 @@ class SalesService {
     await queryRunner.startTransaction();
     try {
       // create invoice
-      const createdInvoice = queryRunner.manager.create(Sales, parsedInvoice);
-      createdInvoice.invoiceNumber = await SerialNumberHelper.getNextSerial(queryRunner, yearId, InvoiceTypes.Sales);
+      const createdInvoice = queryRunner.manager.create(PurchaseReturn, parsedInvoice);
+      createdInvoice.invoiceNumber = await SerialNumberHelper.getNextSerial(queryRunner, yearId, InvoiceTypes.PurchaseReturn);
 
       let totalQty = 0;
       let subtotal = 0;
@@ -222,7 +220,7 @@ class SalesService {
         }
       }
       createdInvoice.totalTaxAmt = totalTaxAmt;
-      createdInvoice.netAmount = subtotal - createdInvoice.discountAmt + totalTaxAmt + invoice.additionalCharges;
+      createdInvoice.netAmount = subtotal - createdInvoice.discountAmt + totalTaxAmt; // + invoice.additionalCharges;
       const savedInvoice = await queryRunner.manager.save(createdInvoice);
 
       //let index = 0;
@@ -239,7 +237,7 @@ class SalesService {
       //   companyId: companyId,
       //   invoiceId: savedInvoice.invoiceId,
       //   lineItemId: lineItem.lineItemId,
-      //   invoiceType: InvoiceTypes.Sales,
+      //   invoiceType: InvoiceTypes.PurchaseReturn,
       //   productId: lineItem.productId,
       //   unitId: lineItem.unitId,
       //   description: lineItem.description,
@@ -267,7 +265,7 @@ class SalesService {
 
       await queryRunner.commitTransaction();
       await this.invalidateCache(companyId, yearId);
-      return { success: true, message: 'Sales created successfully', data: savedInvoice, status: ApiStatus.CREATED };
+      return { success: true, message: 'Purchase return created successfully', data: savedInvoice, status: ApiStatus.CREATED };
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       await queryRunner.rollbackTransaction();
@@ -275,22 +273,22 @@ class SalesService {
         // console.log(error);
         logger.error(error.message);
       }
-      return { success: false, message: 'Failed to create Sales', status: ApiStatus.INTERNAL_SERVER_ERROR };
+      return { success: false, message: 'Failed to create Purchase return', status: ApiStatus.INTERNAL_SERVER_ERROR };
     } finally {
       await queryRunner.release();
     }
   }
 
-  async deleteSales(companyId: string, yearId: string, invoiceId: string): Promise<ApiResponse<Sales>> {
+  async deletePurchaseReturn(companyId: string, yearId: string, invoiceId: string): Promise<ApiResponse<PurchaseReturn>> {
     const queryRunner = AppDataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      const invoice = await queryRunner.manager.findOne(Sales, { where: { invoiceId } });
+      const invoice = await queryRunner.manager.findOne(PurchaseReturn, { where: { invoiceId } });
       if (!invoice) {
-        return { success: false, message: `Sales with id '${invoiceId}' not found`, status: ApiStatus.NOT_FOUND };
+        return { success: false, message: `Purchase return with id '${invoiceId}' not found`, status: ApiStatus.NOT_FOUND };
       }
-      const lineItems = await queryRunner.manager.findBy(SalesLineItem, { invoiceId });
+      const lineItems = await queryRunner.manager.findBy(PurchaseReturnItem, { invoiceId });
       invoice.lineItems = lineItems;
 
       invoice.lineItems?.forEach(async (lineItem) => {
@@ -302,29 +300,29 @@ class SalesService {
         }
       });
       //await queryRunner.manager.remove(invoice);
-      await queryRunner.manager.delete(Sales, { invoiceId });
+      await queryRunner.manager.delete(PurchaseReturn, { invoiceId });
 
       await queryRunner.commitTransaction();
       await this.invalidateCache(companyId, yearId, invoiceId);
-      return { success: true, message: 'Sales deleted successfully', data: invoice, status: ApiStatus.OK };
+      return { success: true, message: 'Purchase return deleted successfully', data: invoice, status: ApiStatus.OK };
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       await queryRunner.rollbackTransaction();
       if (process.env.NODE_ENV === 'development') {
         logger.error(error.message, error.stack);
       }
-      return { success: false, message: 'Failed to delete Sales', status: ApiStatus.INTERNAL_SERVER_ERROR };
+      return { success: false, message: 'Failed to delete Purchase return', status: ApiStatus.INTERNAL_SERVER_ERROR };
     } finally {
       await queryRunner.release();
     }
   }
 
   async invalidateCache(companyId: string, yearId: string, invoiceId?: string): Promise<void> {
-    await cache.del(`sales_${companyId}_${yearId}`);
+    await cache.del(`purchase_return_${companyId}_${yearId}`);
     if (invoiceId) {
-      await cache.del(`sales_${companyId}_${yearId}:${invoiceId}`);
+      await cache.del(`purchase_return_${companyId}_${yearId}:${invoiceId}`);
     }
   }
 }
 
-export const SalesServiceInstance = new SalesService();
+export const PurchaseReturnServiceInstance = new PurchaseReturnService();
