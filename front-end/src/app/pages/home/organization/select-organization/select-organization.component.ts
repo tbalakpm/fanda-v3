@@ -63,7 +63,7 @@ export class SelectOrganizationComponent {
       },
     });
     sessionStorage.removeItem('organization');
-    this._orgService.getAll({ field: 'isActive', value: true }).subscribe({
+    this._orgService.getAll({ filter: 'isActive:eq:true' }).subscribe({
       next: ({ data }) => {
         if (data.length === 0) {
           this.router.navigate(['/home/organization/add']);

@@ -37,7 +37,8 @@ class SalesService {
     console.log('where', where);
     console.log('order', order);
 
-    const invoices = await this.SalesRepository.find({
+    // const invoices = await this.SalesRepository.find({
+    const [invoices, total] = await this.SalesRepository.findAndCount({
       select: {
         invoiceId: true,
         invoiceNumber: true,
@@ -68,7 +69,7 @@ class SalesService {
     });
 
     // await cache.set(`sales_${companyId}_${yearId}`, invoices);
-    return { success: true, message: 'Serving sales from database', data: invoices, status: ApiStatus.OK };
+    return { success: true, message: 'Serving sales from database', data: invoices, total, status: ApiStatus.OK };
   }
 
   async getSalesById(companyId: string, yearId: string, invoiceId: string): Promise<ApiResponse<Sales>> {

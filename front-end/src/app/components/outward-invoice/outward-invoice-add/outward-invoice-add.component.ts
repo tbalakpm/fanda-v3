@@ -193,7 +193,7 @@ export class OutwardInvoiceAddComponent {
     this.id = this.route.snapshot.params['id'];
 
     let requests: any[] = [
-      this._customerService.getAll({ value: false, field: 'isActive' }),
+      this._customerService.getAll({ filter: 'isActive:eq:true' }),
       // this._productService.getAll({ value: false, field: 'isActive' }),
     ];
 

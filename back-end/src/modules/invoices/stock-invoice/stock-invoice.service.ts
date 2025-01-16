@@ -38,7 +38,8 @@ class StockInvoiceService {
       order.invoiceId = 'desc'; // { invoiceId: 'desc' };
     }
 
-    const invoices = await this.stockInvoiceRepository.find({
+    //const invoices = await this.stockInvoiceRepository.find({
+    const [invoices, total] = await this.stockInvoiceRepository.findAndCount({
       select: ['invoiceId', 'invoiceNumber', 'invoiceDate', 'totalQty', 'totalAmount', 'notes'],
       where: where, // { companyId, yearId },
       order: order, // { companyId: 'ASC', yearId: 'ASC', invoiceId: 'ASC' }
@@ -46,7 +47,7 @@ class StockInvoiceService {
       take: pagination.limit
     });
     // await cache.set(`stockInvoices_${companyId}_${yearId}`, invoices);
-    return { success: true, message: 'Serving stock invoices from database', data: invoices, status: ApiStatus.OK };
+    return { success: true, message: 'Serving stock invoices from database', data: invoices, total, status: ApiStatus.OK };
   }
 
   async getStockInvoiceById(companyId: string, yearId: string, invoiceId: string): Promise<ApiResponse<StockInvoice>> {

@@ -20,17 +20,19 @@ import { Stock } from '../models/stock';
 
 interface PagedResponse<T> {
   total: number;
-  items: T[];
+  data: T[];
 }
 
 export interface QueryOptions {
   page?: number;
-  limit?: number;
-  sort?: string;
-  order?: string;
-  value?: string | boolean | number;
-  field?: string;
-  invoiceType?: string;
+  size?: number;
+  sort?: string; // <field>:<direction = asc|desc>
+  filter?: string; // <field>:<operator = eq|neq|gt|gte|lt|lte|in|nin|isnull|isnotnull>:<value>
+  search?: string; // search string
+  // order?: string;
+  // value?: string | boolean | number;
+  // field?: string;
+  // invoiceType?: string;
 }
 
 function queryOptions(options: any) {
@@ -192,6 +194,7 @@ export class SupplierService extends GenericService<Party> {
   }
 }
 
+// INWARD INVOICE SERVICES - Purchase, Sales Return
 @Injectable({ providedIn: 'root' })
 export class InwardInvoiceService extends GenericService<InwardInvoice> {
   constructor(private http: HttpClient) {
@@ -199,7 +202,22 @@ export class InwardInvoiceService extends GenericService<InwardInvoice> {
     this.setApiUrl(this.orgApiUrl + this.yearApiUrl + this.moduleUrl);
   }
 }
+@Injectable({ providedIn: 'root' })
+export class PurchaseInvoiceService extends GenericService<InwardInvoice> {
+  constructor(private http: HttpClient) {
+    super(http, 'purchases');
+    this.setApiUrl(this.orgApiUrl + this.yearApiUrl + this.moduleUrl);
+  }
+}
+@Injectable({ providedIn: 'root' })
+export class SalesReturnInvoiceService extends GenericService<InwardInvoice> {
+  constructor(private http: HttpClient) {
+    super(http, 'sales-returns');
+    this.setApiUrl(this.orgApiUrl + this.yearApiUrl + this.moduleUrl);
+  }
+}
 
+// OUTWARD INVOICE SERVICES - Sales, Purchase Return
 @Injectable({ providedIn: 'root' })
 export class OutwardInvoiceService extends GenericService<OutwardInvoice> {
   constructor(private http: HttpClient) {
@@ -207,11 +225,26 @@ export class OutwardInvoiceService extends GenericService<OutwardInvoice> {
     this.setApiUrl(this.orgApiUrl + this.yearApiUrl + this.moduleUrl);
   }
 }
+@Injectable({ providedIn: 'root' })
+export class SalesInvoiceService extends GenericService<OutwardInvoice> {
+  constructor(private http: HttpClient) {
+    super(http, 'sales');
+    this.setApiUrl(this.orgApiUrl + this.yearApiUrl + this.moduleUrl);
+  }
+}
+@Injectable({ providedIn: 'root' })
+export class PurchaseReturnInvoiceService extends GenericService<OutwardInvoice> {
+  constructor(private http: HttpClient) {
+    super(http, 'purchase-returns');
+    this.setApiUrl(this.orgApiUrl + this.yearApiUrl + this.moduleUrl);
+  }
+}
 
+// STOCK INVOICE SERVICES - Stock, Transfer
 @Injectable({ providedIn: 'root' })
 export class StockService extends GenericService<Stock> {
   constructor(private http: HttpClient) {
-    super(http, 'stock');
+    super(http, 'stock-invoices');
     this.setApiUrl(this.orgApiUrl + this.yearApiUrl + this.moduleUrl);
   }
 }
@@ -227,7 +260,7 @@ export class ConsumerService extends GenericService<Consumer> {
 @Injectable({ providedIn: 'root' })
 export class YearService extends GenericService<Consumer> {
   constructor(private http: HttpClient) {
-    super(http, 'consumers');
+    super(http, 'financial-years');
     this.setApiUrl(this.orgApiUrl + this.moduleUrl);
   }
 }

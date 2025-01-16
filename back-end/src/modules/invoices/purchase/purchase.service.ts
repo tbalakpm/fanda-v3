@@ -88,7 +88,7 @@ class PurchaseService {
     });
 
     // await cache.set(`purchases_${companyId}_${yearId}`, invoices);
-    return { success: true, message: 'Serving purchases from database', data: invoices, total: total, status: ApiStatus.OK };
+    return { success: true, message: 'Serving purchases from database', data: invoices, total, status: ApiStatus.OK };
   }
 
   async getPurchaseById(companyId: string, yearId: string, invoiceId: string): Promise<ApiResponse<Purchase>> {

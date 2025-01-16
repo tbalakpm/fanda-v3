@@ -37,7 +37,8 @@ class PurchaseReturnService {
     console.log('where', where);
     console.log('order', order);
 
-    const invoices = await this.PurchaseReturnRepository.find({
+    //const invoices = await this.PurchaseReturnRepository.find({
+    const [invoices, total] = await this.PurchaseReturnRepository.findAndCount({
       select: {
         invoiceId: true,
         invoiceNumber: true,
@@ -67,7 +68,7 @@ class PurchaseReturnService {
     });
 
     // await cache.set(`purchase_returns_${companyId}_${yearId}`, invoices);
-    return { success: true, message: 'Serving purchase returns from database', data: invoices, status: ApiStatus.OK };
+    return { success: true, message: 'Serving purchase returns from database', data: invoices, total, status: ApiStatus.OK };
   }
 
   async getPurchaseReturnById(companyId: string, yearId: string, invoiceId: string): Promise<ApiResponse<PurchaseReturn>> {
@@ -107,7 +108,7 @@ class PurchaseReturnService {
     const lineItems = await AppDataSource.getRepository(PurchaseReturnItem).findBy({ invoiceId });
     invoice.lineItems = lineItems;
 
-    await cache.set(`purchase_returns_${companyId}_${yearId}:${invoiceId}`, invoice);
+    // await cache.set(`purchase_returns_${companyId}_${yearId}:${invoiceId}`, invoice);
     return { success: true, message: 'Serving a purchase returns from database', data: invoice, status: ApiStatus.OK };
   }
 

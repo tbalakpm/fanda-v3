@@ -187,8 +187,8 @@ export class InwardInvoiceAddComponent {
     this.id = this.route.snapshot.params['id'];
 
     let requests: any = [
-      this._supplierService.getAll({ value: false, field: 'isActive' }),
-      this._productService.getAll({ value: false, field: 'isActive' }),
+      this._supplierService.getAll({ filter: 'isActive:eq:true' }),
+      this._productService.getAll({ filter: 'isActive:eq:true' }),
     ];
     if (this.id && this.id !== 'new') {
       requests.push(this._inwardInvoiceService.getById(this.id));

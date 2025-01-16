@@ -9,7 +9,11 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 
 import { GST_TREATMENTS_IN_DICT, INVOICE_TYPES_DICT } from '@constants';
 import { InwardInvoice } from '@models';
-import { InwardInvoiceService, LoaderService } from '@services';
+import {
+  PurchaseInvoiceService,
+  SalesReturnInvoiceService,
+  LoaderService,
+} from '@services';
 
 @Component({
   selector: 'inward-invoice-list',
@@ -27,32 +31,35 @@ import { InwardInvoiceService, LoaderService } from '@services';
 })
 export class InwardInvoiceListComponent {
   @Input()
-  invoiceType: 'purchase' | 'salesreturn' | 'stock' | 'transfer';
+  invoiceType: 'purchase' | 'salesreturn'; //| 'stock' | 'transfer';
 
   purchases: InwardInvoice[] = [];
-
   invoiceTypes = INVOICE_TYPES_DICT;
   gstTreatments = GST_TREATMENTS_IN_DICT;
-
   total: number;
   pageIndex = 1;
   pageSize = 10;
 
   constructor(
     public _loaderService: LoaderService,
-    private _inwardInvoiceService: InwardInvoiceService
+    // private _inwardInvoiceService: InwardInvoiceService
+    private _purchaseInvoiceService: PurchaseInvoiceService,
+    private _salesReturnInvoiceService: SalesReturnInvoiceService
   ) {}
 
   fetchInvoice() {
     // this._loaderService.showLoader();
-    this._inwardInvoiceService
+    (this.invoiceType === 'purchase'
+      ? this._purchaseInvoiceService
+      : this._salesReturnInvoiceService
+    )
       .getPaged({
-        invoiceType: this.invoiceType,
+        // invoiceType: this.invoiceType,
         page: this.pageIndex,
-        limit: this.pageSize,
+        size: this.pageSize,
       })
       .subscribe((purchases) => {
-        this.purchases = [...purchases.items];
+        this.purchases = [...purchases.data];
         this.total = purchases.total;
         this._loaderService.hideLoader();
       });
@@ -65,8 +72,13 @@ export class InwardInvoiceListComponent {
   }
 
   deleteInvoice(id: string) {
-    this._inwardInvoiceService.delete(id).subscribe(() => {
-      this.fetchInvoice();
-    });
+    (this.invoiceType === 'purchase'
+      ? this._purchaseInvoiceService
+      : this._salesReturnInvoiceService
+    )
+      .delete(id)
+      .subscribe(() => {
+        this.fetchInvoice();
+      });
   }
 }

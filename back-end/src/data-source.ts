@@ -21,6 +21,10 @@ import { Purchase } from './modules/invoices/purchase/purchase.entity';
 import { PurchaseLineItem } from './modules/invoices/purchase/purchase-line-item.entity';
 import { Sales } from './modules/invoices/sales/sales.entity';
 import { SalesLineItem } from './modules/invoices/sales/sales-line-item.entity';
+import { SalesReturn } from './modules/invoices/sales-return/sales-return.entity';
+import { SalesReturnItem } from './modules/invoices/sales-return/sales-return-item.entity';
+import { PurchaseReturn } from './modules/invoices/purchase-return/purchase-return.entity';
+import { PurchaseReturnItem } from './modules/invoices/purchase-return/purchase-return-item.entity';
 
 const {
   NODE_ENV = 'development',
@@ -110,7 +114,11 @@ export const AppDataSource = new DataSource({
     Purchase,
     PurchaseLineItem,
     Sales,
-    SalesLineItem
+    SalesLineItem,
+    SalesReturn,
+    SalesReturnItem,
+    PurchaseReturn,
+    PurchaseReturnItem
   ],
   migrations: [__dirname + '/migrations/*.ts'],
   subscribers: [],
