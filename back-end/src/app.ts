@@ -14,10 +14,11 @@ import { companyRoutes } from './routes/company.route';
 import { financialYearRoutes } from './modules/financial-year/financial-year.route';
 import { unitRoutes } from './modules/unit/unit.route';
 import { productCategoryRoutes } from './modules/product-category/product-category.route';
-import { productRoutes } from './modules/product/product.route';
+import { productRoutes } from './modules/product/product.routes';
 import { supplierRoutes } from './modules/supplier/supplier.route';
 import { customerRoutes } from './modules/customer/customer.route';
 import { consumerRoutes } from './modules/consumer/consumer.route';
+import { inventoryRoutes } from './modules/inventory/inventory.routes';
 
 import { stockInvoiceRoutes } from './modules/invoices/stock-invoice/stock-invoice.route';
 import { purchaseRoutes } from './modules/invoices/purchase/purchase.route';
@@ -85,6 +86,7 @@ companyRouter.use('/:companyId/products', productRoutes());
 companyRouter.use('/:companyId/suppliers', supplierRoutes());
 companyRouter.use('/:companyId/customers', customerRoutes());
 companyRouter.use('/:companyId/consumers', consumerRoutes());
+companyRouter.use('/:companyId/inventories', inventoryRoutes());
 // year routes
 yearRouter.use('/:yearId/stock-invoices', stockInvoiceRoutes());
 yearRouter.use('/:yearId/purchases', purchaseRoutes());

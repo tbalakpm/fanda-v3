@@ -36,14 +36,14 @@
       <td>{{ stock.totalAmount.toIndianCurrencyFormat() }}</td>
       <!-- <td>{{ product.yearId }}</td> -->
       <td class="space-x-2">
-        <!-- <button nz-tooltip="Edit" [routerLink]="['edit', purchase._id]">
+        <!-- <button nz-tooltip="Edit" [routerLink]="['edit', purchase.invoiceId]">
           <i nz-icon nzType="edit"></i>
         </button> -->
         <button
           nz-tooltip="Delete"
           nz-popconfirm="Are you sure want to delete?"
           nzPopconfirmPlacement="bottom"
-          (nzOnConfirm)="deleteInvoice(stock._id!)"
+          (nzOnConfirm)="deleteInvoice(stock.invoiceId!)"
         >
           <i nz-icon nzType="delete"></i>
         </button>

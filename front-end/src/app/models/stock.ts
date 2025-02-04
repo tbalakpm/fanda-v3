@@ -1,7 +1,7 @@
 import { LineItem } from './';
 
 export interface Stock {
-  _id: string;
+  invoiceId: string;
   invoiceNumber: string;
   invoiceDate: Date;
   referenceNumber: string;

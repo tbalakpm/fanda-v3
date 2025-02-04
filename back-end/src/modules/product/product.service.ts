@@ -4,7 +4,6 @@ import { cache } from '../../helpers/cache.helper';
 
 import { AppDataSource } from '../../data-source';
 import { AuditUsers } from '../../entities/embedded/audit.entity';
-// import { ApiResponse, ApiStatus } from "../../responses";
 import { parseError } from '../../helpers/error.helper';
 import { Product } from './product.entity';
 import { ProductSchema } from './product.schema';
@@ -104,7 +103,20 @@ export class ProductService {
   }
 
   static async createProduct(companyId: string, product: Product, userId: string): Promise<ApiResponse<Product>> {
+    if (!product.categoryId) {
+      const defaultCategory = await AppDataSource.getRepository('ProductCategory').findOne({ where: { companyId, code: 'DEFAULT' } });
+      if (defaultCategory) {
+        product.categoryId = defaultCategory.categoryId;
+      }
+    }
+    if (!product.baseUnitId) {
+      const defaultUnit = await AppDataSource.getRepository('Unit').findOne({ where: { companyId, code: 'NO' } });
+      if (defaultUnit) {
+        product.baseUnitId = defaultUnit.unitId;
+      }
+    }
     if (!product.gtnGeneration) product.gtnGeneration = GtnGeneration.Tag;
+
     const parsedResult = ProductSchema.safeParse(product);
     if (!parsedResult.success) {
       return {

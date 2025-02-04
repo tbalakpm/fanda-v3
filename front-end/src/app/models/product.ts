@@ -37,11 +37,18 @@ export interface Unit {
 }
 
 export interface GTN {
-  _id: string;
+  inventoryId: string;
   gtn: string;
   qtyOnHand: number;
-  productId: TID;
-  unitId: TID;
+  product: {
+    productId: string;
+    code: string;
+    name: string;
+    taxPct?: number;
+    taxCode?: string;
+    isActive?: boolean;
+  };
+  unit: { unitId: string; code: string; name: string; isActive?: boolean };
   buyingPrice?: number;
   sellingPrice?: number;
   marginPct?: number;
@@ -49,7 +56,7 @@ export interface GTN {
 }
 
 export interface TID {
-  _id: string;
+  id: string;
   code: string;
   name: string;
   taxPct?: number;

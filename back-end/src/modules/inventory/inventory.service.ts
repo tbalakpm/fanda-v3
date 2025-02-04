@@ -65,4 +65,34 @@ export class InventoryService {
     );
     return updatedInventory.raw[0];
   }
+
+  static async searchGtn(companyId: string, gtn: string): Promise<Inventory | null> {
+    return await this.inventoryRepository.findOne({
+      where: { companyId, gtn },
+      select: {
+        inventoryId: true,
+        companyId: true,
+        gtn: true,
+        productId: true,
+        product: {
+          productId: true,
+          code: true,
+          name: true
+          // buyingPrice: true,
+          // sellingPrice: true,
+          // marginPct: true,
+          // marginAmt: true
+        },
+        unitId: true,
+        unit: { unitId: true, code: true, name: true },
+        qtyOnHand: true,
+        buyingPrice: true,
+        sellingPrice: true,
+        marginPct: true,
+        marginAmt: true
+      },
+      relations: ['product', 'unit'],
+      relationLoadStrategy: 'query'
+    });
+  }
 }

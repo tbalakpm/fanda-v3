@@ -129,38 +129,40 @@ export class StockFormComponent {
 
     this._productService.getAll().subscribe(({ data }) => {
       this.products = data;
+      console.log('Products:', this.products);
     });
   }
 
   getUnit(productId: string) {
-    const product = this.products.find((p) => p._id === productId);
+    const product = this.products.find((p) => p.productId === productId);
+    // console.log('product', product);
     return product?.unit?.code ?? '';
   }
 
   getProductHSN(productId: string) {
-    const product = this.products.find((p) => p._id === productId);
+    const product = this.products.find((p) => p.productId === productId);
     return product?.taxCode ? '- ' + product.taxCode : '';
   }
 
   getGtnDetails(gtnNo: string, form: any) {
     if (gtnNo)
       this._inventoryService.searchGtn(gtnNo).subscribe((res) => {
-        if (!this.products.find((p) => p._id === res.productId._id)) {
+        if (!this.products.find((p) => p.productId === res.product.productId)) {
           this.products.push({
-            _id: res.productId._id,
-            code: res.productId.code,
-            name: res.productId.name,
-            taxPct: res.productId.taxPct ?? 0,
+            productId: res.product.productId,
+            code: res.product.code,
+            name: res.product.name,
+            taxPct: res.product.taxPct ?? 0,
             unit: {
-              _id: res.unitId._id,
-              code: res.unitId.code,
-              name: res.unitId.name,
+              unitId: res.unit.unitId,
+              code: res.unit.code,
+              name: res.unit.name,
             },
           });
         }
-        form.controls['productId'].setValue(res.productId._id);
+        form.controls['productId'].setValue(res.product.productId);
         // form.controls['productId'].disable();
-        form.controls['unitId'].setValue(res.unitId._id);
+        form.controls['unitId'].setValue(res.unit.unitId);
       });
   }
 
@@ -196,8 +198,8 @@ export class StockFormComponent {
         this.isAddProductModalVisible = true;
         return;
       }
-      const product = this.products.find((p) => p._id === productId)!;
-      form.controls.unitId.setValue(product.unit!._id!);
+      const product = this.products.find((p) => p.productId === productId)!;
+      form.controls.unitId.setValue(product.unit!.unitId!);
       form.controls.rate.setValue(product.sellingPrice ?? 0);
       form.controls.sellingPrice.setValue(product.sellingPrice ?? 0);
       form.controls.marginPctOrAmt.setValue(product.marginPct ? 'pct' : 'amt');
@@ -223,12 +225,12 @@ export class StockFormComponent {
 
     form.controls.rate.valueChanges.subscribe(() => {
       reCalculate();
-      this.reCalculateSellPrice(form);
+      this.calculateSellPrice(form);
     });
 
     ['margin', 'marginPctOrAmt'].forEach((controlName) => {
       form.controls[controlName].valueChanges.subscribe((value: number) => {
-        this.reCalculateSellPrice(form);
+        this.calculateSellPrice(form);
       });
     });
 
@@ -248,7 +250,7 @@ export class StockFormComponent {
     this.stockForm.controls['totalQty'].setValue(this.info.totalQty);
   }
 
-  reCalculateSellPrice(form: any) {
+  calculateSellPrice(form: any) {
     if (this.config.profitMgn) {
       const rate = form.controls.rate.value;
       const margin = form.controls.margin.value;
@@ -262,7 +264,7 @@ export class StockFormComponent {
 
   onProfitMarginChange() {
     this.lineItems.controls.forEach((form: any) => {
-      this.reCalculateSellPrice(form);
+      this.calculateSellPrice(form);
     });
   }
 
@@ -308,10 +310,12 @@ export class StockFormComponent {
           this.addLineItem();
         });
     } else {
+      console.log('Invalid Form', this.stockForm.value);
       this.stockForm.markAllAsTouched();
 
       Object.values(this.stockForm.controls).forEach((control: any) => {
         if (control.invalid) {
+          console.log('control', control);
           control.markAsDirty();
           control.updateValueAndValidity({ onlySelf: true });
         }
@@ -319,6 +323,7 @@ export class StockFormComponent {
           control.controls.forEach((c: any) => {
             Object.values(c.controls).forEach((innerControl: any) => {
               if (innerControl.invalid) {
+                console.log('innerControl', innerControl);
                 innerControl.markAsDirty();
                 innerControl.updateValueAndValidity({ onlySelf: true });
               }
@@ -331,18 +336,22 @@ export class StockFormComponent {
 
   addProduct() {
     if (this.productForm.valid) {
-      this._productService
-        .create(this.productForm.value)
-        .subscribe(({ data }) => {
-          let selectedLineItem: any = this.lineItems.controls.find(
-            (x) => x.value.productId === 'new'
-          );
-          this.products.push(data);
-          if (selectedLineItem)
-            selectedLineItem.controls.productId.setValue(data.productId);
-          this.isAddProductModalVisible = false;
-          this.productForm.reset();
-        });
+      const newProduct = {
+        ...this.productForm.value,
+        productType: 'goods',
+        taxPreference: 'taxable',
+        taxPct: 5.0,
+      };
+      this._productService.create(newProduct).subscribe(({ data }) => {
+        let selectedLineItem: any = this.lineItems.controls.find(
+          (x) => x.value.productId === 'new'
+        );
+        this.products.push(data);
+        if (selectedLineItem)
+          selectedLineItem.controls.productId.setValue(data.productId);
+        this.isAddProductModalVisible = false;
+        this.productForm.reset();
+      });
     } else {
       this.productForm.markAllAsTouched();
     }

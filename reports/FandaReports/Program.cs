@@ -1,3 +1,5 @@
+using FandaReports;
+using QuestPDF.Infrastructure;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +15,6 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
-
 }
 
 
@@ -38,6 +39,14 @@ app.MapGet("/weatherforecast", () =>
     })
     .WithName("GetWeatherForecast");
 
+app.MapPost("/new-report", () =>
+{
+    NewReport newReport = new();
+    newReport.CreateReport();
+});
+
+
+QuestPDF.Settings.License = LicenseType.Community;
 app.Run();
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
