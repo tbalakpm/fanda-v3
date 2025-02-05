@@ -1,22 +1,23 @@
 import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { Observable } from 'rxjs';
-import { Injectable, inject } from '@angular/core';
 
-import { AuthService } from './auth.service';
 import {
-  ProductCategory,
+  Consumer,
+  GTN,
+  InwardInvoice,
+  Organization,
+  OutwardInvoice,
+  Party,
   Product,
+  ProductCategory,
+  Response,
+  Stock,
   Unit,
   User,
-  Organization,
-  InwardInvoice,
-  OutwardInvoice,
-  Consumer,
-  Response,
-  Party,
-} from '../models';
-import { Stock } from '../models/stock';
+} from '@models';
+import { AuthService } from './auth.service';
 
 interface PagedResponse<T> {
   total: number;
@@ -262,5 +263,17 @@ export class YearService extends GenericService<Consumer> {
   constructor(private http: HttpClient) {
     super(http, 'financial-years');
     this.setApiUrl(this.orgApiUrl + this.moduleUrl);
+  }
+}
+@Injectable({ providedIn: 'root' })
+export class InventoryService extends GenericService<GTN> {
+  constructor(private http: HttpClient) {
+    super(http, 'inventories');
+  }
+
+  searchGtn(gtn: string): Observable<GTN> {
+    return this.http
+      .get<any>(`${this.baseUrl}${this.orgApiUrl}${this.moduleUrl}/gtn/${gtn}`)
+      .pipe(map((res) => res.data));
   }
 }

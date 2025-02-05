@@ -3,11 +3,13 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "ng serve",
       "type": "chrome",
-      "request": "launch",
-      "preLaunchTask": "npm: start",
-      "url": "http://localhost:4200/"
+      "request": "attach",
+      "name": "Attach to Arc",
+      "port": 9222,
+      "webRoot": "${workspaceFolder}",
+      "sourceMaps": true,
+      "trace": true
     },
     {
       "name": "ng test",

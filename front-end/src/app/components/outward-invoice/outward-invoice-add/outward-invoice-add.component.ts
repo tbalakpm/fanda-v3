@@ -250,24 +250,24 @@ export class OutwardInvoiceAddComponent {
         if (!this.products.find((p) => p.gtn === res.gtn)) {
           // console.log("Product doesn't exist");
           this.products.push({
-            _id: res.productId._id,
-            code: res.productId.code,
+            _id: res.product.productId,
+            code: res.product.code,
             gtn: res.gtn,
-            name: res.productId.name,
-            taxPct: res.productId.taxPct ?? 0,
-            taxCode: res.productId.taxCode ?? '',
+            name: res.product.name,
+            taxPct: res.product.taxPct ?? 0,
+            taxCode: res.product.taxCode ?? '',
             qtyOnHand: res.qtyOnHand,
             buyingPrice: res.buyingPrice,
             sellingPrice: res.sellingPrice,
             unit: {
-              _id: res.unitId._id,
-              code: res.unitId.code,
-              name: res.unitId.name,
+              _id: res.unit.unitId,
+              code: res.unit.code,
+              name: res.unit.name,
             },
           });
         }
-        form.controls['productId'].setValue(res.productId._id);
-        form.controls['unitId'].setValue(res.unitId._id);
+        form.controls['productId'].setValue(res.product.productId);
+        form.controls['unitId'].setValue(res.unit.unitId);
       },
       (_) => {
         form.controls['gtn'].setValue('');

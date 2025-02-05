@@ -1,5 +1,5 @@
-import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, HostListener } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -24,10 +24,10 @@ import { NzStepsModule } from 'ng-zorro-antd/steps';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
+import { PageHeaderComponent } from '@components';
 import { LineItem } from '@models';
 import { InventoryService, ProductService, StockService } from '@services';
 import { watchObject } from '@utils';
-import { PageHeaderComponent } from '@components';
 
 @Component({
   selector: 'app-stock-form',
@@ -199,7 +199,7 @@ export class StockFormComponent {
         return;
       }
       const product = this.products.find((p) => p.productId === productId)!;
-      form.controls.unitId.setValue(product.unit!.unitId!);
+      form.controls.unitId.setValue(product.unit?.unitId);
       form.controls.rate.setValue(product.sellingPrice ?? 0);
       form.controls.sellingPrice.setValue(product.sellingPrice ?? 0);
       form.controls.marginPctOrAmt.setValue(product.marginPct ? 'pct' : 'amt');

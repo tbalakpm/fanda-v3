@@ -34,7 +34,10 @@ export const ErrorInterceptor: HttpInterceptorFn = (req, next) => {
     tap((event) => {
       if (
         event instanceof HttpResponse &&
-        (event.status === 201 || event.status === 204)
+        (event.status === 201 ||
+          event.status === 204 ||
+          event.status === 200) &&
+        req.method !== 'GET'
       ) {
         const action = event.headers.get('X-Action')?.toTitleCase();
         let url = api[event.url?.split('/')[4]!];
