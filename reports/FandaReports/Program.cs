@@ -41,12 +41,16 @@ app.MapGet("/weatherforecast", () =>
 
 app.MapPost("/new-report", () =>
 {
-    NewReport newReport = new();
+    var newReport = new NewReport();
     newReport.CreateReport();
+    return Results.Ok();
 });
 
 
 QuestPDF.Settings.License = LicenseType.Community;
+var newReport = new NewReport();
+newReport.CreateReport();
+
 app.Run();
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
