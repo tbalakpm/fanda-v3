@@ -1,6 +1,8 @@
 import 'reflect-metadata';
 import express from 'express';
 import cors from 'cors';
+import 'dotenv/config';
+
 import { loggerMiddleware } from './middleware/logger.middleware';
 import { authentication } from './middleware/authentication.middleware';
 import { notFound } from './middleware/not-found.middleware';
@@ -41,11 +43,22 @@ const app = express();
 //   }
 // });
 
+const whitelist = process.env.CORS_ORIGINS.split(';');
+
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(
   cors({
-    origin: '*',
+    origin(requestOrigin, callback) {
+      if (!requestOrigin) {
+        return callback(null, true);
+      }
+      if (whitelist.indexOf(requestOrigin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     allowedHeaders: [
       'Origin',
       'X-Requested-With',
