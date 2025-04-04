@@ -1,4 +1,4 @@
-@baseUrl=http://localhost:4000
+@baseUrl=http://localhost:3000
 @token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTkzMmIwOS1lMzU3LTc5OTgtOWE1Mi01MTNkNzNhZWY0YmIiLCJpYXQiOjE3MzUxMjYwNTUsImV4cCI6MTczNTIxMjQ1NX0.O9MhOB5CjeSthk4I4BO_QnqBEIz3tOoqqnKxjNRpKS8
 
 ### Get all companies

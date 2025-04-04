@@ -1,0 +1,45 @@
+/* h4 {
+  margin-bottom: 16px;
+}
+
+.ant-tag {
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+} */
+
+/* nz-icon {
+  margin-right: 6px;
+  font-size: 1rem;
+} */
+
+.btn-wrapper {
+  block-size: 3rem;
+  border: 1px solid var(--ant-primary-6);
+}
+
+.actions {
+  /* display: flex; */
+  /* justify-content: flex-end; */
+  /* margin-top: 16px; */
+  margin-right: 0.75rem;
+  font-size: 1.1rem;
+}
+
+.search-box {
+  padding: 8px;
+}
+
+.search-box input {
+  width: 188px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.search-box button {
+  width: 90px;
+}
+
+.search-button {
+  margin-right: 8px;
+}

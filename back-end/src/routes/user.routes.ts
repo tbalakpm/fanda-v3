@@ -5,6 +5,8 @@ import { UserRoles } from '../entities';
 
 export const userRoutes = () => {
   const router = express.Router();
+  router.route('/dashboard').get(UserController.dashboard);
+  router.route('/exists').get(UserController.exists);
   router
     .route('/')
     .get(authorization([UserRoles.Admin]), UserController.getUsers)

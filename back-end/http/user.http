@@ -1,4 +1,4 @@
-@baseUrl=http://localhost:4000
+@baseUrl=http://localhost:3000
 @token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTkyZmM1ZS0wMDkzLTdjY2MtYTIwYS1kYzg0NGE1YmFkMWMiLCJpYXQiOjE3MzA4MTI0MjQsImV4cCI6NDg4NDQxMjQyNH0.kpqWbQXwp9GsKhB-Yd1eGPdq8NHw5mj_9xpRT5Ggmkw
 @adminUserId=0192fc5e-0093-7ccc-a20a-dc844a5bad1c
 
@@ -21,11 +21,11 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "username": "vyuvan",
+  "username": "enaveen",
   "password": "Welcome!23",
-  "email": "vyuvan@gmail.com",
-  "firstName": "Yuvan",
-  "lastName": "Vinayagam"
+  "email": "enaveen@gmail.com",
+  "firstName": "Naveenkumar",
+  "lastName": "Elumalai"
 }
 
 
@@ -44,5 +44,27 @@ Authorization: Bearer {{token}}
 
 ### Delete user
 DELETE {{baseUrl}}/api/users/4d5dc30e-43f1-4ec1-9300-0285a95c768c
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+### Activate
+PUT {{baseUrl}}/api/users/0194592a-057e-708e-b4e8-55d876b7fbd4
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "isActive": false
+}
+
+
+###
+GET {{baseUrl}}/api/users/dashboard
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+###
+GET {{baseUrl}}/api/users/exists?username=tbala&email=tbala@fandatech.net
 Content-Type: application/json
 Authorization: Bearer {{token}}

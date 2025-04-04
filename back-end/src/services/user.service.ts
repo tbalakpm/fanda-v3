@@ -8,6 +8,8 @@ import { ApiStatus } from '../responses/api-status';
 import { ApiResponse } from '../responses/api-response';
 import { UserSchema } from '../schema/user.schema';
 import { encrypt } from '../helpers/encrypt.helper';
+import { UserDashboard } from '../interfaces/user-dashboard';
+import { UserExists } from '../interfaces/user-exists';
 
 export class UserService {
   private static userRepository = AppDataSource.getRepository(User);
@@ -100,7 +102,7 @@ export class UserService {
       };
     }
     const parsedUser = parsedResult.data as User;
-    if (await this.isUsernameExists(parsedUser.username)) {
+    if ((await this.checkExists(parsedUser.username, '', '')).data?.usernameExists) {
       return {
         success: false,
         message: `Username with name '${user.username}' already exists`,
@@ -124,7 +126,7 @@ export class UserService {
   }
 
   static async updateUser(userId: string, user: Partial<UserDto>): Promise<ApiResponse<UserDto>> {
-    if (user.username && (await this.isUsernameExists(user.username, userId))) {
+    if (user.username && (await this.checkExists(user.username, '', userId)).data?.usernameExists) {
       return {
         success: false,
         message: `Username with name '${user.username}' already exists`,
@@ -178,16 +180,71 @@ export class UserService {
     };
   }
 
-  static async isUsernameExists(username: string, userId?: string): Promise<boolean> {
-    let exists = true;
-    if (userId) {
-      exists = await this.userRepository.exists({
-        where: { username, userId: Not(userId) }
-      });
-      return exists;
+  static async dashboard(): Promise<ApiResponse<UserDashboard>> {
+    const sql = `select 
+      count(*) as total_user_count, 
+      count(case when is_active then 1 else null end) as active_user_count, 
+      count(case when is_active = false then 1 else null end) as inactive_user_count, 
+      count(case when is_active and role='admin' then 1 else null end) admin_user_count,
+      count(case when is_active and role='manager' then 1 else null end) manager_user_count,
+      count(case when is_active and role='salesperson' then 1 else null end) salesperson_user_count,
+      count(case when is_active and role='user' then 1 else null end) user_user_count
+    from users u
+    where username != 'admin'`;
+    // console.log(sql);
+    const result = await this.userRepository.query(sql);
+    if (result && result.length > 0) {
+      const dashboard = result[0];
+      return {
+        success: true,
+        message: 'User dashboard loaded successfully',
+        data: {
+          totalUserCount: Number(dashboard.total_user_count),
+          activeUserCount: Number(dashboard.active_user_count),
+          inactiveUserCount: Number(dashboard.inactive_user_count),
+          adminUserCount: Number(dashboard.admin_user_count),
+          managerUserCount: Number(dashboard.manager_user_count),
+          salespersonUserCount: Number(dashboard.salesperson_user_count),
+          userUserCount: Number(dashboard.user_user_count)
+        },
+        status: ApiStatus.OK
+      };
     }
-    exists = await this.userRepository.existsBy({ username });
-    return exists;
+    return { success: false, message: 'User dashboard failed to load', status: ApiStatus.BAD_REQUEST };
+  }
+
+  static async checkExists(username?: string, email?: string, userId?: string): Promise<ApiResponse<UserExists>> {
+    let usernameExists: boolean = false;
+    let emailExists: boolean = false;
+    if (userId) {
+      if (username)
+        usernameExists = await this.userRepository.exists({
+          where: { username, userId: Not(userId) }
+        });
+      if (email)
+        emailExists = await this.userRepository.exists({
+          where: { email, userId: Not(userId) }
+        });
+
+      const data: UserExists = { username, email, ...(username && { usernameExists }), ...(email && { emailExists }) };
+
+      return {
+        success: true,
+        message: 'Checked Username/Email exists with userid successfully',
+        status: ApiStatus.OK,
+        data
+      };
+    }
+    if (username) usernameExists = await this.userRepository.existsBy({ username });
+    if (email) emailExists = await this.userRepository.existsBy({ email });
+
+    const data: UserExists = { username, email, ...(username && { usernameExists }), ...(email && { emailExists }) };
+    return {
+      success: true,
+      message: 'Checked Username/Email exists without userid succesfully',
+      status: ApiStatus.OK,
+      data
+    };
   }
 
   static async invalidateCache(userId?: string): Promise<void> {
