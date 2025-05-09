@@ -7,9 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.1"/>
-        <PackageReference Include="QuestPDF" Version="2024.12.2" />
-        <PackageReference Include="Scalar.AspNetCore" Version="2.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
+        <PackageReference Include="Microsoft.OpenApi" Version="1.6.24" />
+        <PackageReference Include="QuestPDF" Version="2025.4.2" />
+        <PackageReference Include="Scalar.AspNetCore" Version="2.2.5" />
     </ItemGroup>
 
 </Project>

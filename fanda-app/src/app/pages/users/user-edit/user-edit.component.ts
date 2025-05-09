@@ -91,10 +91,13 @@ export class UserEditComponent implements OnInit, OnDestroy, AfterViewInit {
         this.userId = userId;
 
         if (this.userId) {
+          console.log('UserId', userId);
           this.userService
             .getUser(this.userId)
             .then((response) => response.json())
             .then((user: UserResponse) => {
+              console.log('User', user);
+
               this.userEditForm.patchValue(user.data!);
               this.userEditForm.controls.username.disable();
               this.firstNameField.nativeElement.focus();
@@ -128,7 +131,7 @@ export class UserEditComponent implements OnInit, OnDestroy, AfterViewInit {
   resetForm(e?: MouseEvent) {
     if (e) e.preventDefault();
     this.userId = '';
-    this.userDataService.selectUser('');
+    // this.userDataService.selectUser('');
     this.userEditForm.controls.username.enable();
     this.userEditForm.reset();
     try {

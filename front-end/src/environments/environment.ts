@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  ICMS_API_URL: 'http://localhost:4000/api',
+  ICMS_API_URL: 'http://localhost:3000/api',
   AUTH_SERVER_API_URL: 'http://localhost:5270/',
 };
 

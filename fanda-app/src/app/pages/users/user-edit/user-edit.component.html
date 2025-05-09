@@ -1,12 +1,14 @@
-<form nz-form [formGroup]="userEditForm" (ngSubmit)="onSubmit()">
-  <div nz-row [nzGutter]="24">
-    <div nz-col [nzSpan]="8">
+<form
+  nz-form
+  [formGroup]="userEditForm"
+  nzLayout="vertical"
+  (ngSubmit)="onSubmit()"
+>
+  <div nz-row>
+    <div nz-col>
       <nz-form-item>
-        <nz-form-label nzSpan="6" nzRequired nzLabelAlign="left"
-          >Username</nz-form-label
-        >
+        <nz-form-label nzRequired>Username</nz-form-label>
         <nz-form-control
-          nzSpan="18"
           nzHasFeedback
           nzValidatingTip="Checking username availability..."
           [nzErrorTip]="userErrorTpl"
@@ -29,10 +31,10 @@
         </nz-form-control>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="8">
+    <div nz-col>
       <nz-form-item>
-        <nz-form-label nzSpan="6" nzLabelAlign="left">First Name</nz-form-label>
-        <nz-form-control nzSpan="18">
+        <nz-form-label>First Name</nz-form-label>
+        <nz-form-control>
           <input
             #firstNameField
             nz-input
@@ -42,7 +44,9 @@
         </nz-form-control>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="8">
+  </div>
+  <div nz-row [nzGutter]="24">
+    <div nz-col [nzSpan]="12">
       <nz-form-item>
         <nz-form-label nzSpan="6" nzLabelAlign="left">Last Name</nz-form-label>
         <nz-form-control nzSpan="18">
@@ -50,9 +54,7 @@
         </nz-form-control>
       </nz-form-item>
     </div>
-  </div>
-  <div nz-row [nzGutter]="24">
-    <div nz-col [nzSpan]="8">
+    <div nz-col [nzSpan]="12">
       <nz-form-item>
         <nz-form-label nzSpan="6" nzRequired nzLabelAlign="left"
           >E-mail</nz-form-label
@@ -71,7 +73,9 @@
         </nz-form-control>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="8">
+  </div>
+  <div nz-row [nzGutter]="24">
+    <div nz-col [nzSpan]="12">
       <nz-form-item>
         <nz-form-label nzSpan="6" nzLabelAlign="left">Phone</nz-form-label>
         <nz-form-control nzSpan="18">
@@ -79,7 +83,7 @@
         </nz-form-control>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="8">
+    <div nz-col [nzSpan]="12">
       <nz-form-item>
         <nz-form-label nzSpan="6" nzLabelAlign="left">Role</nz-form-label>
         <nz-form-control nzSpan="18" nzHasFeedback [nzErrorTip]="roleErrorTpl">
@@ -153,15 +157,15 @@
       </nz-textarea-count>
     </nz-form-control>
   </nz-form-item> -->
-  <!-- <nz-form-item> -->
-  <nz-form-control>
-    <div nzGap="small" nz-flex nzJustify="flex-end" nzAlign="center">
-      <button nz-button nzType="primary" [disabled]="!userEditForm.valid">
-        Submit
-      </button>
-      <button nz-button (click)="resetForm($event)">Reset</button>
-    </div>
-  </nz-form-control>
-  <!-- </nz-form-item> -->
+  <!-- <nz-form-item>
+    <nz-form-control> -->
+  <div nzGap="middle" nz-flex nzJustify="flex-end" nzAlign="center">
+    <button nz-button nzType="primary" [disabled]="!userEditForm.valid">
+      Submit
+    </button>
+    <button nz-button (click)="resetForm($event)">Reset</button>
+  </div>
+  <!-- </nz-form-control>
+  </nz-form-item> -->
 </form>
 <!-- [disabled]="!userEditForm.valid" -->

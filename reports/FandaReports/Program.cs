@@ -1,4 +1,6 @@
+using System.Diagnostics.CodeAnalysis;
 using FandaReports;
+using QuestPDF;
 using QuestPDF.Infrastructure;
 using Scalar.AspNetCore;
 
@@ -16,7 +18,6 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference();
 }
-
 
 app.UseHttpsRedirection();
 
@@ -46,14 +47,15 @@ app.MapPost("/new-report", () =>
     return Results.Ok();
 });
 
-
-QuestPDF.Settings.License = LicenseType.Community;
+Settings.License = LicenseType.Community;
 var newReport = new NewReport();
 newReport.CreateReport();
 
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+
+[SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Global")]
+internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }

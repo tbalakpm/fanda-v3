@@ -15,6 +15,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzFlexModule } from 'ng-zorro-antd/flex';
 import { NzSegmentedModule } from 'ng-zorro-antd/segmented';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 //#endregion Ng Zorro
 
 //#region User
@@ -23,6 +24,7 @@ import { UserService } from '../user.service';
 import { UserDataService } from '../user-data.service';
 import { User, UsersResponse } from '../user';
 import { Subscription } from 'rxjs';
+import { UserEditComponent } from '../user-edit/user-edit.component';
 //#endregion User
 
 @Component({
@@ -41,20 +43,18 @@ import { Subscription } from 'rxjs';
     NzFlexModule,
     NzSegmentedModule,
     NzPopconfirmModule,
+    NzDrawerModule,
+    UserEditComponent,
   ],
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.css'],
 })
 export class UserListComponent implements OnInit, OnDestroy {
-  onExport() {
-    throw new Error('Method not implemented.');
-  }
-  onImport() {
-    throw new Error('Method not implemented.');
-  }
   private service = inject(UserService);
   private userDataService = inject(UserDataService);
   private userLoadSub!: Subscription;
+  showDrawer = false;
+  drawerTitle = 'Create';
 
   loading = false;
   checked = false;
@@ -158,6 +158,19 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.userLoadSub.unsubscribe();
+  }
+  onExport() {
+    throw new Error('Method not implemented.');
+  }
+  onImport() {
+    throw new Error('Method not implemented.');
+  }
+  open(): void {
+    this.showDrawer = true;
+  }
+
+  close(): void {
+    this.showDrawer = false;
   }
 
   refreshData() {
@@ -300,7 +313,13 @@ export class UserListComponent implements OnInit, OnDestroy {
       .then((_) => this.refreshData());
   }
   onUserEdit(userId: string = '') {
+    if (userId) {
+      this.drawerTitle = 'Edit';
+    } else {
+      this.drawerTitle = 'Create';
+    }
     this.userDataService.selectUser(userId);
+    this.open();
   }
   onDeleteUser(userId: string) {
     this.service
