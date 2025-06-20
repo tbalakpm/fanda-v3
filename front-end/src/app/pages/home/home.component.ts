@@ -296,7 +296,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {}
 
   getOrganization() {
-    this._orgService.getAll({ field: 'isActive', value: true }).subscribe({
+    this._orgService.getAll({ filter: 'isActive:eq:true' }).subscribe({
       next: ({ data }) => {
         this.organizations = data;
       },

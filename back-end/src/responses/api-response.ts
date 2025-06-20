@@ -1,4 +1,4 @@
-import { ApiStatus } from './api-status';
+import type { ApiStatus } from './api-status';
 
 export class ApiResponse<T> {
   success!: boolean;

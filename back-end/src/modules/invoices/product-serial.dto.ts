@@ -1,4 +1,4 @@
-import { GtnGeneration } from '../product/gtn-generation.enum';
+import type { GtnGeneration } from '../product/gtn-generation.enum';
 
 export class ProductSerialDto {
   product?: {

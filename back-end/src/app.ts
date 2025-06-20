@@ -1,6 +1,8 @@
 import 'reflect-metadata';
 import express from 'express';
 import cors from 'cors';
+import 'dotenv/config';
+
 import { loggerMiddleware } from './middleware/logger.middleware';
 import { authentication } from './middleware/authentication.middleware';
 import { notFound } from './middleware/not-found.middleware';
@@ -8,22 +10,23 @@ import { errorHandler } from './middleware/error.middleware';
 import { rateLimiter } from './middleware/rate-limiter.middleware';
 import { actionHeader } from './middleware/custom-header.middleware';
 
-import { userRoutes } from './routes/user.route';
-import { authRoutes } from './routes/auth.route';
-import { companyRoutes } from './routes/company.route';
-import { financialYearRoutes } from './modules/financial-year/financial-year.route';
-import { unitRoutes } from './modules/unit/unit.route';
-import { productCategoryRoutes } from './modules/product-category/product-category.route';
-import { productRoutes } from './modules/product/product.route';
-import { supplierRoutes } from './modules/supplier/supplier.route';
-import { customerRoutes } from './modules/customer/customer.route';
-import { consumerRoutes } from './modules/consumer/consumer.route';
+import { userRoutes } from './routes/user.routes';
+import { authRoutes } from './routes/auth.routes';
+import { companyRoutes } from './routes/company.routes';
+import { financialYearRoutes } from './modules/financial-year/financial-year.routes';
+import { unitRoutes } from './modules/unit/unit.routes';
+import { productCategoryRoutes } from './modules/product-category/product-category.routes';
+import { productRoutes } from './modules/product/product.routes';
+import { supplierRoutes } from './modules/supplier/supplier.routes';
+import { customerRoutes } from './modules/customer/customer.routes';
+import { consumerRoutes } from './modules/consumer/consumer.routes';
+import { inventoryRoutes } from './modules/inventory/inventory.routes';
 
-import { stockInvoiceRoutes } from './modules/invoices/stock-invoice/stock-invoice.route';
-import { purchaseRoutes } from './modules/invoices/purchase/purchase.route';
-import { salesRoutes } from './modules/invoices/sales/sales.route';
-import { salesReturnRoutes } from './modules/invoices/sales-return/sales-return.route';
-import { purchaseReturnRoutes } from './modules/invoices/purchase-return/purchase-return.route';
+import { stockInvoiceRoutes } from './modules/invoices/stock-invoice/stock-invoice.routes';
+import { purchaseRoutes } from './modules/invoices/purchase/purchase.routes';
+import { salesRoutes } from './modules/invoices/sales/sales.routes';
+import { salesReturnRoutes } from './modules/invoices/sales-return/sales-return.routes';
+import { purchaseReturnRoutes } from './modules/invoices/purchase-return/purchase-return.routes';
 
 const app = express();
 
@@ -40,11 +43,22 @@ const app = express();
 //   }
 // });
 
+const whitelist = process.env.CORS_ORIGINS.split(';');
+
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(
   cors({
-    origin: '*',
+    origin(requestOrigin, callback) {
+      if (!requestOrigin) {
+        return callback(null, true);
+      }
+      if (whitelist.indexOf(requestOrigin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     allowedHeaders: [
       'Origin',
       'X-Requested-With',
@@ -85,6 +99,7 @@ companyRouter.use('/:companyId/products', productRoutes());
 companyRouter.use('/:companyId/suppliers', supplierRoutes());
 companyRouter.use('/:companyId/customers', customerRoutes());
 companyRouter.use('/:companyId/consumers', consumerRoutes());
+companyRouter.use('/:companyId/inventories', inventoryRoutes());
 // year routes
 yearRouter.use('/:yearId/stock-invoices', stockInvoiceRoutes());
 yearRouter.use('/:yearId/purchases', purchaseRoutes());

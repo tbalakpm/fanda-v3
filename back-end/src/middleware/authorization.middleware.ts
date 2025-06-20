@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 // import { User } from "../entities";
 import { ApiError } from '../responses/api-error';
-import { User } from '../entities/user.entity';
+import type { User } from '../entities/user.entity';
 
 export const authorization = (roles: string[]) => {
   return (req: Request, _res: Response, next: NextFunction) => {

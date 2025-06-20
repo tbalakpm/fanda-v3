@@ -34,15 +34,25 @@ export const ErrorInterceptor: HttpInterceptorFn = (req, next) => {
     tap((event) => {
       if (
         event instanceof HttpResponse &&
-        (event.status === 201 || event.status === 204)
+        (event.status === 201 ||
+          event.status === 204 ||
+          event.status === 200) &&
+        req.method !== 'GET'
       ) {
         const action = event.headers.get('X-Action')?.toTitleCase();
         let url = api[event.url?.split('/')[4]!];
         // console.log(event.url?.split('/')[4]!);
         let message;
-        if (url) message = `${url} ${action?.toLowerCase()}d successfully`;
-        else message = `${action}d successfully`;
-        _messageService.success(message);
+        if (url && action) {
+          message = `${url} ${action?.toLowerCase()}d successfully`;
+        } else if (action) {
+          message = `${action}d successfully`;
+        } else {
+          message = '';
+        }
+        if (message) {
+          _messageService.success(message);
+        }
       }
       _loaderService.hideLoader();
     }),

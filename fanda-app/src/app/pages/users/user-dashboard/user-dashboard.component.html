@@ -1,0 +1,51 @@
+<div class="dashboard-container">
+  <nz-row [nzGutter]="24" nz-flex nzJustify="space-between">
+    <nz-col [nzSpan]="3" class="dashboard-item">
+      <nz-statistic
+        [nzValue]="(userDashboard?.totalUserCount | number)!"
+        nzTitle="Total Users"
+      ></nz-statistic>
+    </nz-col>
+    <nz-col [nzSpan]="3" class="dashboard-item">
+      <nz-statistic
+        [nzValue]="(userDashboard?.activeUserCount | number)!"
+        nzTitle="Active Users"
+      ></nz-statistic>
+    </nz-col>
+    <nz-col [nzSpan]="3" class="dashboard-item">
+      <nz-statistic
+        [nzValue]="(userDashboard?.inactiveUserCount | number)!"
+        nzTitle="Inactive Users"
+      ></nz-statistic>
+    </nz-col>
+    <!-- </nz-row> -->
+    <nz-col [nzSpan]="3">
+      <nz-divider nzPlain="true" nzType="vertical" class="vl"></nz-divider>
+    </nz-col>
+    <!-- <nz-row [nzGutter]="24"> -->
+    <nz-col [nzSpan]="3" class="dashboard-item">
+      <nz-statistic
+        [nzValue]="(userDashboard?.adminUserCount | number)!"
+        nzTitle="Administrators"
+      ></nz-statistic>
+    </nz-col>
+    <nz-col [nzSpan]="3" class="dashboard-item">
+      <nz-statistic
+        [nzValue]="(userDashboard?.managerUserCount | number)!"
+        nzTitle="Managers"
+      ></nz-statistic>
+    </nz-col>
+    <nz-col [nzSpan]="3" class="dashboard-item">
+      <nz-statistic
+        [nzValue]="(userDashboard?.salespersonUserCount | number)!"
+        nzTitle="Salespeople"
+      ></nz-statistic>
+    </nz-col>
+    <nz-col [nzSpan]="3" class="dashboard-item">
+      <nz-statistic
+        [nzValue]="(userDashboard?.userUserCount | number)!"
+        nzTitle="Users"
+      ></nz-statistic>
+    </nz-col>
+  </nz-row>
+</div>

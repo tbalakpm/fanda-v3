@@ -1,0 +1,25 @@
+@FandaReports_HostAddress = http://localhost:5139
+
+GET {{FandaReports_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+POST {{FandaReports_HostAddress}}/new-report/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "New Report",
+  "description": "New Report Description",
+  "reportType": "New Report Type",
+  "reportFormat": "New Report Format",
+  "reportPath": "New Report Path",
+  "reportParameters": [
+    {
+      "name": "New Parameter",
+      "description": "New Parameter Description",
+      "dataType": "New Parameter Data Type",
+      "value": "New Parameter Value"
+    }
+  ]
+}

@@ -143,9 +143,11 @@
         class="aspect-square h-8 text-base rounded-full flex items-center justify-center font-medium group-hover:scale-125 transition-all bg-primary text-white border-2 border-[#032a4c] cursor-pointer"
       >
         {{
-          user.firstName
-            ? user.firstName[0] + user.lastName[0]
-            : user.username[0]
+          (user.firstName
+            ? user.firstName[0] +
+              (user.lastName ? user.lastName[0] : user.firstName[1])
+            : user.username[0] + user.username[1]
+          ) | uppercase
         }}
       </div>
     </nz-header>

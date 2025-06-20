@@ -17,7 +17,7 @@
       <th>Invoice Number</th>
       <th>Invoice Date</th>
       <th>Supplier</th>
-      <th>Invoice Type</th>
+      <!-- <th>Invoice Type</th> -->
       <!-- <th>Year ID</th> -->
       <th nzWidth="150px">Action</th>
     </tr>
@@ -27,7 +27,7 @@
       <td>{{ purchase.invoiceNumber }}</td>
       <td>{{ purchase.invoiceDate | date : "dd-MM-yyyy" }}</td>
       <td>{{ purchase.supplier.name }}</td>
-      <td>{{ invoiceTypes[purchase.invoiceType] }}</td>
+      <!-- <td>{{ invoiceTypes[purchase.invoiceType] }}</td> -->
       <!-- <td>{{ product.yearId }}</td> -->
       <td class="space-x-2">
         <!-- <button nz-tooltip="Edit" [routerLink]="['edit', purchase._id]">

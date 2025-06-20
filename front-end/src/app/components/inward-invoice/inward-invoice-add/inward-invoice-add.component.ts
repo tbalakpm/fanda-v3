@@ -187,8 +187,8 @@ export class InwardInvoiceAddComponent {
     this.id = this.route.snapshot.params['id'];
 
     let requests: any = [
-      this._supplierService.getAll({ value: false, field: 'isActive' }),
-      this._productService.getAll({ value: false, field: 'isActive' }),
+      this._supplierService.getAll({ filter: 'isActive:eq:true' }),
+      this._productService.getAll({ filter: 'isActive:eq:true' }),
     ];
     if (this.id && this.id !== 'new') {
       requests.push(this._inwardInvoiceService.getById(this.id));
@@ -230,23 +230,23 @@ export class InwardInvoiceAddComponent {
       (res) => {
         if (!this.gtnProducts.find((p) => p.gtn === res.gtn)) {
           this.gtnProducts.push({
-            _id: res.productId._id,
-            code: res.productId.code,
+            _id: res.product.productId,
+            code: res.product.code,
             gtn: res.gtn,
-            name: res.productId.name,
-            taxPct: res.productId.taxPct ?? 0,
-            taxCode: res.productId.taxCode ?? '',
+            name: res.product.name,
+            taxPct: res.product.taxPct ?? 0,
+            taxCode: res.product.taxCode ?? '',
             sellingPrice: res.sellingPrice,
             buyingPrice: res.buyingPrice,
             unit: {
-              _id: res.unitId._id,
-              code: res.unitId.code,
-              name: res.unitId.name,
+              _id: res.unit.unitId,
+              code: res.unit.code,
+              name: res.unit.name,
             },
           });
         }
-        form.controls['productId'].setValue(res.productId._id);
-        form.controls['unitId'].setValue(res.unitId._id);
+        form.controls['productId'].setValue(res.product.productId);
+        form.controls['unitId'].setValue(res.unit.unitId);
       },
       (err) => {
         this.lookupFound = {};

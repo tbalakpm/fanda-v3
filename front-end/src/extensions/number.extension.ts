@@ -17,6 +17,7 @@ Number.prototype.toIndianCurrencyFormat = function (): string {
 };
 
 Number.prototype.toIndianNumberFormat = function (): string {
+  if (this == null) return '₹0.00';
   let val = indianCurrencyFormatter(this).replaceAll('₹', '');
   return val;
 };

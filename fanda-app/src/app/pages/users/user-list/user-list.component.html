@@ -1,0 +1,293 @@
+<!-- <form nz-form #userlistform id="user-list-form" name="user-list-form"> -->
+<nz-drawer
+  [nzBodyStyle]="{ overflow: 'auto' }"
+  [nzMaskClosable]="false"
+  [nzWidth]="720"
+  [nzVisible]="showDrawer"
+  [nzTitle]="drawerTitle"
+  [nzKeyboard]="false"
+  (nzOnClose)="close()"
+>
+  <!-- [nzFooter]="footerTpl" -->
+  <app-user-edit *nzDrawerContent></app-user-edit>
+
+  <!-- <ng-template #footerTpl>
+    <div style="float: right">
+      <button nz-button style="margin-right: 8px" (click)="close()">
+        Cancel
+      </button>
+      <button nz-button nzType="primary" (click)="close()">Submit</button>
+    </div>
+  </ng-template> -->
+</nz-drawer>
+
+<div
+  nzGap="middle"
+  nz-flex
+  nzJustify="flex-end"
+  nzAlign="flex-start"
+  class="btn-wrapper"
+>
+  <a nz-button nzType="link">
+    <nz-icon nzType="download" nzTheme="outline" />
+    Download Template
+  </a>
+  <button
+    nz-button
+    nzType="default"
+    nz-popconfirm
+    nzOkText="Yes"
+    nzCancelText="No"
+    nzPopconfirmTitle="Are you sure to import users?"
+    (nzOnConfirm)="onImport()"
+  >
+    <nz-icon nzType="import" nzTheme="outline" />
+    Import
+  </button>
+  <button
+    nz-button
+    nzType="default"
+    nz-popconfirm
+    nzOkText="Yes"
+    nzCancelText="No"
+    nzPopconfirmTitle="Are you sure to export users?"
+    (nzOnConfirm)="onExport()"
+  >
+    <nz-icon nzType="export" nzTheme="outline" />
+    Export
+  </button>
+  <nz-input-group [nzPrefix]="prefixIconSearch">
+    <input
+      type="text"
+      id="searchText"
+      name="searchText"
+      #searchText
+      nz-input
+      placeholder="Search"
+      (keyup)="search(searchText.value)"
+    />
+  </nz-input-group>
+  <button nz-button nzType="default" (click)="refreshData()">
+    <nz-icon nzType="reload" nzTheme="outline" />
+    Refresh
+    <!-- <nz-icon nzType="reload" nzTheme="outline" /> -->
+  </button>
+  <ng-template #prefixIconSearch>
+    <nz-icon nzType="search" />
+  </ng-template>
+
+  <button nz-button nzType="primary" (click)="onUserEdit()">
+    <nz-icon nzType="plus-circle" nzTheme="outline" />
+    Create User
+  </button>
+  <!-- <button
+            nz-button
+      nz-popconfirm
+      nzOkText="Yes"
+      nzCancelText="No"
+      nzPopconfirmTitle="Are you sure delete selected users?"
+      nzType="primary"
+      nzDanger
+      (nzOnConfirm)="deleteSelected()"
+    >
+      Delete
+    </button> -->
+  <!-- </nz-space> -->
+</div>
+<!-- </form> -->
+
+<nz-table
+  #middleTable
+  nzSize="small"
+  [nzData]="listOfDisplayData || []"
+  [nzLoading]="loading"
+  nzTableLayout="auto"
+  nzShowSizeChanger
+  nzResponsive="true"
+  [nzShowTotal]="rangeTemplate"
+  nzHideOnSinglePage="true"
+  (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+>
+  <!--'calc(100vh - 100px)'-->
+  <thead>
+    <tr>
+      <!-- <th
+            [nzChecked]="checked"
+            [nzIndeterminate]="indeterminate"
+            nzLabel="Select all"
+            (nzCheckedChange)="onAllChecked($event)"
+          ></th> -->
+      <th nzAlign="right">S.No.</th>
+      @for (column of listOfColumns; track column.name) { @if(column.filterFn) {
+      <th
+        nzCustomFilter="false"
+        [nzSortOrder]="column.sortOrder"
+        [nzSortFn]="column.sortFn"
+        [nzSortDirections]="column.sortDirections"
+        [nzFilterMultiple]="column.filterMultiple"
+        [nzFilters]="column.listOfFilter"
+        [nzFilterFn]="column.filterFn"
+        [nzAlign]="column.alignment!"
+      >
+        {{ column.name }}
+      </th>
+      } @else {
+      <th
+        nzCustomFilter="true"
+        [nzSortOrder]="column.sortOrder"
+        [nzSortFn]="column.sortFn"
+        [nzSortDirections]="column.sortDirections"
+      >
+        {{ column.name }}
+        @if(column.name==='Username') {
+        <nz-filter-trigger
+          [(nzVisible)]="usernameVisible"
+          [nzActive]="usernameSearch.length > 0"
+          [nzDropdownMenu]="menu1"
+        >
+          <nz-icon nzType="search" />
+        </nz-filter-trigger>
+        } @else if(column.name==='Phone') {
+        <nz-filter-trigger
+          [(nzVisible)]="phoneVisible"
+          [nzActive]="phoneSearch.length > 0"
+          [nzDropdownMenu]="menu2"
+        >
+          <nz-icon nzType="search" />
+        </nz-filter-trigger>
+        }
+      </th>
+      } }
+      <th nzAlign="center">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (data of middleTable.data; track data.userId;let i=$index) {
+    <tr>
+      <!-- <td
+            [nzChecked]="setOfCheckedId.has(data.userId!)"
+            [nzLabel]="data.username!"
+            (nzCheckedChange)="onItemChecked(data.userId!, $event)"
+          ></td> -->
+      <td nzAlign="right">
+        {{ (middleTable.nzPageIndex - 1) * middleTable.nzPageSize + (i + 1) }}
+      </td>
+      <td>
+        <a (click)="onUserEdit(data.userId)">{{ data.username }}</a>
+      </td>
+      <td>{{ data.firstName }}</td>
+      <td>{{ data.lastName }}</td>
+      <td>{{ data.email }}</td>
+      <td>{{ data.phone }}</td>
+      <td nzAlign="center">
+        <nz-tag [nzColor]="roleColor(data.role!)">{{ data.role }}</nz-tag>
+      </td>
+      <td nzAlign="center">
+        <!-- <nz-tag [nzColor]="data.isActive ? 'green' : 'red'">
+          <nz-icon [nzType]="data.isActive ? 'check-circle' : 'close-circle'" />
+          <span> {{ data.isActive ? "Active" : "Inactive" }}</span>
+        </nz-tag> -->
+        <!-- <nz-switch
+          nzSize="small"
+          [ngModel]="data.isActive ? true : false"
+        ></nz-switch> -->
+        <nz-switch
+          nzSize="small"
+          [ngModel]="data.isActive ? true : false"
+          [nzCheckedChildren]="checkedTemplate"
+          [nzUnCheckedChildren]="unCheckedTemplate"
+          (ngModelChange)="onChangeStatus(data.userId!, $event)"
+        ></nz-switch>
+      </td>
+      <td nzAlign="center">
+        <a
+          class="actions"
+          nz-tooltip
+          nzTooltipTitle="Update"
+          nzTooltipColor="blue"
+          nzPlacement="top"
+          (click)="onUserEdit(data.userId)"
+        >
+          <!-- <i nz-icon nzType="edit"></i> -->
+          <nz-icon nzType="edit" nzTheme="twotone" />
+        </a>
+        <a
+          class="actions"
+          nz-tooltip
+          nzTooltipTitle="Delete"
+          nzTooltipColor="red"
+          nzPlacement="top"
+          nz-popconfirm
+          nzOkText="Yes"
+          nzCancelText="No"
+          nzPopconfirmTitle="Are you sure delete this user?"
+          nzType="default"
+          (nzOnConfirm)="onDeleteUser(data.userId!)"
+        >
+          <!-- <i nz-icon nzType="delete"></i> -->
+          <nz-icon nzType="delete" nzTheme="twotone" nzTwotoneColor="#eb2f96" />
+        </a>
+      </td>
+    </tr>
+    }
+  </tbody>
+</nz-table>
+
+<ng-template #checkedTemplate><nz-icon nzType="check" /></ng-template>
+<ng-template #unCheckedTemplate><nz-icon nzType="close" /></ng-template>
+
+<ng-template #rangeTemplate let-range="range" let-total>
+  {{ range[0] }}-{{ range[1] }} of {{ total }} items
+</ng-template>
+
+<nz-dropdown-menu #menu1="nzDropdownMenu">
+  <div class="ant-table-filter-dropdown">
+    <div class="search-box">
+      <input
+        id="searchUsername"
+        name="searchUsername"
+        #searchUsername
+        type="text"
+        nz-input
+        placeholder="Search name"
+        [(ngModel)]="usernameSearch"
+      />
+      <button
+        nz-button
+        nzSize="small"
+        nzType="primary"
+        (click)="searchUsernameFn()"
+        class="search-button"
+      >
+        Search
+      </button>
+      <button nz-button nzSize="small" (click)="reset()">Reset</button>
+    </div>
+  </div>
+</nz-dropdown-menu>
+
+<nz-dropdown-menu #menu2="nzDropdownMenu">
+  <div class="ant-table-filter-dropdown">
+    <div class="search-box">
+      <input
+        id="searchPhone"
+        name="searchPhone"
+        #searchPhone
+        type="text"
+        nz-input
+        placeholder="Search phone"
+        [(ngModel)]="phoneSearch"
+      />
+      <button
+        nz-button
+        nzSize="small"
+        nzType="primary"
+        (click)="searchPhoneFn()"
+        class="search-button"
+      >
+        Search
+      </button>
+      <button nz-button nzSize="small" (click)="reset()">Reset</button>
+    </div>
+  </div>
+</nz-dropdown-menu>

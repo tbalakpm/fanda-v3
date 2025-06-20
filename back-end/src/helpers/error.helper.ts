@@ -1,4 +1,4 @@
-import { SafeParseError } from 'zod';
+import type { SafeParseError } from 'zod';
 import 'dotenv/config';
 
 export function parseError<T>(parseResult: SafeParseError<T>): string {

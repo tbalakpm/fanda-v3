@@ -5,7 +5,7 @@ export const INVOICE_TYPES = [
   { label: 'Sales Return', value: 'salesreturn' },
   { label: 'Stock', value: 'stock' },
   { label: 'Transfer', value: 'transfer' },
-  { label: 'gtn', value: 'GTN' },
+  // { label: 'gtn', value: 'GTN' },
 ];
 
 const GST_TREATMENTS = [
@@ -128,6 +128,7 @@ const CITY_STATE: any = {
     'Vaniyambadi',
     'Theni Allinagaram',
     'Udhagamandalam',
+    'Ooty',
     'Aruppukkottai',
     'Paramakudi',
     'Arakkonam',
@@ -1315,6 +1316,7 @@ const CITY_STATE: any = {
 };
 
 export const STATES = Object.keys(CITY_STATE);
+
 export const GetCities = (state: any) => {
   return CITY_STATE[state] || [];
 };

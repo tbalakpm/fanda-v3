@@ -3,6 +3,7 @@ declare global {
     interface ProcessEnv extends Dict<string> {
       NODE_ENV: 'development' | 'production' | 'test';
       PORT: string;
+      CORS_ORIGINS: string;
       JWT_SECRET: string;
       JWT_EXPIRES_IN: string;
       DB_TYPE: 'postgres' | 'mysql' | 'mariadb' | 'sqlite' | 'better-sqlite3' | 'mssql' | 'mongodb';

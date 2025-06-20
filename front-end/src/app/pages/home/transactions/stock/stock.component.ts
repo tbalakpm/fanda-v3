@@ -44,10 +44,10 @@ export class StockComponent {
     this._stockService
       .getPaged({
         page: this.pageIndex,
-        limit: this.pageSize,
+        size: this.pageSize,
       })
       .subscribe((stock) => {
-        this.stocks = [...stock.items];
+        this.stocks = [...stock.data];
         this.total = stock.total;
       });
   }

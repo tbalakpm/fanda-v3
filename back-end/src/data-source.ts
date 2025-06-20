@@ -21,6 +21,10 @@ import { Purchase } from './modules/invoices/purchase/purchase.entity';
 import { PurchaseLineItem } from './modules/invoices/purchase/purchase-line-item.entity';
 import { Sales } from './modules/invoices/sales/sales.entity';
 import { SalesLineItem } from './modules/invoices/sales/sales-line-item.entity';
+import { SalesReturn } from './modules/invoices/sales-return/sales-return.entity';
+import { SalesReturnItem } from './modules/invoices/sales-return/sales-return-item.entity';
+import { PurchaseReturn } from './modules/invoices/purchase-return/purchase-return.entity';
+import { PurchaseReturnItem } from './modules/invoices/purchase-return/purchase-return-item.entity';
 
 const {
   NODE_ENV = 'development',
@@ -60,8 +64,8 @@ if (DB_TYPE === 'sqlite' || DB_TYPE === 'better-sqlite3') {
 } else {
   dbConnection.host = DB_HOST;
   dbConnection.port = Number(DB_PORT);
-  dbConnection.username = DB_USER!;
-  dbConnection.password = DB_PASSWORD!;
+  dbConnection.username = DB_USER || 'postgres';
+  dbConnection.password = DB_PASSWORD || 'postgres';
   dbConnection.database = DB_NAME;
   switch (DB_TYPE) {
     case 'postgres':
@@ -91,7 +95,7 @@ export const AppDataSource = new DataSource({
   // database: 'fanda-v3.db', //DB_DATABASE,
   ...dbConnection,
   synchronize: true,
-  logging: NODE_ENV === 'development' ? true : false,
+  logging: NODE_ENV === 'development',
   entities: [
     User,
     Company,
@@ -110,9 +114,13 @@ export const AppDataSource = new DataSource({
     Purchase,
     PurchaseLineItem,
     Sales,
-    SalesLineItem
+    SalesLineItem,
+    SalesReturn,
+    SalesReturnItem,
+    PurchaseReturn,
+    PurchaseReturnItem
   ],
-  migrations: [__dirname + '/migrations/*.ts'],
+  migrations: [`${__dirname}/migrations/*.ts`],
   subscribers: [],
   namingStrategy: new SnakeNamingStrategy()
 });

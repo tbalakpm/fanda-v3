@@ -6,138 +6,138 @@ import { Unit } from '../modules/unit/unit.entity';
 import { SerialNumber } from '../modules/serial-number/serial-number.entity';
 import { DefaultSerials } from './serials.data-seed';
 
-export class CompanyDataSeeder {
-  static getNewYear(companyId: string, adminUserId: string, date: Date = new Date()): FinancialYear {
-    const newYear = new FinancialYear();
+// export class CompanyDataSeeder {
+export function getNewYear(companyId: string, adminUserId: string, date: Date = new Date()): FinancialYear {
+  const newYear = new FinancialYear();
 
-    // Apr-Dec
-    if (date.getMonth() >= 3 && date.getMonth() <= 11) {
-      newYear.code = `FY-${date.getFullYear()}-${(date.getFullYear() + 1).toString().substring(2)}`;
-      newYear.beginDate = new Date(`${date.getFullYear()}-04-01`);
-      newYear.endDate = new Date(`${date.getFullYear() + 1}-03-31`);
-    } else {
-      newYear.code = `FY-${date.getFullYear() - 1}-${date.getFullYear().toString().substring(2)}`;
-      newYear.beginDate = new Date(`${date.getFullYear() - 1}-04-01`);
-      newYear.endDate = new Date(`${date.getFullYear()}-03-31`);
-    }
-    newYear.description = 'Financial year';
-    newYear.date = {
-      created: new Date(),
-      updated: new Date()
-    };
-    newYear.user = {
-      created: adminUserId,
-      updated: adminUserId
-    };
-    newYear.companyId = companyId;
-    newYear.isActive = true;
-    return newYear;
-    // const savedYear = await FinancialYearService.createYear(companyId, newYear, adminUserId);
-    // if (!savedYear.success) return;
-    // await this.createSequences(savedYear.data!.yearId, adminUserId);
+  // Apr-Dec
+  if (date.getMonth() >= 3 && date.getMonth() <= 11) {
+    newYear.code = `FY-${date.getFullYear()}-${(date.getFullYear() + 1).toString().substring(2)}`;
+    newYear.beginDate = new Date(`${date.getFullYear()}-04-01`);
+    newYear.endDate = new Date(`${date.getFullYear() + 1}-03-31`);
+  } else {
+    newYear.code = `FY-${date.getFullYear() - 1}-${date.getFullYear().toString().substring(2)}`;
+    newYear.beginDate = new Date(`${date.getFullYear() - 1}-04-01`);
+    newYear.endDate = new Date(`${date.getFullYear()}-03-31`);
   }
-
-  static getDefaultCashCustomer(companyId: string, adminUserId: string): Customer {
-    const cashCustomer = new Customer();
-    cashCustomer.code = 'CASH';
-    cashCustomer.name = 'Cash';
-    cashCustomer.description = 'Cash customer';
-    cashCustomer.date = {
-      created: new Date(),
-      updated: new Date()
-    };
-    cashCustomer.user = {
-      created: adminUserId,
-      updated: adminUserId
-    };
-    cashCustomer.companyId = companyId;
-    cashCustomer.isActive = true;
-    return cashCustomer;
-
-    // await CustomerService.createCustomer(companyId, cashCustomer, adminUserId);
-  }
-
-  static getDefaultCashSupplier(companyId: string, adminUserId: string): Supplier {
-    const cashSupplier = new Supplier();
-    cashSupplier.code = 'CASH';
-    cashSupplier.name = 'Cash';
-    cashSupplier.description = 'Cash supplier';
-    cashSupplier.date = {
-      created: new Date(),
-      updated: new Date()
-    };
-    cashSupplier.user = {
-      created: adminUserId,
-      updated: adminUserId
-    };
-    cashSupplier.companyId = companyId;
-    cashSupplier.isActive = true;
-
-    return cashSupplier;
-    // await SupplierService.createSupplier(companyId, cashSupplier, adminUserId);
-  }
-
-  static getDefaultProductCategory(companyId: string, amdinUserId: string): ProductCategory {
-    const defaultCategory = new ProductCategory();
-    defaultCategory.code = 'DEFAULT';
-    defaultCategory.name = 'Default';
-    defaultCategory.description = 'Default product category';
-    defaultCategory.companyId = companyId;
-    defaultCategory.isActive = true;
-    defaultCategory.date = {
-      created: new Date(),
-      updated: new Date()
-    };
-    defaultCategory.user = {
-      created: amdinUserId,
-      updated: amdinUserId
-    };
-    return defaultCategory;
-
-    // await ProductCategoryService.createCategory(companyId, defaultCategory, amdinUserId);
-  }
-
-  static getDefaultUnit(companyId: string, adminUserId: string): Unit {
-    const numberUnit = new Unit();
-    numberUnit.code = 'NO';
-    numberUnit.name = 'Number';
-    numberUnit.description = 'Default unit';
-    numberUnit.companyId = companyId;
-    numberUnit.isActive = true;
-    numberUnit.date = {
-      created: new Date(),
-      updated: new Date()
-    };
-    numberUnit.user = {
-      created: adminUserId,
-      updated: adminUserId
-    };
-    return numberUnit;
-
-    // await UnitService.createUnit(companyId, numberUnit, adminUserId);
-  }
-
-  static getDefaultSequences(yearId: string): SerialNumber[] {
-    const serials = DefaultSerials.map((serial) => {
-      const newSerial = new SerialNumber();
-      newSerial.key = serial.key;
-      newSerial.prefix = serial.prefix;
-      newSerial.current = serial.current;
-      newSerial.length = serial.length;
-      newSerial.yearId = yearId;
-      // newSerial.isActive = true;
-      // newSerial.date = {
-      //   created: new Date(),
-      //   updated: new Date()
-      // };
-      // newSerial.user = {
-      //   created: adminUserId,
-      //   updated: adminUserId
-      // };
-
-      return newSerial;
-    });
-    return serials;
-    // await AppDataSource.getRepository("SequenceGenerator").insert(sequences);
-  }
+  newYear.description = 'Financial year';
+  newYear.date = {
+    created: new Date(),
+    updated: new Date()
+  };
+  newYear.user = {
+    created: adminUserId,
+    updated: adminUserId
+  };
+  newYear.companyId = companyId;
+  newYear.isActive = true;
+  return newYear;
+  // const savedYear = await FinancialYearService.createYear(companyId, newYear, adminUserId);
+  // if (!savedYear.success) return;
+  // await this.createSequences(savedYear.data!.yearId, adminUserId);
 }
+
+export function getDefaultCashCustomer(companyId: string, adminUserId: string): Customer {
+  const cashCustomer = new Customer();
+  cashCustomer.code = 'CASH';
+  cashCustomer.name = 'Cash';
+  cashCustomer.description = 'Cash customer';
+  cashCustomer.date = {
+    created: new Date(),
+    updated: new Date()
+  };
+  cashCustomer.user = {
+    created: adminUserId,
+    updated: adminUserId
+  };
+  cashCustomer.companyId = companyId;
+  cashCustomer.isActive = true;
+  return cashCustomer;
+
+  // await CustomerService.createCustomer(companyId, cashCustomer, adminUserId);
+}
+
+export function getDefaultCashSupplier(companyId: string, adminUserId: string): Supplier {
+  const cashSupplier = new Supplier();
+  cashSupplier.code = 'CASH';
+  cashSupplier.name = 'Cash';
+  cashSupplier.description = 'Cash supplier';
+  cashSupplier.date = {
+    created: new Date(),
+    updated: new Date()
+  };
+  cashSupplier.user = {
+    created: adminUserId,
+    updated: adminUserId
+  };
+  cashSupplier.companyId = companyId;
+  cashSupplier.isActive = true;
+
+  return cashSupplier;
+  // await SupplierService.createSupplier(companyId, cashSupplier, adminUserId);
+}
+
+export function getDefaultProductCategory(companyId: string, amdinUserId: string): ProductCategory {
+  const defaultCategory = new ProductCategory();
+  defaultCategory.code = 'DEFAULT';
+  defaultCategory.name = 'Default';
+  defaultCategory.description = 'Default product category';
+  defaultCategory.companyId = companyId;
+  defaultCategory.isActive = true;
+  defaultCategory.date = {
+    created: new Date(),
+    updated: new Date()
+  };
+  defaultCategory.user = {
+    created: amdinUserId,
+    updated: amdinUserId
+  };
+  return defaultCategory;
+
+  // await ProductCategoryService.createCategory(companyId, defaultCategory, amdinUserId);
+}
+
+export function getDefaultUnit(companyId: string, adminUserId: string): Unit {
+  const numberUnit = new Unit();
+  numberUnit.code = 'NO';
+  numberUnit.name = 'Number';
+  numberUnit.description = 'Default unit';
+  numberUnit.companyId = companyId;
+  numberUnit.isActive = true;
+  numberUnit.date = {
+    created: new Date(),
+    updated: new Date()
+  };
+  numberUnit.user = {
+    created: adminUserId,
+    updated: adminUserId
+  };
+  return numberUnit;
+
+  // await UnitService.createUnit(companyId, numberUnit, adminUserId);
+}
+
+export function getDefaultSequences(yearId: string): SerialNumber[] {
+  const serials = DefaultSerials.map((serial) => {
+    const newSerial = new SerialNumber();
+    newSerial.key = serial.key;
+    newSerial.prefix = serial.prefix;
+    newSerial.current = serial.current;
+    newSerial.length = serial.length;
+    newSerial.yearId = yearId;
+    // newSerial.isActive = true;
+    // newSerial.date = {
+    //   created: new Date(),
+    //   updated: new Date()
+    // };
+    // newSerial.user = {
+    //   created: adminUserId,
+    //   updated: adminUserId
+    // };
+
+    return newSerial;
+  });
+  return serials;
+  // await AppDataSource.getRepository("SequenceGenerator").insert(sequences);
+}
+// }

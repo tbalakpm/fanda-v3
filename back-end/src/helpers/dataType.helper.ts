@@ -1,4 +1,4 @@
-import { ColumnType } from 'typeorm';
+import type { ColumnType } from 'typeorm';
 
 export const auditDateDataType = (): ColumnType => {
   switch (process.env.DB_TYPE) {
