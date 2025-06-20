@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
-    "better-sqlite3": "^9.0.0",
+    "better-sqlite3": "11.10.0",
     "cache-manager": "^6.3.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -42,7 +42,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.0.1",
-    "@eslint/js": "^9.17.0",
+    "@eslint/js": "9.29.0",
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
@@ -55,6 +55,6 @@
     "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.3",
-    "typescript-eslint": "^8.19.1"
+    "typescript-eslint": "8.34.1"
   }
 }
