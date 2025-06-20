@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import { ApiError } from '../responses/api-error';
 
 export const notFound = (_req: Request, _res: Response, next: NextFunction) => {

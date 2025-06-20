@@ -1,6 +1,6 @@
 import express from 'express';
 import { authorization } from '../../../middleware/authorization.middleware';
-import { SalesReturnController } from './sales-return.controller';
+import * as SalesReturnController from './sales-return.controller';
 import { UserRoles } from '../../../entities';
 
 export const salesReturnRoutes = () => {

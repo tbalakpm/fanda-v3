@@ -1,6 +1,6 @@
 import express from 'express';
 import { authorization } from '../../middleware/authorization.middleware';
-import { ProductCategoryController } from './product-category.controller';
+import * as ProductCategoryController from './product-category.controller';
 import { UserRoles } from '../../entities';
 
 export const productCategoryRoutes = () => {

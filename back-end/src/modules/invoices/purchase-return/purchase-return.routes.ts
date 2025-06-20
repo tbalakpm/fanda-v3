@@ -1,6 +1,6 @@
 import express from 'express';
 import { authorization } from '../../../middleware/authorization.middleware';
-import { PurchaseReturnController } from './purchase-return.controller';
+import * as PurchaseReturnController from './purchase-return.controller';
 import { UserRoles } from '../../../entities';
 
 export const purchaseReturnRoutes = () => {

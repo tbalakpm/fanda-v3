@@ -1,5 +1,5 @@
-import { GSTTreatment } from '../modules/party/gst-treatment.enum';
-import { AddressType, ContactType } from '../schema';
+import type { GSTTreatment } from '../modules/party/gst-treatment.enum';
+import type { AddressType, ContactType } from '../schema';
 
 export class PartyDto {
   id!: string;

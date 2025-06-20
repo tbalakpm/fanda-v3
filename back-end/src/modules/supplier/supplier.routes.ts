@@ -1,6 +1,6 @@
 import express from 'express';
 import { authorization } from '../../middleware/authorization.middleware';
-import { SupplierController } from './supplier.controller';
+import * as SupplierController from './supplier.controller';
 import { UserRoles } from '../../entities';
 
 export const supplierRoutes = () => {

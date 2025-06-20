@@ -1,6 +1,6 @@
 import express from 'express';
 import { authorization } from '../../../middleware/authorization.middleware';
-import { StockInvoiceController } from './stock-invoice.controller';
+import * as StockInvoiceController from './stock-invoice.controller';
 import { UserRoles } from '../../../entities';
 
 export const stockInvoiceRoutes = () => {

@@ -1,6 +1,6 @@
 import express from 'express';
 import { authorization } from '../../middleware/authorization.middleware';
-import { FinancialYearController } from './financial-year.controller';
+import * as FinancialYearController from './financial-year.controller';
 import { UserRoles } from '../../entities';
 
 export const financialYearRoutes = () => {

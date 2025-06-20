@@ -8,6 +8,7 @@
 // }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export function isEmpty(obj: any) {
   return Object.keys(obj).length === 0 && obj.constructor === Object;
 }

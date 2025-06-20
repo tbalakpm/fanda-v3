@@ -2,8 +2,8 @@ import { BeforeInsert, Column, Entity, OneToMany, PrimaryColumn } from 'typeorm'
 import { v7 } from 'uuid';
 //import { Address, Contact } from "./";
 import { AuditDates, AuditUsers } from './embedded/audit.entity';
-import { Address } from './address.entity';
-import { Contact } from './contact.entity';
+import type { Address } from './address.entity';
+import type { Contact } from './contact.entity';
 import 'dotenv/config';
 import { FinancialYear } from '../modules/financial-year/financial-year.entity';
 
