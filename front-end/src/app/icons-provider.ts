@@ -1,4 +1,4 @@
-import { EnvironmentProviders, importProvidersFrom } from '@angular/core';
+import { type EnvironmentProviders, importProvidersFrom } from '@angular/core';
 import {
   AppstoreOutline,
   ArrowLeftOutline,
