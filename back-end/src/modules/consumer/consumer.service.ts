@@ -8,7 +8,6 @@ import { parseError } from '../../helpers/error.helper';
 import type { ApiResponse } from '../../responses/api-response';
 import { ApiStatus } from '../../responses/api-status';
 
-// export class ConsumerService {
 const consumerRepository = AppDataSource.getRepository(Consumer);
 
 export async function getAllConsumers(companyId: string): Promise<ApiResponse<Consumer[]>> {
@@ -98,4 +97,3 @@ async function invalidateCache(companyId: string, consumerId?: string): Promise<
   await cache.del(`consumers_${companyId}`);
   if (consumerId) await cache.del(`consumers:${consumerId}`);
 }
-// }

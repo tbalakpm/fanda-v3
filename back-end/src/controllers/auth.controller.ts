@@ -1,13 +1,11 @@
 import type { NextFunction, Request, Response } from 'express';
 
-// import { AuthService, UserService } from "../services";
 import { LoginDto } from '../dto/login.dto';
 import { ApiError } from '../responses/api-error';
 import * as AuthService from '../services/auth.service';
 import * as UserService from '../services/user.service';
 import { ApiStatus } from '../responses';
 
-// export class AuthController {
 export async function register(req: Request, res: Response, next: NextFunction) {
   try {
     const { username, password } = req.body;
@@ -55,4 +53,3 @@ export async function getProfile(req: Request, res: Response, next: NextFunction
     return next(error);
   }
 }
-// }

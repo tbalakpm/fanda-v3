@@ -4,7 +4,6 @@ import * as ProductService from './product.service';
 import type { User } from '../../entities/user.entity';
 import { ApiError } from '../../responses/api-error';
 
-// export class ProductController {
 export async function getProducts(req: Request, res: Response, next: NextFunction) {
   try {
     const { companyId } = req.params;
@@ -66,4 +65,3 @@ export async function deleteProduct(req: Request, res: Response, next: NextFunct
     return next(error);
   }
 }
-// }

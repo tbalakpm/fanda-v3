@@ -8,7 +8,7 @@ import { Supplier } from '../supplier/supplier.entity';
 import { InvoiceTypes } from '../invoices/invoice-type.enum';
 import { GtnGeneration } from '../product/gtn-generation.enum';
 import 'dotenv/config';
-import { enumDataType } from '../../helpers/dataType.helper';
+import { enumDataType } from '../../helpers/data-type.helper';
 
 @Entity({ name: 'inventories' })
 @Index(['companyId', 'productId', 'gtn'], { unique: true })

@@ -2,7 +2,6 @@ import type { Request, Response, NextFunction } from 'express';
 import * as InventoryService from './inventory.service';
 import { ApiError, ApiStatus } from '../../responses';
 
-// class InventoryController {
 export async function searchGtn(req: Request, res: Response, next: NextFunction) {
   try {
     const { companyId, gtn } = req.params;
@@ -15,6 +14,3 @@ export async function searchGtn(req: Request, res: Response, next: NextFunction)
     return next(error);
   }
 }
-// }
-
-// export default new InventoryController();

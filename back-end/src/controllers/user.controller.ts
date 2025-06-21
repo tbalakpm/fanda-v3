@@ -4,7 +4,6 @@ import * as UserService from '../services/user.service';
 import { ApiError } from '../responses/api-error';
 import { ApiStatus } from '../responses';
 
-// export class UserController {
 export async function getUsers(_req: Request, res: Response, next: NextFunction) {
   try {
     const result = await UserService.getAllUsers();
@@ -89,4 +88,3 @@ export async function dashboard(req: Request, res: Response, next: NextFunction)
     return next(error);
   }
 }
-// }

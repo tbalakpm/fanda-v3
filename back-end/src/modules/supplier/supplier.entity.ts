@@ -1,13 +1,12 @@
 import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { v7 } from 'uuid';
-// import { Address, Contact, AuditDates, AuditUsers, Company } from "../../entities";
 import { AuditDates, AuditUsers } from '../../entities/embedded/audit.entity';
 import { Company } from '../../entities/company.entity';
 import type { Address } from '../../entities/address.entity';
 import type { Contact } from '../../entities/contact.entity';
 import 'dotenv/config';
 import { GSTTreatment } from '../party/gst-treatment.enum';
-import { enumDataType } from '../../helpers/dataType.helper';
+import { enumDataType } from '../../helpers/data-type.helper';
 
 @Entity({ name: 'suppliers' })
 @Index(['companyId', 'supplierId'], { unique: true })

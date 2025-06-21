@@ -18,15 +18,9 @@ import type { GetAllQuery } from '../../../interfaces/get-all-query';
 import { getFiltering, getPagination, getSorting } from '../../../helpers/get-all-query.helper';
 import { isEmpty } from '../../../helpers/utility.helper';
 
-// class PurchaseService {
 const purchaseRepository = AppDataSource.getRepository(Purchase);
 
 export async function getAllPurchases(companyId: string, yearId: string, query: GetAllQuery): Promise<ApiResponse<Purchase[]>> {
-  // const data = await cache.get<Purchase[]>(`purchases_${companyId}_${yearId}`);
-  // if (data) {
-  //   return { success: true, message: 'Serving purchases from cache', data, status: ApiStatus.OK };
-  // }
-
   const pagination = getPagination(query);
   const where = getFiltering(query.filter);
   // mandatory where clauses
@@ -37,21 +31,6 @@ export async function getAllPurchases(companyId: string, yearId: string, query: 
   if (isEmpty(order)) {
     order.invoiceId = 'desc'; // { invoiceId: 'desc' };
   }
-
-  // console.log('page', pagination, 'where', where, 'order', order);
-  // const [languages, total] = await cityRepository.findAndCount({
-  //   where,
-  //   order,
-  //   take: limit,
-  //   skip: offset
-  // });
-
-  // return {
-  //   totalItems: total,
-  //   items: languages,
-  //   page,
-  //   size
-  // };
 
   const [invoices, total] = await purchaseRepository.findAndCount({
     select: {
@@ -87,7 +66,6 @@ export async function getAllPurchases(companyId: string, yearId: string, query: 
     take: pagination.limit // query.limit
   });
 
-  // await cache.set(`purchases_${companyId}_${yearId}`, invoices);
   return { success: true, message: 'Serving purchases from database', data: invoices, total, status: ApiStatus.OK };
 }
 
@@ -297,7 +275,6 @@ export async function createPurchase(companyId: string, yearId: string, invoice:
   } catch (error: any) {
     await queryRunner.rollbackTransaction();
     if (process.env.NODE_ENV === 'development') {
-      // console.log(error);
       logger.error(error.message);
     }
     return { success: false, message: 'Failed to create purchase', status: ApiStatus.INTERNAL_SERVER_ERROR };
@@ -328,7 +305,7 @@ export async function deletePurchase(companyId: string, yearId: string, invoiceI
         }
       }
     }
-    //await queryRunner.manager.remove(invoice);
+    // delete inventory records
     await queryRunner.manager.delete(Purchase, { invoiceId });
 
     await queryRunner.commitTransaction();
@@ -339,7 +316,6 @@ export async function deletePurchase(companyId: string, yearId: string, invoiceI
   } catch (error: any) {
     await queryRunner.rollbackTransaction();
     if (process.env.NODE_ENV === 'development') {
-      // console.log(error);
       logger.error(error.message, error.stack);
     }
     return { success: false, message: 'Failed to delete purchase', status: ApiStatus.INTERNAL_SERVER_ERROR };
@@ -354,6 +330,3 @@ async function invalidateCache(companyId: string, yearId: string, invoiceId?: st
     await cache.del(`purchases_${companyId}_${yearId}:${invoiceId}`);
   }
 }
-// }
-
-// export const PurchaseServiceInstance = new PurchaseService();

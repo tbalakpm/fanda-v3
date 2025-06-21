@@ -1,6 +1,3 @@
-// import * as jwt from "jsonwebtoken";
-// import { User } from "../../entity/user.entity";
-
 import type { User } from '../../entities/user.entity';
 
 declare global {
@@ -32,11 +29,14 @@ declare global {
 
   namespace Express {
     interface Request {
-      // jwtPayload?: string | jwt.JwtPayload;
-      currentUser?: User; //Record<string, any>;
+      currentUser?: User;
     }
     interface Response {
       timeTakenMs?: number;
     }
   }
 }
+
+// If this file has no import/export statements (i.e. is a script)
+// convert it into a module by adding an empty export statement.
+// export {};

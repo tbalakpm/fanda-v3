@@ -14,15 +14,9 @@ import type { GetAllQuery } from '../../../interfaces/get-all-query';
 import { getFiltering, getPagination, getSorting } from '../../../helpers/get-all-query.helper';
 import { isEmpty } from '../../../helpers/utility.helper';
 
-// class PurchaseReturnService {
 const PurchaseReturnRepository = AppDataSource.getRepository(PurchaseReturn);
 
 export async function getAllPurchaseReturns(companyId: string, yearId: string, query: GetAllQuery): Promise<ApiResponse<PurchaseReturn[]>> {
-  // const data = await cache.get<PurchaseReturn[]>(`purchase_returns_${companyId}_${yearId}`);
-  // if (data) {
-  //   return { success: true, message: 'Serving purchase returns from cache', data, status: ApiStatus.OK };
-  // }
-
   const pagination = getPagination(query);
   const where = getFiltering(query.filter);
   // mandatory where clauses
@@ -37,7 +31,6 @@ export async function getAllPurchaseReturns(companyId: string, yearId: string, q
   console.log('where', where);
   console.log('order', order);
 
-  //const invoices = await PurchaseReturnRepository.find({
   const [invoices, total] = await PurchaseReturnRepository.findAndCount({
     select: {
       invoiceId: true,
@@ -67,7 +60,6 @@ export async function getAllPurchaseReturns(companyId: string, yearId: string, q
     take: pagination.limit
   });
 
-  // await cache.set(`purchase_returns_${companyId}_${yearId}`, invoices);
   return { success: true, message: 'Serving purchase returns from database', data: invoices, total, status: ApiStatus.OK };
 }
 
@@ -108,7 +100,6 @@ export async function getPurchaseReturnById(companyId: string, yearId: string, i
   const lineItems = await AppDataSource.getRepository(PurchaseReturnItem).findBy({ invoiceId });
   invoice.lineItems = lineItems;
 
-  // await cache.set(`purchase_returns_${companyId}_${yearId}:${invoiceId}`, invoice);
   return { success: true, message: 'Serving a purchase returns from database', data: invoice, status: ApiStatus.OK };
 }
 
@@ -140,7 +131,6 @@ export async function createPurchaseReturn(
     let subtotal = 0;
     let totalDiscountAmt = 0;
     let totalTaxAmt = 0;
-    //const productSerials: ProductSerialDto[] = [];
 
     for (const lineItem of createdInvoice.lineItems || []) {
       // calculations - start
@@ -170,48 +160,6 @@ export async function createPurchaseReturn(
       // calculations - end
     }
 
-    /*
-      // product serials
-      //const productSerial: ProductSerialDto = {};
-
-      // const productResponse = await ProductService.getProductById(companyId, lineItem.productId, queryRunner);
-      // if (productResponse.success && productResponse.data) {
-      //const product = productResponse.data;
-
-      // productSerial.product = {
-      //   productId: lineItem.productId,
-      //   isPriceInclusiveTax: product.isPriceInclusiveTax,
-      //   gtnGeneration: product.gtnGeneration
-      // };
-
-      // GTN generation
-      // if (!lineItem.gtn || lineItem.gtn.trim().length === 0 || lineItem.gtn.trim().toLocaleLowerCase() === 'tbd') {
-      //   switch (product.gtnGeneration) {
-      //     case GtnGeneration.Batch: {
-      //       const result = await SerialNumberHelper.getNextSerial(queryRunner, yearId, 'gtn');
-      //       lineItem.gtn = result;
-      //       break;
-      //     }
-      //     case GtnGeneration.Tag: {
-      //       const result = await SerialNumberHelper.getNextRangeSerial(queryRunner, yearId, 'gtn', lineItem.qty);
-      //       productSerial.serial = { length: result.serial.length, current: result.serial.current, prefix: result.serial.prefix };
-      //       lineItem.gtn = result.beginSerial === result.endSerial ? result.beginSerial : `${result.beginSerial}~${result.endSerial}`;
-      //       break;
-      //     }
-      //     case GtnGeneration.Code:
-      //       lineItem.gtn = product.code;
-      //       break;
-      //     default:
-      //       logger.error('Invalid GTN generation', product.gtnGeneration);
-      //   }
-      // }
-      // } else {
-      //   logger.error('Product not found');
-      // }
-
-      // productSerials.push(productSerial);
-      // }
-     */
     createdInvoice.totalQty = totalQty;
     createdInvoice.subtotal = subtotal;
     // Total discount amount
@@ -237,37 +185,6 @@ export async function createPurchaseReturn(
         await InventoryService.updateQtyOnHandByInvoice(queryRunner, companyId, savedInvoice.invoiceId, lineItem.lineItemId, -lineItem.qty);
       }
     }
-    //const productSerial = productSerials[index++];
-
-    // const inventory = queryRunner.manager.create(Inventory, {
-    //   companyId: companyId,
-    //   invoiceId: savedInvoice.invoiceId,
-    //   lineItemId: lineItem.lineItemId,
-    //   invoiceType: InvoiceTypes.PurchaseReturn,
-    //   productId: lineItem.productId,
-    //   unitId: lineItem.unitId,
-    //   description: lineItem.description,
-    //   buyingPrice: lineItem.rate
-    //   // gtnGeneration: productSerial.product!.gtnGeneration,
-    //   // isPriceInclusiveTax: productSerial.product!.isPriceInclusiveTax
-    // });
-
-    // if (!productSerial.serial) {
-    //   inventory.gtn = lineItem.gtn;
-    //   inventory.qtyOnHand = lineItem.qty;
-    //   await InventoryService.saveInventory(queryRunner, inventory);
-    // } else {
-    //   for (let i = 0; i < lineItem.qty; i++) {
-    //     inventory.gtn = SerialNumberHelper.formatSerial(
-    //       productSerial.serial.length || 7,
-    //       (productSerial.serial.current || 1) + i,
-    //       productSerial.serial.prefix || ''
-    //     );
-    //     inventory.qtyOnHand = 1;
-    //     await InventoryService.saveInventory(queryRunner, inventory);
-    //   }
-    // }
-    // }
 
     await queryRunner.commitTransaction();
     await invalidateCache(companyId, yearId);
@@ -277,7 +194,6 @@ export async function createPurchaseReturn(
   } catch (error: any) {
     await queryRunner.rollbackTransaction();
     if (process.env.NODE_ENV === 'development') {
-      // console.log(error);
       logger.error(error.message);
     }
     return { success: false, message: 'Failed to create Purchase return', status: ApiStatus.INTERNAL_SERVER_ERROR };
@@ -309,7 +225,6 @@ export async function deletePurchaseReturn(companyId: string, yearId: string, in
       }
     }
 
-    //await queryRunner.manager.remove(invoice);
     await queryRunner.manager.delete(PurchaseReturn, { invoiceId });
 
     await queryRunner.commitTransaction();
@@ -334,6 +249,3 @@ async function invalidateCache(companyId: string, yearId: string, invoiceId?: st
     await cache.del(`purchase_return_${companyId}_${yearId}:${invoiceId}`);
   }
 }
-// }
-
-// export const PurchaseReturnServiceInstance = new PurchaseReturnService();

@@ -4,14 +4,12 @@ import { cache } from '../../helpers/cache.helper';
 
 import { AppDataSource } from '../../data-source';
 import type { AuditUsers } from '../../entities/embedded/audit.entity';
-// import { ApiResponse, ApiStatus } from "../../responses";
 import { parseError } from '../../helpers/error.helper';
 import { ProductCategory } from './product-category.entity';
 import { ProductCategorySchema } from './product-category.schema';
 import type { ApiResponse } from '../../responses/api-response';
 import { ApiStatus } from '../../responses/api-status';
 
-// export class ProductCategoryService {
 const categoryRepository = AppDataSource.getRepository(ProductCategory);
 
 export async function getAllCategories(companyId: string): Promise<ApiResponse<ProductCategory[]>> {
@@ -224,4 +222,3 @@ async function invalidateCache(companyId: string, categoryId?: string): Promise<
   await cache.del(`product_categories_${companyId}`);
   if (categoryId) await cache.del(`product_categories:${categoryId}`);
 }
-// }

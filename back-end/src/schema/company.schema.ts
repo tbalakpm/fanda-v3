@@ -1,4 +1,3 @@
-// import { Company } from "../entity/company.entity";
 import { z } from 'zod';
 import { AddressSchema } from './address.schema';
 import { ContactSchema } from './contact.schema';

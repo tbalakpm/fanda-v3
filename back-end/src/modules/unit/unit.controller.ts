@@ -4,7 +4,6 @@ import * as UnitService from './unit.service';
 import type { User } from '../../entities/user.entity';
 import { ApiError } from '../../responses/api-error';
 
-// export class UnitController {
 export async function getUnits(req: Request, res: Response, next: NextFunction) {
   try {
     const { companyId } = req.params;
@@ -66,4 +65,3 @@ export async function deleteUnit(req: Request, res: Response, next: NextFunction
     return next(error);
   }
 }
-// }

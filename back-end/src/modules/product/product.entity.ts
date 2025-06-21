@@ -9,7 +9,7 @@ import { ProductTypes } from './product-type.enum';
 import { TaxPreferences } from './tax-preference.enum';
 import { GtnGeneration } from './gtn-generation.enum';
 import 'dotenv/config';
-import { enumDataType } from '../../helpers/dataType.helper';
+import { enumDataType } from '../../helpers/data-type.helper';
 
 @Entity({ name: 'products' })
 @Index(['companyId', 'productId'], { unique: true })

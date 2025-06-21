@@ -3,7 +3,6 @@ import { AppDataSource } from '../../data-source';
 import { Inventory } from './inventory.entity';
 import { InvoiceTypes } from '../invoices/invoice-type.enum';
 
-// export class InventoryService {
 const inventoryRepository = AppDataSource.getRepository(Inventory);
 
 export async function getInventoryByGtn(companyId: string, gtn: string): Promise<Inventory | null> {
@@ -101,4 +100,3 @@ export async function searchGtn(companyId: string, gtn: string): Promise<Invento
     relationLoadStrategy: 'query'
   });
 }
-// }

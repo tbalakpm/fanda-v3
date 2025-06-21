@@ -1,5 +1,4 @@
 import { createLogger, format, transports } from 'winston';
-// import process from "node:process";
 
 const { combine, timestamp, label, prettyPrint, printf, colorize, align } = format;
 const myFormat = printf(({ timestamp, label, level, message }) => {

@@ -1,10 +1,6 @@
 import type { QueryRunner } from 'typeorm';
-// import { AppDataSource } from '../data-source';
 import type { SerialNumber } from '../modules/serial-number/serial-number.entity';
 import type { InvoiceTypes } from '../modules/invoices/invoice-type.enum';
-
-// export class SerialNumberHelper {
-// const serialRepository = AppDataSource.getRepository(SerialNumber);
 
 export async function getNextSerial(queryRunner: QueryRunner, yearId: string, key: InvoiceTypes | 'gtn'): Promise<string> {
   const serial = await incrementSerial(queryRunner, yearId, key, 1);
@@ -45,7 +41,5 @@ export async function incrementSerial(queryRunner: QueryRunner, yearId: string, 
     'UPDATE serial_numbers SET current = (current + $1) WHERE year_id = $2 AND key = $3 RETURNING length, current, prefix',
     [count, yearId, key]
   );
-  // console.log('INCREMENT_SERIAL:', result[0][0]);
   return result[0][0];
 }
-// }

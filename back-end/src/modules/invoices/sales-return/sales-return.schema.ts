@@ -32,7 +32,6 @@ export const SalesReturnSchema = z.object({
   subtotal: z.coerce.number(),
   discountPct: z.coerce.number().optional(),
   discountAmt: z.coerce.number().optional(),
-  //taxPct: z.coerce.number().optional(),
   totalTaxAmt: z.coerce.number().optional(),
   netAmount: z.coerce.number().optional(),
   notes: z.string().max(255).optional(),
