@@ -7,12 +7,10 @@ import { ApiResponse, ApiStatus } from '../../../responses';
 import type { Purchase } from './purchase.entity';
 import type { GetAllQuery } from '../../../interfaces/get-all-query';
 
-// export class PurchaseController {
 export async function getAllPurchases(req: Request, res: Response, next: NextFunction) {
   try {
     const { companyId, yearId } = req.params;
     const getAllQuery: GetAllQuery = req.query;
-    // console.log('companyId', companyId, 'yearId', yearId);
     const result = await PurchaseService.getAllPurchases(companyId, yearId, getAllQuery);
     res.status(result.status).json(result);
   } catch (error) {
@@ -23,7 +21,6 @@ export async function getAllPurchases(req: Request, res: Response, next: NextFun
 export async function getPurchaseById(req: Request, res: Response, next: NextFunction) {
   try {
     const { companyId, yearId, invoiceId } = req.params;
-    // console.log('companyId', companyId, 'yearId', yearId);
 
     const result = await PurchaseService.getPurchaseById(companyId, yearId, invoiceId);
     if (!result.success) {
@@ -38,7 +35,6 @@ export async function getPurchaseById(req: Request, res: Response, next: NextFun
 export async function createPurchase(req: Request, res: Response, next: NextFunction) {
   try {
     const { companyId, yearId } = req.params;
-    // console.log('companyId', companyId, 'yearId', yearId);
 
     const result = await PurchaseService.createPurchase(companyId, yearId, req.body, (req.currentUser as User).userId);
     if (!result.success) {
@@ -52,12 +48,6 @@ export async function createPurchase(req: Request, res: Response, next: NextFunc
 
 export async function updatePurchase(req: Request, res: Response, next: NextFunction) {
   try {
-    // const { companyId, yearId } = req.params;
-    // const result = await StockInvoiceService.updateStockInvoice(companyId, yearId, req.body, (req.currentUser as User).userId);
-    // if (!result.success) {
-    //   return next(new ApiError(result.message, result.status));
-    // }
-    // res.status(result.status).json(result);
     const result = new ApiResponse<Purchase>();
     result.status = ApiStatus.NOT_IMPLEMENTED;
     res.status(result.status).json({ success: true, message: 'Not implemented yet' });
@@ -79,4 +69,3 @@ export async function deletePurchase(req: Request, res: Response, next: NextFunc
     return next(error);
   }
 }
-// }

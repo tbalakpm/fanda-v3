@@ -20,7 +20,6 @@ import type { ProductCategory } from '../modules/product-category/product-catego
 import type { Unit } from '../modules/unit/unit.entity';
 import type { SerialNumber } from '../modules/serial-number/serial-number.entity';
 
-// export class CompanyService {
 const companyRepository = AppDataSource.getRepository(Company);
 
 export async function getAllCompanies(): Promise<ApiResponse<Company[]>> {
@@ -171,4 +170,3 @@ async function invalidateCache(companyId?: string): Promise<void> {
   await cache.del('companies');
   if (companyId) await cache.del(`companies:${companyId}`);
 }
-// }

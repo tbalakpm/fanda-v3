@@ -4,7 +4,6 @@ import * as ProductCategoryService from './product-category.service';
 import type { User } from '../../entities/user.entity';
 import { ApiError } from '../../responses/api-error';
 
-// export class ProductCategoryController {
 export async function getCategories(req: Request, res: Response, next: NextFunction) {
   try {
     const { companyId } = req.params;
@@ -66,4 +65,3 @@ export async function deleteCategory(req: Request, res: Response, next: NextFunc
     return next(error);
   }
 }
-// }

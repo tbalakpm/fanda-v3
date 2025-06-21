@@ -3,8 +3,6 @@ import { v7 } from 'uuid';
 import { AuditDates, AuditUsers } from '../../entities/embedded/audit.entity';
 import { Company } from '../../entities/company.entity';
 
-// import { Company, AuditDates, AuditUsers } from "../../entities";
-
 @Entity({ name: 'units' })
 @Index(['companyId', 'unitId'], { unique: true })
 @Index(['companyId', 'code'], { unique: true })

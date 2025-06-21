@@ -9,7 +9,6 @@ import { ApiStatus } from '../../responses/api-status';
 import { PartyDto } from '../../dto';
 import { CustomerSchema } from '../customer/customer.schema';
 
-// export class CustomerService {
 const customerRepository = AppDataSource.getRepository(Customer);
 
 export async function getAllCustomers(companyId: string): Promise<ApiResponse<PartyDto[]>> {
@@ -177,4 +176,3 @@ async function invalidateCache(companyId: string, customerId?: string): Promise<
   await cache.del(`customers_${companyId}`);
   if (customerId) await cache.del(`customers:${customerId}`);
 }
-// }

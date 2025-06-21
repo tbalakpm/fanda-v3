@@ -10,7 +10,6 @@ import { FinancialYear } from './financial-year.entity';
 import { FinancialYearSchema } from './financial-year.schema';
 import type { AuditUsers } from '../../entities/embedded/audit.entity';
 
-// export class FinancialYearService {
 const yearRepository = AppDataSource.getRepository(FinancialYear);
 
 export async function getAllYears(companyId: string): Promise<ApiResponse<FinancialYear[]>> {
@@ -180,4 +179,3 @@ async function invalidateCache(companyId: string, yearId?: string): Promise<void
   await cache.del(`years_${companyId}`);
   if (yearId) await cache.del(`years:${yearId}`);
 }
-// }

@@ -1,8 +1,5 @@
-// import process from "node:process";
 import type { NextFunction, Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
-// import { UserService } from "../services";
-// import { User } from "../entities";
 import { ApiError } from '../responses/api-error';
 import * as UserService from '../services/user.service';
 import type { User } from '../entities/user.entity';

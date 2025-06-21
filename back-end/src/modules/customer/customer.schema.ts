@@ -3,8 +3,6 @@ import { AddressSchema } from '../../schema/address.schema';
 import { ContactSchema } from '../../schema/contact.schema';
 import { GSTTreatment } from '../party/gst-treatment.enum';
 
-// console.log(Object.values(GSTTreatment));
-
 export const CustomerSchema = z.object({
   customerId: z.union([z.null(), z.string().uuid().optional()]),
   code: z.string().min(1).max(10),

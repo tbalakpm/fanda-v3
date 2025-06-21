@@ -9,7 +9,6 @@ import { ApiStatus } from '../../responses/api-status';
 import { cache } from '../../helpers/cache.helper';
 import { parseError } from '../../helpers/error.helper';
 
-// export class UnitService {
 const unitRepository = AppDataSource.getRepository(Unit);
 
 export async function getAllUnits(companyId: string): Promise<ApiResponse<Unit[]>> {
@@ -132,4 +131,3 @@ async function invalidateCache(companyId: string, unitId?: string): Promise<void
   await cache.del(`units_${companyId}`);
   if (unitId) await cache.del(`units:${unitId}`);
 }
-// }

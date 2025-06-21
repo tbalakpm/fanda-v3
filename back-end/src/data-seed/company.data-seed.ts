@@ -6,7 +6,6 @@ import { Unit } from '../modules/unit/unit.entity';
 import { SerialNumber } from '../modules/serial-number/serial-number.entity';
 import { DefaultSerials } from './serials.data-seed';
 
-// export class CompanyDataSeeder {
 export function getNewYear(companyId: string, adminUserId: string, date: Date = new Date()): FinancialYear {
   const newYear = new FinancialYear();
 
@@ -32,9 +31,6 @@ export function getNewYear(companyId: string, adminUserId: string, date: Date = 
   newYear.companyId = companyId;
   newYear.isActive = true;
   return newYear;
-  // const savedYear = await FinancialYearService.createYear(companyId, newYear, adminUserId);
-  // if (!savedYear.success) return;
-  // await this.createSequences(savedYear.data!.yearId, adminUserId);
 }
 
 export function getDefaultCashCustomer(companyId: string, adminUserId: string): Customer {
@@ -53,8 +49,6 @@ export function getDefaultCashCustomer(companyId: string, adminUserId: string): 
   cashCustomer.companyId = companyId;
   cashCustomer.isActive = true;
   return cashCustomer;
-
-  // await CustomerService.createCustomer(companyId, cashCustomer, adminUserId);
 }
 
 export function getDefaultCashSupplier(companyId: string, adminUserId: string): Supplier {
@@ -74,7 +68,6 @@ export function getDefaultCashSupplier(companyId: string, adminUserId: string): 
   cashSupplier.isActive = true;
 
   return cashSupplier;
-  // await SupplierService.createSupplier(companyId, cashSupplier, adminUserId);
 }
 
 export function getDefaultProductCategory(companyId: string, amdinUserId: string): ProductCategory {
@@ -93,8 +86,6 @@ export function getDefaultProductCategory(companyId: string, amdinUserId: string
     updated: amdinUserId
   };
   return defaultCategory;
-
-  // await ProductCategoryService.createCategory(companyId, defaultCategory, amdinUserId);
 }
 
 export function getDefaultUnit(companyId: string, adminUserId: string): Unit {
@@ -113,8 +104,6 @@ export function getDefaultUnit(companyId: string, adminUserId: string): Unit {
     updated: adminUserId
   };
   return numberUnit;
-
-  // await UnitService.createUnit(companyId, numberUnit, adminUserId);
 }
 
 export function getDefaultSequences(yearId: string): SerialNumber[] {
@@ -125,19 +114,8 @@ export function getDefaultSequences(yearId: string): SerialNumber[] {
     newSerial.current = serial.current;
     newSerial.length = serial.length;
     newSerial.yearId = yearId;
-    // newSerial.isActive = true;
-    // newSerial.date = {
-    //   created: new Date(),
-    //   updated: new Date()
-    // };
-    // newSerial.user = {
-    //   created: adminUserId,
-    //   updated: adminUserId
-    // };
 
     return newSerial;
   });
   return serials;
-  // await AppDataSource.getRepository("SequenceGenerator").insert(sequences);
 }
-// }

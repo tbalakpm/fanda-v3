@@ -1,5 +1,4 @@
 import type { NextFunction, Request, Response } from 'express';
-// import { User } from "../entities";
 import { ApiError } from '../responses/api-error';
 import type { User } from '../entities/user.entity';
 

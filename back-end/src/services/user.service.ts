@@ -11,7 +11,6 @@ import * as EncryptHelper from '../helpers/encrypt.helper';
 import type { UserDashboard } from '../interfaces/user-dashboard';
 import type { UserExists } from '../interfaces/user-exists';
 
-// export class UserService {
 const userRepository = AppDataSource.getRepository(User);
 
 export async function getAllUsers(): Promise<ApiResponse<UserDto[]>> {
@@ -191,7 +190,7 @@ export async function dashboard(): Promise<ApiResponse<UserDashboard>> {
       count(case when is_active and role='user' then 1 else null end) user_user_count
     from users u
     where username != 'admin'`;
-  // console.log(sql);
+
   const result = await userRepository.query(sql);
   if (result && result.length > 0) {
     const dashboard = result[0];
@@ -251,4 +250,3 @@ async function invalidateCache(userId?: string): Promise<void> {
   await cache.del('users');
   if (userId) await cache.del(`users:${userId}`);
 }
-// }

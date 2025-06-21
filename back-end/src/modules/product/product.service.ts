@@ -11,7 +11,6 @@ import type { ApiResponse } from '../../responses/api-response';
 import { ApiStatus } from '../../responses/api-status';
 import { GtnGeneration } from './gtn-generation.enum';
 
-// export class ProductService {
 const productRepository = AppDataSource.getRepository(Product);
 
 export async function getAllProducts(companyId: string): Promise<ApiResponse<Product[]>> {
@@ -268,4 +267,3 @@ async function invalidateCache(companyId: string, productId?: string): Promise<v
     await cache.del(`products:${productId}`);
   }
 }
-// }

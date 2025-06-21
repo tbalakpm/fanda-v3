@@ -4,7 +4,6 @@ import * as SupplierService from './supplier.service';
 import type { User } from '../../entities/user.entity';
 import { ApiError } from '../../responses/api-error';
 
-// export class SupplierController {
 export async function getSuppliers(req: Request, res: Response, next: NextFunction) {
   try {
     const { companyId } = req.params;
@@ -66,4 +65,3 @@ export async function deleteSupplier(req: Request, res: Response, next: NextFunc
     return next(error);
   }
 }
-// }

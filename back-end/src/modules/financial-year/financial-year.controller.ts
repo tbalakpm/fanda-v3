@@ -4,7 +4,6 @@ import * as FinancialYearService from './financial-year.service';
 import type { User } from '../../entities/user.entity';
 import { ApiError } from '../../responses/api-error';
 
-// export class FinancialYearController {
 export async function getYears(req: Request, res: Response, next: NextFunction) {
   try {
     const { companyId } = req.params;
@@ -66,4 +65,3 @@ export async function deleteYear(req: Request, res: Response, next: NextFunction
     return next(error);
   }
 }
-// }

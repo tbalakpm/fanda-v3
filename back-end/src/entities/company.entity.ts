@@ -1,13 +1,10 @@
 import { BeforeInsert, Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 import { v7 } from 'uuid';
-//import { Address, Contact } from "./";
 import { AuditDates, AuditUsers } from './embedded/audit.entity';
 import type { Address } from './address.entity';
 import type { Contact } from './contact.entity';
 import 'dotenv/config';
 import { FinancialYear } from '../modules/financial-year/financial-year.entity';
-
-// console.log('Company.DB_TYPE:', process.env.DB_TYPE);
 
 @Entity({ name: 'companies' })
 export class Company {

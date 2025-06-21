@@ -4,7 +4,6 @@ import * as CompanyService from '../services/company.service';
 import type { User } from '../entities/user.entity';
 import { ApiError } from '../responses/api-error';
 
-// export class CompanyController {
 export async function getCompanies(_req: Request, res: Response, next: NextFunction) {
   try {
     const result = await CompanyService.getAllCompanies();
@@ -68,4 +67,3 @@ export async function deleteCompany(req: Request, res: Response, next: NextFunct
     return next(error);
   }
 }
-// }

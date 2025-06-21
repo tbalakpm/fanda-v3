@@ -18,15 +18,9 @@ import { getFiltering, getPagination, getSorting } from '../../../helpers/get-al
 import { isEmpty } from '../../../helpers/utility.helper';
 import type { GetAllQuery } from '../../../interfaces/get-all-query';
 
-// class StockInvoiceService {
 const stockInvoiceRepository = AppDataSource.getRepository(StockInvoice);
 
 export async function getAllStockInvoices(companyId: string, yearId: string, query: GetAllQuery): Promise<ApiResponse<StockInvoice[]>> {
-  // const data = await cache.get<StockInvoice[]>(`stockInvoices_${companyId}_${yearId}`);
-  // if (data) {
-  //   return { success: true, message: 'Serving stock invoices from cache', data, status: ApiStatus.OK };
-  // }
-
   const pagination = getPagination(query);
   const where = getFiltering(query.filter);
   // mandatory where clauses
@@ -38,7 +32,6 @@ export async function getAllStockInvoices(companyId: string, yearId: string, que
     order.invoiceId = 'desc'; // { invoiceId: 'desc' };
   }
 
-  //const invoices = await stockInvoiceRepository.find({
   const [invoices, total] = await stockInvoiceRepository.findAndCount({
     select: ['invoiceId', 'invoiceNumber', 'invoiceDate', 'totalQty', 'totalAmount', 'notes'],
     where: where, // { companyId, yearId },
@@ -46,7 +39,7 @@ export async function getAllStockInvoices(companyId: string, yearId: string, que
     skip: pagination.offset,
     take: pagination.limit
   });
-  // await cache.set(`stockInvoices_${companyId}_${yearId}`, invoices);
+
   return { success: true, message: 'Serving stock invoices from database', data: invoices, total, status: ApiStatus.OK };
 }
 
@@ -60,7 +53,7 @@ export async function getStockInvoiceById(companyId: string, yearId: string, inv
     // where: { companyId, yearId, invoiceId }
     where: { invoiceId }
   });
-  // const invoice = await stockInvoiceRepository.findOne({ where: { invoiceId }, relationLoadStrategy: 'query', relations: ['lineItems'] });
+
   if (!invoice) {
     return { success: false, message: `Stock Invoice with id '${invoiceId}' not found`, status: ApiStatus.NOT_FOUND };
   }
@@ -98,7 +91,6 @@ export async function createStockInvoice(
     // create invoice
     const createdInvoice = queryRunner.manager.create(StockInvoice, parsedInvoice);
     createdInvoice.invoiceNumber = await SerialNumberHelper.getNextSerial(queryRunner, yearId, InvoiceTypes.Stock);
-    // console.log('INVOICE', createdInvoice);
 
     let totalQty = 0;
     let totalAmount = 0;
@@ -225,7 +217,6 @@ export async function createStockInvoice(
   } catch (error: any) {
     await queryRunner.rollbackTransaction();
     if (process.env.NODE_ENV === 'development') {
-      // console.log(error);
       logger.error(error.message);
     }
     return { success: false, message: 'Failed to create stock invoice', status: ApiStatus.INTERNAL_SERVER_ERROR };
@@ -256,7 +247,6 @@ export async function deleteStockInvoice(companyId: string, yearId: string, invo
         }
       }
     }
-    //await queryRunner.manager.remove(invoice);
     await queryRunner.manager.delete(StockInvoice, { invoiceId });
 
     await queryRunner.commitTransaction();
@@ -281,6 +271,3 @@ async function invalidateCache(companyId: string, yearId: string, invoiceId?: st
     await cache.del(`stockInvoices_${companyId}_${yearId}:${invoiceId}`);
   }
 }
-// }
-
-// export const StockInvoiceServiceInstance = new StockInvoiceService();

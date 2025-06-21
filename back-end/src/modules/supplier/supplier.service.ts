@@ -9,7 +9,6 @@ import { ApiStatus } from '../../responses/api-status';
 import { PartyDto } from '../../dto';
 import { SupplierSchema } from './supplier.schema';
 
-// export class SupplierService {
 const supplierRepository = AppDataSource.getRepository(Supplier);
 
 export async function getAllSuppliers(companyId: string): Promise<ApiResponse<PartyDto[]>> {
@@ -176,4 +175,3 @@ async function invalidateCache(companyId: string, supplierId?: string): Promise<
   await cache.del(`suppliers_${companyId}`);
   if (supplierId) await cache.del(`suppliers:${supplierId}`);
 }
-// }

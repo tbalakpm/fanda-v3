@@ -4,7 +4,6 @@ import * as ConsumerService from './consumer.service';
 import type { User } from '../../entities/user.entity';
 import { ApiError } from '../../responses/api-error';
 
-// export class ConsumerController {
 export async function getAllConsumers(req: Request, res: Response, next: NextFunction) {
   try {
     const { companyId } = req.params;
@@ -66,4 +65,3 @@ export async function deleteConsumer(req: Request, res: Response, next: NextFunc
     return next(error);
   }
 }
-// }

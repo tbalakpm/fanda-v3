@@ -2,7 +2,7 @@ import { BeforeInsert, Column, Entity, PrimaryColumn } from 'typeorm';
 import { v7 } from 'uuid';
 import { UserRoles } from './role.enum';
 import 'dotenv/config';
-import { enumDataType } from '../helpers/dataType.helper';
+import { enumDataType } from '../helpers/data-type.helper';
 
 @Entity({ name: 'users' })
 export class User {

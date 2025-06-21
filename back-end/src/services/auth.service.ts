@@ -5,7 +5,6 @@ import * as UserService from './user.service';
 import type { AuthResponse } from '../responses/auth-response';
 import { ApiStatus } from '../responses/api-status';
 
-// export class AuthService {
 export async function register(register: User): Promise<AuthResponse> {
   const result = await UserService.createUser(register);
   if (!result.success) {
@@ -47,4 +46,3 @@ export async function login(login: LoginDto): Promise<AuthResponse> {
     status: ApiStatus.OK
   };
 }
-// }
