@@ -3,6 +3,7 @@ import { DataSource } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import 'dotenv/config';
 
+//#region Masters
 import { User } from './entities/user.entity';
 import { Company } from './entities/company.entity';
 import { Unit } from './modules/unit/unit.entity';
@@ -13,10 +14,13 @@ import { Customer } from './modules/customer/customer.entity';
 import { Consumer } from './modules/consumer/consumer.entity';
 import { Inventory } from './modules/inventory/inventory.entity';
 import { FinancialYear } from './modules/financial-year/financial-year.entity';
+//#endregion
+
+//#region Transactions
 import { SerialNumber } from './modules/serial-number/serial-number.entity';
+import { ProductSerial } from './modules/product/product-serial.entity';
 import { StockInvoice } from './modules/invoices/stock-invoice/stock-invoice.entity';
 import { StockLineItem } from './modules/invoices/stock-invoice/stock-line-item.entity';
-import { ProductSerial } from './modules/product/product-serial.entity';
 import { Purchase } from './modules/invoices/purchase/purchase.entity';
 import { PurchaseLineItem } from './modules/invoices/purchase/purchase-line-item.entity';
 import { Sales } from './modules/invoices/sales/sales.entity';
@@ -25,6 +29,7 @@ import { SalesReturn } from './modules/invoices/sales-return/sales-return.entity
 import { SalesReturnItem } from './modules/invoices/sales-return/sales-return-item.entity';
 import { PurchaseReturn } from './modules/invoices/purchase-return/purchase-return.entity';
 import { PurchaseReturnItem } from './modules/invoices/purchase-return/purchase-return-item.entity';
+//#endregion
 
 const {
   NODE_ENV = 'development',

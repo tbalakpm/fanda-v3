@@ -5,7 +5,7 @@ import app from './app';
 import logger from './logger';
 import { createAdminUser } from './data-seed/admin-user.data-seed';
 
-const { PORT = '4000' } = process.env;
+const { PORT = '3000' } = process.env;
 
 AppDataSource.initialize()
   .then(async (db) => {
