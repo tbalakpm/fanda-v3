@@ -17,7 +17,7 @@
     "@angular/forms": "^19.2.14",
     "@angular/platform-browser": "^19.2.14",
     "@angular/platform-browser-dynamic": "^19.2.14",
-    "@angular/router": "^19.2.14",
+    "@angular/router": "^20.0.4",
     "lottie-web": "^5.12.2",
     "ng-zorro-antd": "^19.3.1",
     "ngx-lottie": "^13.0.0",
