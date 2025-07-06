@@ -44,7 +44,7 @@ import type { Party } from '../../../../models';
     NzPopconfirmModule,
   ],
   templateUrl: './party-list.component.html',
-  styleUrl: './party-list.component.scss',
+  styleUrl: './party-list.component.css',
 })
 export class PartyListComponent {
   isCustomer: boolean;

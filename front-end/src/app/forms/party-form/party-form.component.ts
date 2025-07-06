@@ -20,7 +20,7 @@ import { GST_TREATMENTS_IN, GST_TREATMENTS_OUT } from '@constants';
     NzSelectModule,
   ],
   templateUrl: './party-form.component.html',
-  styleUrl: './party-form.component.scss',
+  styleUrl: './party-form.component.css',
 })
 export class PartyFormComponent {
   @Input() partyForm: FormGroup;

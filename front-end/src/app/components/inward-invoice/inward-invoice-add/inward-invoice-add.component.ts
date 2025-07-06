@@ -69,7 +69,7 @@ import { watchObject } from '@utils';
     NzPopconfirmModule,
   ],
   templateUrl: './inward-invoice-add.component.html',
-  styleUrl: './inward-invoice-add.component.scss',
+  styleUrl: './inward-invoice-add.component.css',
 })
 export class InwardInvoiceAddComponent {
   @Input()
@@ -286,7 +286,7 @@ export class InwardInvoiceAddComponent {
       productId: [null, Validators.required],
       unitId: ['', Validators.required],
       gtn:
-        this.invoiceType == 'salesreturn'
+        this.invoiceType === 'salesreturn'
           ? ['', Validators.required]
           : [{ value: 'tbd', disabled: true }],
       qty: [1, Validators.required],

@@ -7,7 +7,7 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss",
+          "style": "css",
           "skipTests": true
         },
         "@schematics/angular:class": {
@@ -44,7 +44,7 @@
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
-            "inlineStyleLanguage": "scss",
+            "inlineStyleLanguage": "css",
             "assets": [
               {
                 "glob": "**/*",
@@ -55,7 +55,7 @@
             "styles": [
               "src/theme.less",
               "src/styles.tailwind.css",
-              "src/styles.scss",
+              "src/styles.css",
               {
                 "input": "src/styles/default.less",
                 "bundleName": "default",
@@ -133,7 +133,7 @@
           "options": {
             "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
-            "inlineStyleLanguage": "scss",
+            "inlineStyleLanguage": "css",
             "assets": [
               {
                 "glob": "**/*",
@@ -143,7 +143,7 @@
             "styles": [
               "src/theme.less",
               "src/styles.tailwind.css",
-              "src/styles.scss"
+              "src/styles.css"
             ],
             "scripts": []
           }

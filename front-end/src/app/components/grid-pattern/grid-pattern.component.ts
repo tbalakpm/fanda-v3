@@ -4,7 +4,7 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'grid-pattern',
   templateUrl: './grid-pattern.component.html',
-  styleUrls: ['./grid-pattern.component.scss'],
+  styleUrls: ['./grid-pattern.component.css'],
   standalone: true,
   imports: [CommonModule],
 })

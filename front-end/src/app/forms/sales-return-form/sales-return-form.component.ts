@@ -67,7 +67,7 @@ import { watchObject } from '@utils';
     NzPopconfirmModule,
   ],
   templateUrl: './sales-return-form.component.html',
-  styleUrl: './sales-return-form.component.scss',
+  styleUrl: './sales-return-form.component.css',
 })
 export class SalesReturnFormComponent {
   inwardInvoiceForm: FormGroup;

@@ -61,7 +61,7 @@ import { watchObject } from '@utils';
     NzToolTipModule,
   ],
   templateUrl: './stock-form.component.html',
-  styleUrl: './stock-form.component.scss',
+  styleUrl: './stock-form.component.css',
 })
 export class StockFormComponent {
   stockForm: FormGroup;

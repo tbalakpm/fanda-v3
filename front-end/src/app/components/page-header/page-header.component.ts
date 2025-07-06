@@ -24,7 +24,7 @@ import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
     NzInputModule,
   ],
   templateUrl: './page-header.component.html',
-  styleUrl: './page-header.component.scss',
+  styleUrl: './page-header.component.css',
 })
 export class PageHeaderComponent {
   @Input() title: string;

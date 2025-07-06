@@ -29,7 +29,7 @@ import {
     NzTagModule,
   ],
   templateUrl: './outward-invoice-list.component.html',
-  styleUrl: './outward-invoice-list.component.scss',
+  styleUrl: './outward-invoice-list.component.css',
 })
 export class OutwardInvoiceListComponent {
   @Input()

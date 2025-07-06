@@ -30,7 +30,7 @@ import { Form, Option } from '@models';
   selector: 'f-form',
   standalone: true,
   templateUrl: './form.component.html',
-  styleUrls: ['./form.component.scss'],
+  styleUrls: ['./form.component.css'],
   imports: [
     CommonModule,
     ReactiveFormsModule,

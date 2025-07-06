@@ -41,7 +41,7 @@ import { orgColumns } from './org-list';
     NzSwitchModule,
   ],
   templateUrl: './organization-list.component.html',
-  styleUrl: './organization-list.component.scss',
+  styleUrl: './organization-list.component.css',
 })
 export class OrganizationListComponent implements OnInit {
   isInfoDrawerVisible = false;

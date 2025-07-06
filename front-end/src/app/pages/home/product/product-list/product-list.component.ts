@@ -37,7 +37,7 @@ import { productColumns } from './product-list';
     NzSwitchModule,
   ],
   templateUrl: './product-list.component.html',
-  styleUrl: './product-list.component.scss',
+  styleUrl: './product-list.component.css',
 })
 export class ProductListComponent {
   private _products: Product[] = [];

@@ -29,7 +29,7 @@ import { LoaderService, UserService } from '@services';
     NzSelectModule,
   ],
   templateUrl: './user-add.component.html',
-  styleUrl: './user-add.component.scss',
+  styleUrl: './user-add.component.css',
 })
 export class UserAddComponent {
   userForm: FormGroup;

@@ -14,7 +14,7 @@ import { AuthService, LoginResponseData, OrganizationService } from '@services';
   standalone: true,
   imports: [CommonModule, NzDropDownModule, NzIconModule, NzButtonModule],
   templateUrl: './select-organization.component.html',
-  styleUrl: './select-organization.component.scss',
+  styleUrl: './select-organization.component.css',
 })
 export class SelectOrganizationComponent {
   user: LoginResponseData;

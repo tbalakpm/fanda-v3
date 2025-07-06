@@ -33,7 +33,7 @@ import { UserAddComponent } from '../user-add/user-add.component';
     NzPopconfirmModule,
   ],
   templateUrl: './user-list.component.html',
-  styleUrl: './user-list.component.scss',
+  styleUrl: './user-list.component.css',
 })
 export class UserListComponent {
   users: User[] = [];

@@ -70,7 +70,7 @@ import { watchObject } from '@utils';
     NzDividerModule,
   ],
   templateUrl: './purchase-return-form.component.html',
-  styleUrl: './purchase-return-form.component.scss',
+  styleUrl: './purchase-return-form.component.css',
 })
 export class PurchaseReturnFormComponent {
   outwardInvoiceForm: FormGroup;

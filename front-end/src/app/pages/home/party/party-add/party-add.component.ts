@@ -32,7 +32,7 @@ import { Party } from '../../../../models';
     NzIconModule,
   ],
   templateUrl: './party-add.component.html',
-  styleUrl: './party-add.component.scss',
+  styleUrl: './party-add.component.css',
   animations: [fadeInAnimation],
 })
 export class PartyAddComponent {

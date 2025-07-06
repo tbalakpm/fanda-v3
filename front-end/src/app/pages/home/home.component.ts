@@ -32,7 +32,7 @@ import {
     FormsModule,
   ],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
+  styleUrl: './home.component.css',
   animations: [fadeInAnimation],
 })
 export class HomeComponent implements OnInit {

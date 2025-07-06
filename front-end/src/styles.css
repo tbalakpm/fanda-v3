@@ -1,8 +1,7 @@
-@use "sass:meta";
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400..900;1,100..900&family=Sanchez:ital@0;1&display=swap");
 
-@include meta.load-css("styles/glassy-button.scss");
-@include meta.load-css("styles/wave.scss");
+@import url("styles/glassy-button.css");
+@import url("styles/wave.css");
 
 * {
   font-family: "Montserrat", sans-serif;

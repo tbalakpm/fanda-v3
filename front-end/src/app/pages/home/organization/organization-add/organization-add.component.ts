@@ -37,7 +37,7 @@ import { Organization } from '@models';
     NzIconModule,
   ],
   templateUrl: './organization-add.component.html',
-  styleUrl: './organization-add.component.scss',
+  styleUrl: './organization-add.component.css',
   animations: [fadeInAnimation],
 })
 export class OrganizationAddComponent {

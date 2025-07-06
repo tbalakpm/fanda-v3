@@ -1,4 +1,4 @@
-<nz-page-header nzTitle="Units" nzBackIcon class="!p-0 !py-3">
+<nz-page-header nzTitle="Units" nzBackIcon class="p-0! py-3!">
   <nz-breadcrumb nz-page-header-breadcrumb>
     <nz-breadcrumb-item>Inventory</nz-breadcrumb-item>
     <nz-breadcrumb-item>Units</nz-breadcrumb-item>
@@ -96,14 +96,14 @@
       </td>
       <td>
         @if(unit.code !== 'NO') {
-        <div class="space-x-2">
+        <div class="flex gap-2">
           <span
             [hidden]="editId === unit.unitId"
             nz-icon
             nzType="edit"
             nz-tooltip="Edit"
             (click)="editId === null && startEdit(unit.unitId!, 'shortName')"
-            [ngClass]="{ '!text-gray-500': editId !== null }"
+            [ngClass]="{ 'text-gray-500!': editId !== null }"
           ></span>
           <span
             [hidden]="editId === unit.unitId"

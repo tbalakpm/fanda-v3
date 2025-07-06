@@ -70,7 +70,7 @@ import { watchObject } from '@utils';
     NzDividerModule,
   ],
   templateUrl: './sales-form.component.html',
-  styleUrl: './sales-form.component.scss',
+  styleUrl: './sales-form.component.css',
 })
 export class SalesFormComponent {
   outwardInvoiceForm: FormGroup;

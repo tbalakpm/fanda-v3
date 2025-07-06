@@ -25,7 +25,7 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
     NzInputNumberModule,
   ],
   templateUrl: './product-form.component.html',
-  styleUrl: './product-form.component.scss',
+  styleUrl: './product-form.component.css',
 })
 export class ProductFormComponent {
   @Input() productForm: FormGroup;
