@@ -27,7 +27,7 @@ import {
     NzPopconfirmModule,
   ],
   templateUrl: './inward-invoice-list.component.html',
-  styleUrl: './inward-invoice-list.component.scss',
+  styleUrl: './inward-invoice-list.component.css',
 })
 export class InwardInvoiceListComponent {
   @Input()

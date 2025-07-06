@@ -35,7 +35,7 @@ import { LoaderService, ProductCategoryService } from '@services';
     NzSwitchModule,
   ],
   templateUrl: './product-category.component.html',
-  styleUrl: './product-category.component.scss',
+  styleUrl: './product-category.component.css',
 })
 export class ProductCategoryComponent {
   productCategories: ProductCategory[] = [];

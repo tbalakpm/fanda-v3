@@ -1,9 +1,10 @@
+/** biome-ignore-all lint/style/useImportType: Suppressing import type linting rule */
+/** biome-ignore-all assist/source/organizeImports: Suppress import sort */
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { map, type Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-
-import {
+import type {
   Consumer,
   GTN,
   InwardInvoice,
@@ -36,11 +37,12 @@ export interface QueryOptions {
   // invoiceType?: string;
 }
 
+// biome-ignore lint/suspicious/noExplicitAny: Suppressing any type for queryOptions function
 function queryOptions(options: any) {
   if (!options) return '';
   let string = '?';
   Object.keys(options).forEach((key, id, s) => {
-    if (s.length == id) string += `${key}=${options[key]}`;
+    if (s.length === id) string += `${key}=${options[key]}`;
     else string += `${key}=${options[key]}&`;
   });
   return string;
@@ -120,20 +122,18 @@ abstract class GenericService<T> {
   }
 
   public activate(id: string): Observable<Response<T>> {
-    return this.httpClient.patch<Response<T>>(
-      `${this.baseUrl}/activate/${this.module}`,
+    return this.httpClient.put<Response<T>>(
+      `${this.baseUrl}${this.apiUrl}/${id}`,
       {
-        id,
-        activeFlag: true,
+        isActive: true,
       }
     );
   }
   public deactivate(id: string): Observable<Response<T>> {
-    return this.httpClient.patch<Response<T>>(
-      `${this.baseUrl}/activate/${this.module}`,
+    return this.httpClient.put<Response<T>>(
+      `${this.baseUrl}${this.apiUrl}/${id}`,
       {
-        id,
-        activeFlag: false,
+        isActive: false,
       }
     );
   }
@@ -265,6 +265,7 @@ export class YearService extends GenericService<Consumer> {
     this.setApiUrl(this.orgApiUrl + this.moduleUrl);
   }
 }
+
 @Injectable({ providedIn: 'root' })
 export class InventoryService extends GenericService<GTN> {
   constructor(private http: HttpClient) {
@@ -272,8 +273,13 @@ export class InventoryService extends GenericService<GTN> {
   }
 
   searchGtn(gtn: string): Observable<GTN> {
-    return this.http
-      .get<any>(`${this.baseUrl}${this.orgApiUrl}${this.moduleUrl}/gtn/${gtn}`)
-      .pipe(map((res) => res.data));
+    return (
+      this.http
+        // biome-ignore lint/suspicious/noExplicitAny: Suppressing any type for response
+        .get<any>(
+          `${this.baseUrl}${this.orgApiUrl}${this.moduleUrl}/gtn/${gtn}`
+        )
+        .pipe(map((res) => res.data))
+    );
   }
 }

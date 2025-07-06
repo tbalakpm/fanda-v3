@@ -20,7 +20,7 @@ import { GetCities, STATES } from '@constants';
     NzSelectModule,
   ],
   templateUrl: './party-address-form.component.html',
-  styleUrl: './party-address-form.component.scss',
+  styleUrl: './party-address-form.component.css',
 })
 export class PartyAddressFormComponent implements OnInit {
   isCustomer: boolean;

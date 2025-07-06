@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/useImportType: Suppress import types */
 import {
   NzTableFilterFn,
   NzTableFilterList,
@@ -28,7 +29,7 @@ export const partyColumns: ColumnItem[] = [
   },
   {
     name: 'Name',
-    sortOrder: 'ascend',
+    sortOrder: null,
     sortFn: (a: Party, b: Party) => a.name.localeCompare(b.name),
     sortDirections: ['ascend', 'descend', null],
     listOfFilter: [],

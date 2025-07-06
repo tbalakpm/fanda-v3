@@ -10,7 +10,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
   standalone: true,
   imports: [ReactiveFormsModule, NzFormModule, NzInputModule],
   templateUrl: './party-contact-form.component.html',
-  styleUrl: './party-contact-form.component.scss',
+  styleUrl: './party-contact-form.component.css',
 })
 export class PartyContactFormComponent {
   isCustomer: boolean;

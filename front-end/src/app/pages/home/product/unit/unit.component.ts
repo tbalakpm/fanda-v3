@@ -35,7 +35,7 @@ import { LoaderService, UnitService } from '@services';
     NzSwitchModule,
   ],
   templateUrl: './unit.component.html',
-  styleUrl: './unit.component.scss',
+  styleUrl: './unit.component.css',
 })
 export class UnitComponent {
   units: Unit[] = [];

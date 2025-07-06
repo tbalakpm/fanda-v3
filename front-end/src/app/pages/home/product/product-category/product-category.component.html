@@ -1,4 +1,4 @@
-<nz-page-header nzTitle="Product Categories" nzBackIcon class="!p-0 !py-3">
+<nz-page-header nzTitle="Product Categories" nzBackIcon class="p-0! py-3!">
   <nz-breadcrumb nz-page-header-breadcrumb>
     <nz-breadcrumb-item>Inventory</nz-breadcrumb-item>
     <nz-breadcrumb-item>Product Categories</nz-breadcrumb-item>
@@ -94,7 +94,8 @@
         <nz-tag *ngIf="!category.isActive" nzColor="red">Inactive</nz-tag>
       </td>
       <td>
-        <div class="space-x-2">
+        @if(category.code !== 'DEFAULT') {
+        <div class="flex gap-2">
           <span
             [hidden]="editId === category.categoryId"
             nz-icon
@@ -103,7 +104,7 @@
             (click)="
               editId === null && startEdit(category.categoryId!, 'shortName')
             "
-            [ngClass]="{ '!text-gray-500': editId !== null }"
+            [ngClass]="{ 'text-gray-500!': editId !== null }"
           ></span>
           <span
             [hidden]="editId === category.categoryId"
@@ -138,6 +139,7 @@
             (nzOnConfirm)="cancelEdit()"
           ></span>
         </div>
+        }
       </td>
     </tr>
   </tbody>

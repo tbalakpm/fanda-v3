@@ -48,7 +48,8 @@
         <nz-tag *ngIf="!party.isActive" nzColor="red">Inactive</nz-tag>
       </td>
       <td>
-        <div class="space-x-2">
+        @if(party.code !== 'CASH'){
+        <div class="flex gap-2">
           <button
             nz-tooltip="Edit"
             [routerLink]="
@@ -74,6 +75,7 @@
             (ngModelChange)="toggleActive(party.id!, $event)"
           ></nz-switch>
         </div>
+        }
       </td>
     </tr>
     }

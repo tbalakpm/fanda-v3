@@ -70,7 +70,7 @@ import { watchObject } from '@utils';
     NzDividerModule,
   ],
   templateUrl: './outward-invoice-add.component.html',
-  styleUrl: './outward-invoice-add.component.scss',
+  styleUrl: './outward-invoice-add.component.css',
 })
 export class OutwardInvoiceAddComponent {
   @Input()

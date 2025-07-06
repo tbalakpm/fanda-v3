@@ -26,7 +26,7 @@ import { LoaderService, StockService } from '@services';
     NzPopconfirmModule,
   ],
   templateUrl: './stock.component.html',
-  styleUrl: './stock.component.scss',
+  styleUrl: './stock.component.css',
 })
 export class StockComponent {
   stocks: Stock[] = [];

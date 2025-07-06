@@ -1,3 +1,5 @@
+/** biome-ignore-all lint/style/useImportType: Suppress error */
+/** biome-ignore-all assist/source/organizeImports: Suppress import */
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -39,14 +41,13 @@ import { orgColumns } from './org-list';
     NzSwitchModule,
   ],
   templateUrl: './organization-list.component.html',
-  styleUrl: './organization-list.component.scss',
+  styleUrl: './organization-list.component.css',
 })
 export class OrganizationListComponent implements OnInit {
   isInfoDrawerVisible = false;
 
   private _organizations: Organization[] = [];
   selectedInfoOrganization: Organization = {} as Organization;
-
   selectedOrganization: Organization = {} as Organization;
 
   orgColumns = orgColumns;
@@ -88,9 +89,9 @@ export class OrganizationListComponent implements OnInit {
   }
 
   openInfoDrawer(id: string) {
-    this.selectedInfoOrganization = this.organizations.find(
-      (org) => org.companyId === id
-    )!;
+    this.selectedInfoOrganization =
+      this.organizations.find((org) => org.companyId === id) ||
+      ({} as Organization);
     this.isInfoDrawerVisible = true;
   }
 
@@ -108,12 +109,18 @@ export class OrganizationListComponent implements OnInit {
   toggleActive(id: string, active: boolean) {
     if (active)
       this._orgService.activate(id).subscribe(() => {
-        this.organizations.find((o) => o.companyId === id)!.isActive = true;
+        const org = this.organizations.find((o) => o.companyId === id);
+        if (org) {
+          org.isActive = true;
+        }
         this._authService.isOrgChanged.emit();
       });
     else
       this._orgService.deactivate(id).subscribe(() => {
-        this.organizations.find((o) => o.companyId === id)!.isActive = false;
+        const org = this.organizations.find((o) => o.companyId === id);
+        if (org) {
+          org.isActive = false;
+        }
         this._authService.isOrgChanged.emit();
       });
   }

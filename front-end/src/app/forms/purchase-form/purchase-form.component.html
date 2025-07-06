@@ -93,7 +93,7 @@
             >
               <td>
                 <div class="flex gap-2 items-center">
-                  <nz-form-item class="flex-grow">
+                  <nz-form-item class="grow">
                     <nz-form-control>
                       <nz-select
                         nzPlaceHolder="Please select a Product"
@@ -277,8 +277,8 @@
 
     <!-- Info -->
     <div class="grid grid-cols-1 justify-between gap-10 mb-10">
-      <div class="flex-grow flex gap-5">
-        <div class="w-full !mb-0 block">
+      <div class="grow flex gap-5">
+        <div class="w-full mb-0! block">
           <nz-form-label nzFor="notes">Notes</nz-form-label>
           <nz-form-control>
             <textarea
@@ -290,7 +290,7 @@
           </nz-form-control>
         </div>
 
-        <div class="w-full !mb-0 block">
+        <div class="w-full mb-0! block">
           <nz-form-label nzFor="terms">Terms</nz-form-label>
           <nz-form-control>
             <textarea
@@ -466,7 +466,7 @@
 >
   <ng-container *nzModalContent>
     <form nz-form [formGroup]="tagNotFoundForm" nzLayout="vertical">
-      <nz-form-item class="flex-grow">
+      <nz-form-item class="grow">
         <nz-form-label nzFor="tagNo" nzRequired>Product</nz-form-label>
         <nz-form-control nzErrorTip="Please select product">
           <nz-select

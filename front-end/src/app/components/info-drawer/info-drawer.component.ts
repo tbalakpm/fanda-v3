@@ -8,7 +8,7 @@ import { NzDrawerModule } from 'ng-zorro-antd/drawer';
   standalone: true,
   imports: [CommonModule, NzDrawerModule],
   templateUrl: './info-drawer.component.html',
-  styleUrl: './info-drawer.component.scss',
+  styleUrl: './info-drawer.component.css',
 })
 export class InfoDrawerComponent {
   @Input() isVisible: boolean = false;

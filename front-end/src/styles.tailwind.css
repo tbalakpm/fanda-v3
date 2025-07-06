@@ -1,28 +1,55 @@
-@use "sass:meta";
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400..900;1,100..900&family=Sanchez:ital@0;1&display=swap");
+@import "tailwindcss";
 
-@include meta.load-css("styles/glassy-button.scss");
-@include meta.load-css("styles/wave.scss");
+@custom-variant dark (&:where(.dark, .dark *));
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@theme {
+  --shadow-hard: 0 3px 6px -4px oklch(0 0 0 / 12.16%),
+    0 6px 16px oklch(0 0 0 / 7.84%), 0 9px 28px 8px oklch(0 0 0 / 5.1%);
 
-* {
-  font-family: "Montserrat", sans-serif;
-  transition: background-color 0.3s;
+  --color-primary: oklch(0.4935 0.1447 252.21);
+  --color-dark: oklch(0.2393 0 0);
+  --color-dark-sec: oklch(0.2686 0 0);
+
+  --animate-meteor: meteor 5s linear infinite;
+
+  @keyframes meteor {
+    0% {
+      transform: rotate(215deg) translateX(0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    70% {
+      opacity: 1;
+    }
+    100% {
+      transform: rotate(215deg) translateX(-500px);
+      opacity: 0;
+    }
+  }
 }
 
-.sanchez-regular {
-  font-family: "Sanchez", serif;
-  font-weight: 400;
-  font-style: normal;
+@utility container {
+  margin-inline: auto;
 }
 
-.sanchez-regular-italic {
-  font-family: "Sanchez", serif;
-  font-weight: 400;
-  font-style: italic;
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
 }
 
 .ant-table-cell:not(.nz-disable-td) {
@@ -75,13 +102,6 @@
   }
 }
 
-.form-content {
-  padding: 14px 18px;
-  border: 1px dashed #e9e9e9;
-  border-radius: 6px;
-  min-height: 200px;
-}
-
 .sidebar-logo {
   @apply relative h-16 pl-6 overflow-hidden transition-all duration-300;
   line-height: 4rem;
@@ -101,15 +121,5 @@
   }
   &:hover > svg {
     @apply fill-primary;
-  }
-}
-
-.shadow-top {
-  box-shadow: 0 -4px 5px -3px rgba(0, 0, 0, 0.1);
-}
-
-.dark {
-  .shadow-top {
-    box-shadow: 0 -4px 5px -3px rgba(255, 255, 255, 0.1);
   }
 }

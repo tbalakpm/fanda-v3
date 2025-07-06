@@ -16,7 +16,7 @@
   <thead>
     <tr>
       <th nzColumnKey="username" [nzSortFn]="true">Username</th>
-      <th nzColumnKey="name" nzSortOrder="ascend" [nzSortFn]="true">Name</th>
+      <th nzColumnKey="name" [nzSortFn]="true">Name</th>
       <th>Phone</th>
       <th>Email</th>
       <th>Role</th>
@@ -45,7 +45,7 @@
         <nz-tag *ngIf="!user.isActive" nzColor="red">Inactive</nz-tag>
       </td>
       <td>
-        <div class="space-x-2">
+        <div class="flex gap-2">
           <button nz-tooltip="Edit" (click)="editId = user.userId">
             <i nz-icon nzType="edit"></i>
           </button>

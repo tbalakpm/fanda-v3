@@ -1,8 +1,8 @@
 @baseUrl=http://localhost:3000
 @token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTkyZmM1ZS0wMDkzLTdjY2MtYTIwYS1kYzg0NGE1YmFkMWMiLCJpYXQiOjE3MzA4MTI0MjQsImV4cCI6NDg4NDQxMjQyNH0.kpqWbQXwp9GsKhB-Yd1eGPdq8NHw5mj_9xpRT5Ggmkw
-@companyId=0193ea0e-12b0-704e-b888-cf085466b612
-@unitId=0193ea0e-12ca-71ad-a5fd-ec3aa58be8d3
-@categoryId=0193ea0e-12c7-7620-8f5e-0aa5fdeb613a
+@companyId=0196aeed-4384-73b8-ac3a-d8d25524de6d
+@unitId=0196aeed-43a3-7565-bf46-ef21d1849cdb
+@categoryId=0196aeed-43a0-75ff-88f2-319b21ca0848
 @productId=0193f233-fc38-7360-8bb1-b317340fee32
 @productId2=0193f233-fc38-7360-8bb1-b317340fee33
 
@@ -23,18 +23,18 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "productId": "{{productId}}",
-  "code": "MONITOR",
-  "name": "Monitor",
-  "description": "Monitors",
+  # "productId": "{{productId}}",
+  "code": "KEYBOARD",
+  "name": "Keyboard",
+  # "description": "Monitors",
   "productType": "goods",
   "categoryId": "{{categoryId}}",
   "baseUnitId": "{{unitId}}",
-  "buyingPrice": 20000,
-  "marginAmt": 5000,
-  "sellingPrice": 15000,
+  "buyingPrice": 0,
+  "marginAmt": 0,
+  "sellingPrice": 0,
   "taxCode": "G-C00001",
-  "taxPct": 18,
+  "taxPct": 5,
   "taxPreference": "taxable",
   "isPriceInclusiveTax": true,
   "gtnGeneration": "tag"

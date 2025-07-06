@@ -12,7 +12,7 @@ import { LottieAnimationComponent } from '@components';
   standalone: true,
   imports: [RouterModule, CommonModule, LottieAnimationComponent],
   templateUrl: './base.component.html',
-  styleUrl: './base.component.scss',
+  styleUrl: './base.component.css',
   animations: [fadeInAnimation],
 })
 export class BaseComponent {

@@ -32,7 +32,7 @@ import {
     FormsModule,
   ],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
+  styleUrl: './home.component.css',
   animations: [fadeInAnimation],
 })
 export class HomeComponent implements OnInit {
@@ -223,7 +223,7 @@ export class HomeComponent implements OnInit {
     private _orgService: OrganizationService,
     protected _loaderService: LoaderService
   ) {
-    let isReportMenu = localStorage.getItem('isReportMenu');
+    const isReportMenu = localStorage.getItem('isReportMenu');
     if (isReportMenu) {
       this.isReportMenu = JSON.parse(isReportMenu);
     } else {
@@ -231,22 +231,27 @@ export class HomeComponent implements OnInit {
       localStorage.setItem('isReportMenu', JSON.stringify(this.isReportMenu));
     }
     this.isLoading$ = this._loaderService.isLoadingActive();
+
     this.auth.getUser().subscribe({
       next: (value) => {
         this.user = value;
       },
     });
+
     this.auth.getOrganization().subscribe({
       next: (value) => {
         if (value?.companyId) this.selectedOrganization = value;
       },
     });
+
     this.auth.getYear().subscribe({
       next: (value) => {
         if (value?.yearId) this.selectedYear = value;
       },
     });
+
     this.getOrganization();
+
     this.auth.isOrgChanged.subscribe({
       next: () => {
         this.getOrganization();

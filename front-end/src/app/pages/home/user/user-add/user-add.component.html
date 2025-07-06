@@ -1,5 +1,5 @@
 <form
-  class="grid grid-cols-3 gap-x-4 form-content"
+  class="grid grid-cols-3 gap-x-4 vertical-form-padding form-content"
   [formGroup]="userForm"
   (ngSubmit)="submitForm()"
   nz-form
@@ -85,6 +85,7 @@
     <button nz-button nzType="primary" class="float-right">Submit</button>
   </div>
 </form>
+
 <ng-template #tagPlaceHolder let-selectedList
   >and {{ selectedList.length }} more selected</ng-template
 >

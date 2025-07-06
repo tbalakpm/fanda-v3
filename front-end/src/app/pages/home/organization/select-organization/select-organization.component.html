@@ -2,9 +2,9 @@
   <div
     class="flex items-center justify-between px-6 bg-slate-100 dark:bg-dark shadow-md"
   >
-    <a class="sidebar-logo !p-0" routerLink="/">
+    <a class="sidebar-logo p-0!" routerLink="/">
       <img src="assets/Logo.svg" alt="logo" />
-      <h1 class="sanchez-regular !text-black dark:!text-white">FandaTech</h1>
+      <h1 class="sanchez-regular text-black! dark:text-white!">FandaTech</h1>
     </a>
     <div
       nz-dropdown
@@ -17,7 +17,7 @@
       }}
     </div>
   </div>
-  <div class="flex flex-col items-center gap-5" style="margin-top: 10%">
+  <div class="flex flex-col items-center gap-5 mt-[10%]">
     <h1 class="text-5xl font-semibold">Select an organization</h1>
     <div class="flex flex-wrap items-center justify-center gap-20">
       <div
@@ -26,7 +26,7 @@
         class="group flex flex-col justify-center items-center gap-4 p-4 cursor-pointer"
       >
         <div
-          class="aspect-square h-[100px] rounded-full flex items-center justify-center text-xl font-medium group-hover:scale-125 transition-all"
+          class="aspect-square h-[100px] rounded-full flex items-center justify-center text-xl font-medium group-hover:scale-125 duration-300 ease-in-out transition-transform"
           [ngStyle]="colorStyles[i]"
         >
           {{ organization.code }}

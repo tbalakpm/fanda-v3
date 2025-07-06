@@ -17,7 +17,7 @@ import { LottieAnimationComponent } from '@components';
     LottieAnimationComponent,
   ],
   templateUrl: './landing-page.component.html',
-  styleUrl: './landing-page.component.scss',
+  styleUrl: './landing-page.component.css',
 })
 export class LandingPageComponent implements AfterViewInit {
   options: AnimationOptions = {

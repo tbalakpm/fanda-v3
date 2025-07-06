@@ -1,0 +1,42 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400..900;1,100..900&family=Sanchez:ital@0;1&display=swap");
+
+@import url("styles/glassy-button.css");
+@import url("styles/wave.css");
+
+* {
+  font-family: "Montserrat", sans-serif;
+  transition: background-color 0.3s;
+}
+
+.sanchez-regular {
+  font-family: "Sanchez", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.sanchez-regular-italic {
+  font-family: "Sanchez", serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.vertical-form-padding {
+  padding: 1rem !important;
+}
+
+.form-content {
+  padding: 14px 18px;
+  border: 1px dashed #e9e9e9;
+  border-radius: 6px;
+  min-height: 200px;
+}
+
+.shadow-top {
+  box-shadow: 0 -4px 5px -3px rgba(0, 0, 0, 0.1);
+}
+
+.dark {
+  .shadow-top {
+    box-shadow: 0 -4px 5px -3px rgba(255, 255, 255, 0.1);
+  }
+}

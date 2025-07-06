@@ -42,7 +42,7 @@ import {
     NzInputModule,
   ],
   templateUrl: './product-add.component.html',
-  styleUrl: './product-add.component.scss',
+  styleUrl: './product-add.component.css',
   animations: [fadeInAnimation],
 })
 export class ProductAddComponent {

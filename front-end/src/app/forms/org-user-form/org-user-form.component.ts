@@ -9,7 +9,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
   standalone: true,
   imports: [ReactiveFormsModule, NzFormModule, NzInputModule],
   templateUrl: './org-user-form.component.html',
-  styleUrl: './org-user-form.component.scss',
+  styleUrl: './org-user-form.component.css',
 })
 export class OrgUserFormComponent {
   @Input() orgUserForm: FormGroup;
