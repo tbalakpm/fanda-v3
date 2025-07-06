@@ -95,6 +95,7 @@
         <nz-tag *ngIf="!unit.isActive" nzColor="red">Inactive</nz-tag>
       </td>
       <td>
+        @if(unit.code !== 'NO') {
         <div class="space-x-2">
           <span
             [hidden]="editId === unit.unitId"
@@ -137,6 +138,7 @@
             (nzOnConfirm)="cancelEdit()"
           ></span>
         </div>
+        }
       </td>
     </tr>
     }

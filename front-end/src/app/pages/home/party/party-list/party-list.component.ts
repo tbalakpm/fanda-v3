@@ -1,3 +1,5 @@
+/** biome-ignore-all lint/style/useImportType: Suppress import types */
+/** biome-ignore-all assist/source/organizeImports: Suppress sort imports */
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -19,7 +21,7 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { PageHeaderComponent } from '@components';
 import { partyColumns } from './party-list';
-import { Party } from '../../../../models';
+import type { Party } from '../../../../models';
 
 @Component({
   selector: 'party',
@@ -75,7 +77,7 @@ export class PartyListComponent {
   }
 
   getParties(): void {
-    let request = this.isCustomer
+    const request = this.isCustomer
       ? this._customerService.getAll()
       : this._supplierService.getAll();
 
@@ -88,7 +90,7 @@ export class PartyListComponent {
   }
 
   deleteParty(id: string) {
-    let request = this.isCustomer
+    const request = this.isCustomer
       ? this._customerService.delete(id)
       : this._supplierService.delete(id);
 
@@ -100,21 +102,26 @@ export class PartyListComponent {
   }
 
   toggleActive(id: string, active: boolean) {
-    if (active)
+    if (active) {
       this.isCustomer
         ? this._customerService.activate(id).subscribe(() => {
-            this.parties.find((p) => p.id === id)!.isActive = true;
+            const foundCustomer = this.parties.find((p) => p.id === id);
+            if (foundCustomer) foundCustomer.isActive = true;
           })
         : this._supplierService.activate(id).subscribe(() => {
-            this.parties.find((p) => p.id === id)!.isActive = true;
+            const foundSupplier = this.parties.find((p) => p.id === id);
+            if (foundSupplier) foundSupplier.isActive = true;
           });
-    else
+    } else {
       this.isCustomer
         ? this._customerService.deactivate(id).subscribe(() => {
-            this.parties.find((p) => p.id === id)!.isActive = false;
+            const foundCustomer = this.parties.find((p) => p.id === id);
+            if (foundCustomer) foundCustomer.isActive = false;
           })
         : this._supplierService.deactivate(id).subscribe(() => {
-            this.parties.find((p) => p.id === id)!.isActive = false;
+            const foundSupplier = this.parties.find((p) => p.id === id);
+            if (foundSupplier) foundSupplier.isActive = false;
           });
+    }
   }
 }

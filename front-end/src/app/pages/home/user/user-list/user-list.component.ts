@@ -1,3 +1,5 @@
+/** biome-ignore-all lint/style/useImportType: Suppress import types */
+/** biome-ignore-all assist/source/organizeImports: Suppress sort imports */
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -11,7 +13,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 import { PageHeaderComponent } from '@components';
 import { User } from '@models';
-import { AuthService, LoaderService, UserService } from '@services';
+import { LoaderService, UserService } from '@services';
 
 import { UserAddComponent } from '../user-add/user-add.component';
 
@@ -21,10 +23,8 @@ import { UserAddComponent } from '../user-add/user-add.component';
   imports: [
     PageHeaderComponent,
     UserAddComponent,
-
     CommonModule,
     FormsModule,
-
     NzTableModule,
     NzTagModule,
     NzIconModule,
@@ -37,14 +37,12 @@ import { UserAddComponent } from '../user-add/user-add.component';
 })
 export class UserListComponent {
   users: User[] = [];
-
   total: number;
-
   editId: string = 'new';
+
   constructor(
     public _loaderService: LoaderService,
-    private _userService: UserService,
-    private _authService: AuthService
+    private _userService: UserService // private _authService: AuthService
   ) {
     this.fetchUsers();
   }
@@ -60,13 +58,17 @@ export class UserListComponent {
   toggleActive(id: string, active: boolean) {
     if (active)
       this._userService.activate(id).subscribe(() => {
-        this.users.find((p) => p.userId === id)!.isActive = true;
-        this._authService.isOrgChanged.emit();
+        const user = this.users.find((p) => p.userId === id);
+        if (user) {
+          user.isActive = true;
+        }
       });
     else
       this._userService.deactivate(id).subscribe(() => {
-        this.users.find((p) => p.userId === id)!.isActive = false;
-        this._authService.isOrgChanged.emit();
+        const user = this.users.find((p) => p.userId === id);
+        if (user) {
+          user.isActive = false;
+        }
       });
   }
 

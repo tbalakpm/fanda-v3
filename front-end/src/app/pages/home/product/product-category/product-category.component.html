@@ -94,6 +94,7 @@
         <nz-tag *ngIf="!category.isActive" nzColor="red">Inactive</nz-tag>
       </td>
       <td>
+        @if(category.code !== 'DEFAULT') {
         <div class="space-x-2">
           <span
             [hidden]="editId === category.categoryId"
@@ -138,6 +139,7 @@
             (nzOnConfirm)="cancelEdit()"
           ></span>
         </div>
+        }
       </td>
     </tr>
   </tbody>

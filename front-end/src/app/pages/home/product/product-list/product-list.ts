@@ -1,3 +1,5 @@
+/** biome-ignore-all lint/style/useImportType: Suppress import types */
+/** biome-ignore-all assist/source/organizeImports: Suppress sort imports */
 import { Product } from '../../../../models';
 import {
   NzTableFilterFn,
@@ -19,7 +21,7 @@ interface ColumnItem {
 export const productColumns: ColumnItem[] = [
   {
     name: 'Code',
-    sortOrder: 'ascend',
+    sortOrder: null,
     sortFn: (a: Product, b: Product) => a.code.localeCompare(b.code),
     sortDirections: ['ascend', 'descend', null],
     listOfFilter: [],

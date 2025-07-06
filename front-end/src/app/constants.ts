@@ -35,13 +35,16 @@ export const TAX_TYPES = [
   { label: 'No Exempt', value: 'noexempt' },
 ];
 
-export const INVOICE_TYPES_DICT = INVOICE_TYPES.reduce((acc: any, curr) => {
-  acc[curr.value] = curr.label;
-  return acc;
-}, {});
+export const INVOICE_TYPES_DICT = INVOICE_TYPES.reduce(
+  (acc: { [key: string]: string }, curr: { label: string; value: string }) => {
+    acc[curr.value] = curr.label;
+    return acc;
+  },
+  {}
+);
 
 export const GST_TREATMENTS_IN_DICT = GST_TREATMENTS_IN.reduce(
-  (acc: any, curr) => {
+  (acc: { [key: string]: string }, curr: { label: string; value: string }) => {
     acc[curr.value] = curr.label;
     return acc;
   },
@@ -49,19 +52,22 @@ export const GST_TREATMENTS_IN_DICT = GST_TREATMENTS_IN.reduce(
 );
 
 export const GST_TREATMENTS_OUT_DICT = GST_TREATMENTS_OUT.reduce(
-  (acc: any, curr) => {
+  (acc: { [key: string]: string }, curr: { label: string; value: string }) => {
     acc[curr.value] = curr.label;
     return acc;
   },
   {}
 );
 
-export const TAX_TYPES_DICT = TAX_TYPES.reduce((acc: any, curr) => {
-  acc[curr.value] = curr.label;
-  return acc;
-}, {});
+export const TAX_TYPES_DICT = TAX_TYPES.reduce(
+  (acc: { [key: string]: string }, curr: { label: string; value: string }) => {
+    acc[curr.value] = curr.label;
+    return acc;
+  },
+  {}
+);
 
-const CITY_STATE: any = {
+const CITY_STATE: { [key: string]: string[] } = {
   'Andaman and Nicobar Islands': ['Port Blair'],
   Haryana: [
     'Faridabad',
@@ -754,6 +760,18 @@ const CITY_STATE: any = {
     'Sadalagi',
     'Piriyapatna',
     'Adyar',
+    'Hunsur',
+    'Hiriyur',
+    'Haliyal',
+    'Hagaribommanahalli',
+    'Gundlupet',
+    'Gubbi',
+    'Gokak Falls',
+    'Gadag Betageri',
+    'Gadag',
+    'Gajendragarh',
+    'Gangavathi',
+    'Gadag',
   ],
   Manipur: ['Imphal', 'Thoubal', 'Lilong', 'Mayang Imphal'],
   Kerala: [
@@ -1315,8 +1333,8 @@ const CITY_STATE: any = {
   ],
 };
 
-export const STATES = Object.keys(CITY_STATE);
+export const STATES = Object.keys(CITY_STATE).sort();
 
-export const GetCities = (state: any) => {
-  return CITY_STATE[state] || [];
+export const GetCities = (state: string) => {
+  return (CITY_STATE[state] || []).sort();
 };

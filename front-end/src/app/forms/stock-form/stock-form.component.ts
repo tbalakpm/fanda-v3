@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener } from '@angular/core';
+// biome-ignore lint/style/useImportType: <explanation>
 import {
   FormArray,
   FormBuilder,
@@ -8,6 +9,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+// biome-ignore lint/style/useImportType: <explanation>
 import { ActivatedRoute } from '@angular/router';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -25,8 +27,15 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 import { PageHeaderComponent } from '@components';
-import { LineItem } from '@models';
-import { InventoryService, ProductService, StockService } from '@services';
+import { type LineItem, Product } from '@models';
+// biome-ignore lint/style/useImportType: <explanation>
+import {
+  InventoryService,
+  UnitService,
+  ProductCategoryService,
+  ProductService,
+  StockService,
+} from '@services';
 import { watchObject } from '@utils';
 
 @Component({
@@ -57,6 +66,7 @@ import { watchObject } from '@utils';
 export class StockFormComponent {
   stockForm: FormGroup;
   productForm: FormGroup;
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   products: any[] = [];
   config = {
     profitMgn: true,
@@ -65,9 +75,11 @@ export class StockFormComponent {
     totalAmount: 0,
     totalQty: 0,
   };
-  id: string = 'new';
+  id = 'new';
   isEdit = false;
 
+  defaultUnitId = '';
+  defaultCategoryId = '';
   isAddProductModalVisible = false;
 
   formatter = (value: number) =>
@@ -88,15 +100,24 @@ export class StockFormComponent {
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
+    private _unitService: UnitService,
+    private _productCategoryService: ProductCategoryService,
     private _productService: ProductService,
     private _stockService: StockService,
     private _inventoryService: InventoryService
   ) {
-    let config = JSON.parse(localStorage.getItem('config') || '{}');
+    const config = JSON.parse(localStorage.getItem('config') || '{}');
     if (config) this.config = config;
 
     this.config = watchObject(this.config, (prop, value) => {
       this.setConfigToLocalStorage();
+    });
+    this._unitService.getAll().subscribe(({ data }) => {
+      this.defaultUnitId = data.find((u) => u.code === 'NO')?.unitId ?? '';
+    });
+    this._productCategoryService.getAll().subscribe(({ data }) => {
+      this.defaultCategoryId =
+        data.find((c) => c.code === 'DEFAULT')?.categoryId ?? '';
     });
   }
 
@@ -122,6 +143,7 @@ export class StockFormComponent {
     });
     this.addLineItem();
 
+    // biome-ignore lint/complexity/useLiteralKeys: <explanation>
     this.id = this.route.snapshot.params['id'];
     if (this.id && this.id !== 'new') {
       this.isEdit = true;
@@ -141,9 +163,10 @@ export class StockFormComponent {
 
   getProductHSN(productId: string) {
     const product = this.products.find((p) => p.productId === productId);
-    return product?.taxCode ? '- ' + product.taxCode : '';
+    return product?.taxCode ? `- ${product.taxCode}` : '';
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   getGtnDetails(gtnNo: string, form: any) {
     if (gtnNo)
       this._inventoryService.searchGtn(gtnNo).subscribe((res) => {
@@ -160,9 +183,9 @@ export class StockFormComponent {
             },
           });
         }
-        form.controls['productId'].setValue(res.product.productId);
+        form.controls.productId.setValue(res.product.productId);
         // form.controls['productId'].disable();
-        form.controls['unitId'].setValue(res.unit.unitId);
+        form.controls.unitId.setValue(res.unit.unitId);
       });
   }
 
@@ -171,7 +194,8 @@ export class StockFormComponent {
   }
 
   addLineItem(): void {
-    let form: any = this.fb.group({
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    const form: any = this.fb.group({
       productId: [null, Validators.required],
       unitId: ['', Validators.required],
       gtn: [''],
@@ -198,7 +222,7 @@ export class StockFormComponent {
         this.isAddProductModalVisible = true;
         return;
       }
-      const product = this.products.find((p) => p.productId === productId)!;
+      const product = this.products.find((p) => p.productId === productId);
       form.controls.unitId.setValue(product.unit?.unitId);
       form.controls.rate.setValue(product.sellingPrice ?? 0);
       form.controls.sellingPrice.setValue(product.sellingPrice ?? 0);
@@ -217,22 +241,22 @@ export class StockFormComponent {
       this.calculateFooter();
     };
 
-    ['qty', 'rate'].forEach((controlName) => {
+    for (const controlName of ['qty', 'rate']) {
       form.controls[controlName].valueChanges.subscribe(() => {
         reCalculate();
       });
-    });
+    }
 
     form.controls.rate.valueChanges.subscribe(() => {
       reCalculate();
       this.calculateSellPrice(form);
     });
 
-    ['margin', 'marginPctOrAmt'].forEach((controlName) => {
-      form.controls[controlName].valueChanges.subscribe((value: number) => {
+    for (const controlName of ['margin', 'marginPctOrAmt']) {
+      form.controls[controlName].valueChanges.subscribe(() => {
         this.calculateSellPrice(form);
       });
-    });
+    }
 
     this.lineItems.push(form);
     this.calculateFooter();
@@ -241,15 +265,18 @@ export class StockFormComponent {
   calculateFooter() {
     this.info.totalAmount = 0;
     this.info.totalQty = 0;
-    this.stockForm.value.lineItems.forEach((item: LineItem) => {
+    for (const item of this.stockForm.value.lineItems as LineItem[]) {
       this.info.totalAmount += item.lineTotal;
       this.info.totalQty += item.qty;
-    });
+    }
 
+    // biome-ignore lint/complexity/useLiteralKeys: <explanation>
     this.stockForm.controls['totalAmount'].setValue(this.info.totalAmount);
+    // biome-ignore lint/complexity/useLiteralKeys: <explanation>
     this.stockForm.controls['totalQty'].setValue(this.info.totalQty);
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   calculateSellPrice(form: any) {
     if (this.config.profitMgn) {
       const rate = form.controls.rate.value;
@@ -263,9 +290,9 @@ export class StockFormComponent {
   }
 
   onProfitMarginChange() {
-    this.lineItems.controls.forEach((form: any) => {
+    for (const form of this.lineItems.controls as FormGroup[]) {
       this.calculateSellPrice(form);
-    });
+    }
   }
 
   removeLineItem(index: number): void {
@@ -275,25 +302,30 @@ export class StockFormComponent {
 
   submitForm(): void {
     if (this.stockForm.valid) {
-      let value = this.stockForm.getRawValue();
+      const value = this.stockForm.getRawValue();
 
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       const addDiscountProfitField = (value: any) => {
         if (value.marginPctOrAmt === 'pct') {
-          value['marginPct'] = value.margin;
-          value['marginAmt'] = 0;
+          value.marginPct = value.margin;
+          value.marginAmt = 0;
+          // biome-ignore lint/performance/noDelete: <explanation>
           delete value.margin;
+          // biome-ignore lint/performance/noDelete: <explanation>
           delete value.marginPctOrAmt;
         } else {
-          value['marginAmt'] = value.margin;
-          value['marginPct'] = 0;
+          value.marginAmt = value.margin;
+          value.marginPct = 0;
+          // biome-ignore lint/performance/noDelete: <explanation>
           delete value.margin;
+          // biome-ignore lint/performance/noDelete: <explanation>
           delete value.marginPctOrAmt;
         }
       };
-      value.lineItems.forEach((item: LineItem) => {
+      for (const item of value.lineItems as LineItem[]) {
         addDiscountProfitField(item);
         if (item.gtn === '') item.gtn = 'tbd';
-      });
+      }
 
       if (this.isEdit) {
         this._stockService.update(this.id, value).subscribe((res) => {
@@ -313,24 +345,26 @@ export class StockFormComponent {
       console.log('Invalid Form', this.stockForm.value);
       this.stockForm.markAllAsTouched();
 
-      Object.values(this.stockForm.controls).forEach((control: any) => {
+      for (const control of Object.values(this.stockForm.controls)) {
         if (control.invalid) {
           console.log('control', control);
           control.markAsDirty();
           control.updateValueAndValidity({ onlySelf: true });
         }
         if (control instanceof FormArray) {
-          control.controls.forEach((c: any) => {
-            Object.values(c.controls).forEach((innerControl: any) => {
+          for (const c of control.controls) {
+            for (const innerControl of Object.values(
+              (c as FormGroup).controls
+            )) {
               if (innerControl.invalid) {
                 console.log('innerControl', innerControl);
                 innerControl.markAsDirty();
                 innerControl.updateValueAndValidity({ onlySelf: true });
               }
-            });
-          });
+            }
+          }
         }
-      });
+      }
     }
   }
 
@@ -340,10 +374,13 @@ export class StockFormComponent {
         ...this.productForm.value,
         productType: 'goods',
         taxPreference: 'taxable',
+        unitId: this.defaultUnitId,
+        categoryId: this.defaultCategoryId,
         taxPct: 5.0,
       };
       this._productService.create(newProduct).subscribe(({ data }) => {
-        let selectedLineItem: any = this.lineItems.controls.find(
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        const selectedLineItem: any = this.lineItems.controls.find(
           (x) => x.value.productId === 'new'
         );
         this.products.push(data);

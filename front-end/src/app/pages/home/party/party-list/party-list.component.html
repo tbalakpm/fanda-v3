@@ -48,6 +48,7 @@
         <nz-tag *ngIf="!party.isActive" nzColor="red">Inactive</nz-tag>
       </td>
       <td>
+        @if(party.code !== 'CASH'){
         <div class="space-x-2">
           <button
             nz-tooltip="Edit"
@@ -74,6 +75,7 @@
             (ngModelChange)="toggleActive(party.id!, $event)"
           ></nz-switch>
         </div>
+        }
       </td>
     </tr>
     }

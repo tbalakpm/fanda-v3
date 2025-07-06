@@ -1,3 +1,4 @@
+// biome-ignore assist/source/organizeImports: Supress sort imports
 import 'dotenv/config';
 
 import { AppDataSource } from './data-source';

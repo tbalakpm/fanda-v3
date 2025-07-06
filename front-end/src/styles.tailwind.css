@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.ant-table-cell:not(.nz-disable-td) {
+  .anticon-check {
+    @apply text-green-400;
+  }
+
+  .anticon-edit {
+    @apply text-blue-400;
+  }
+
+  .anticon-info-circle {
+    @apply text-yellow-400;
+  }
+
+  .anticon-delete,
+  .anticon-close {
+    @apply text-red-400;
+  }
+
+  .anticon-printer {
+    @apply text-cyan-400;
+  }
+
+  .ant-switch {
+    @apply flex items-center justify-center;
+    background-image: linear-gradient(
+        to right,
+        rgb(212, 88, 88),
+        rgb(212, 88, 88)
+      ),
+      linear-gradient(to right, #fff, #fff);
+    transition: background-image 0.3s ease-in-out !important;
+  }
+  .ant-switch-checked {
+    background-image: linear-gradient(
+        to right,
+        rgb(19, 196, 84),
+        rgb(19, 196, 84)
+      ),
+      linear-gradient(to right, #fff, #fff);
+  }
+  &:last-child {
+    div:not(.ant-input-number-handler-wrap) {
+      @apply flex items-center;
+      button:not(:last-child) {
+        height: 18px;
+      }
+    }
+  }
+}
+
+.sidebar-logo {
+  @apply relative h-16 pl-6 overflow-hidden transition-all duration-300;
+  line-height: 4rem;
+  img {
+    @apply inline-block h-9;
+    vertical-align: middle;
+  }
+  h1 {
+    @apply inline-block ml-3 text-white font-semibold text-lg;
+  }
+}
+
+.theme-switcher {
+  @apply absolute bottom-10 right-10 z-50 shadow-hard p-3 rounded-full bg-white dark:bg-gray-400;
+  > svg {
+    @apply transition-all duration-300;
+  }
+  &:hover > svg {
+    @apply fill-primary;
+  }
+}
