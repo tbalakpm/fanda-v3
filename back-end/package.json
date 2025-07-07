@@ -39,7 +39,7 @@
     "typeorm-naming-strategies": "^4.1.0",
     "uuid": "^11.1.0",
     "winston": "^3.17.0",
-    "zod": "^3.25.74"
+    "zod": "^3.25.75"
   },
   "devDependencies": {
     "@biomejs/biome": "2.0.6",
